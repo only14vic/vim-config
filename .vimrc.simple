@@ -78,6 +78,7 @@ cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
 nnoremap x     <C-v>
 nnoremap <A-v> <C-v>
+nmap <C-d> :Lexplore<CR>
 
 execute system('
     \ test -e ~/.vim/autoload/plug.vim ||
@@ -87,3 +88,17 @@ execute system('
 call plug#begin()
 Plug 'farmergreg/vim-lastplace'
 call plug#end()
+
+let g:netrw_liststyle = 3
+let g:netrw_preview = 1
+let g:netrw_keepdir = 1
+let g:netrw_usetab = 1
+let g:netrw_browse_split = 2
+let g:netrw_altv = 1
+let g:netrw_alto = 0
+let g:netrw_winsize = 20
+let g:netrw_fastbrowse = 1
+let g:netrw_mousemaps = 0
+let g:netrw_banner = 0
+let g:netrw_sort_options = 'i'
+let g:netrw_list_hide = '^\.+'
