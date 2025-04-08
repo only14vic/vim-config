@@ -1,0 +1,88 @@
+lang ru_RU.utf8
+syntax enable
+filetype plugin indent on
+
+colorscheme slate
+
+set tabstop=4
+set expandtab
+set completeopt=menu,menuone,popuphidden,noinsert
+set wildignorecase
+set wildoptions=fuzzy,pum
+set showtabline=2
+set virtualedit=onemore
+set list
+set listchars=tab:<->,trail:·
+set mouse=a
+set mousemodel=popup
+set number
+set ignorecase
+set smartcase
+set splitright
+set splitbelow
+set hlsearch
+set incsearch
+set switchbuf=useopen,usetab,vsplit
+set cursorlineopt=number
+set cursorline
+set showcmd
+set noswapfile
+set undofile
+set shortmess-=S
+set shortmess-=C
+set timeout timeoutlen=500 ttimeoutlen=10
+set termguicolors
+set t_md=
+set t_mb=
+set t_Co=256
+
+set laststatus=2
+set statusline=
+set statusline+=%#Icon#
+set statusline+=\  
+set statusline+=%#NormalC#%{(mode()=='n')?'\ NORMAL\ ':''}
+set statusline+=%#InsertC#%{(mode()=='i')?'\ INSERT\ ':''}
+set statusline+=%#VisualC#%{(mode('1')=~'v')?'\ VISUAL\ ':''}
+set statusline+=%#Filename#
+set statusline+=\ %f
+set statusline+=%#ReadOnly#
+set statusline+=\ %r
+set statusline+=%m
+set statusline+=%=
+set statusline+=%#Fileformat#
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\ [%{&fileformat}\]
+set statusline+=%#Position#
+set statusline+=\ [%l/%L]
+
+let &t_SI = "\e[5 q\<Esc>]12;green\x7"
+let &t_SR = "\e[5 q\<Esc>]12;magenta\x7"
+let &t_EI = "\e[2 q\<Esc>]12;red\x7"
+
+nmap <Enter> i
+nmap <S-q> :qa<CR>
+nmap <C-q> :q<CR>
+nmap q     :q<CR>
+nmap <Tab> <C-w>w
+map  <C-s> :w<CR>
+imap <C-s> <Esc>:w<CR>
+nnoremap <Esc> <C-c>:noh<CR>
+nnoremap ; q:
+vmap <C-c> ""y g`<
+vmap <C-x> ""x g`<
+nmap <C-v> ""gP
+vmap <C-v> ""Pgvy
+imap <C-v> <C-o>""gP
+cmap <C-v> <C-r>=trim(@")<CR>
+vmap <LeftMouse> ""y :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
+nnoremap x <C-v>
+
+execute system('
+    \ test -e ~/.vim/autoload/plug.vim ||
+    \ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    \')
+
+call plug#begin()
+Plug 'farmergreg/vim-lastplace'
+call plug#end()
