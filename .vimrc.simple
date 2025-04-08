@@ -62,7 +62,7 @@ let &t_EI = "\e[2 q\<Esc>]12;red\x7"
 
 nmap <Enter> i
 nmap <S-q> :qa<CR>
-nmap <C-q> :q<CR>
+nmap <C-q> :bd<CR>
 nmap q     :q<CR>
 nmap <Tab> <C-w>w
 map  <C-s> :w<CR>
@@ -96,7 +96,7 @@ let g:netrw_usetab = 1
 let g:netrw_browse_split = 2
 let g:netrw_altv = 1
 let g:netrw_alto = 0
-let g:netrw_winsize = 20
+let g:netrw_winsize = 80
 let g:netrw_fastbrowse = 1
 let g:netrw_mousemaps = 0
 let g:netrw_banner = 0
