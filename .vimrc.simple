@@ -69,14 +69,15 @@ map  <C-s> :w<CR>
 imap <C-s> <Esc>:w<CR>
 nnoremap <Esc> <C-c>:noh<CR>
 nnoremap ; q:
-vmap <C-c> ""y g`<
+vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
 vmap <C-x> ""x g`<
 nmap <C-v> ""gP
 vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
-vmap <LeftMouse> ""y :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
-nnoremap x <C-v>
+vmap <LeftMouse> <C-c>
+nnoremap x     <C-v>
+nnoremap <A-v> <C-v>
 
 execute system('
     \ test -e ~/.vim/autoload/plug.vim ||
