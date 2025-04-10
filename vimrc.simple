@@ -70,7 +70,7 @@ call plug#end()
 set laststatus=2
 set statusline=
 set statusline+=%#Icon#
-set statusline+=\  
+set statusline+=\ 
 set statusline+=%#NormalC#%{(mode()=='n')?'\ NORMAL\ ':''}
 set statusline+=%#InsertC#%{(mode()=='i')?'\ INSERT\ ':''}
 set statusline+=%#VisualC#%{(mode('1')=~'v')?'\ VISUAL\ ':''}
@@ -111,6 +111,7 @@ nmap = <C-w>=
 exec "set <M-v>=\<Esc>v"
 nnoremap <A-v> <C-v>
 nmap <C-d> :Lexplore<CR>
+nmap r     :redo<CR>
 nmap <C-z> u
 imap <C-u> <C-o>u
 imap <C-z> <C-o>u
@@ -123,12 +124,13 @@ inoremap <C-BS> <C-w>
 inoremap <C-h>  <C-w>
 nnoremap <C-h>  :execute(printf(":help %s*",expand("<cword>")))<CR>
 
-" fix
-au VimEnter * nmap <S-q> :qa<CR>
-
-augroup help_position
+augroup defaults
     au!
+    " fix
+    au VimEnter * nmap <S-q> :qa<CR>
+    au BufWinEnter * doau FileType
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
+    au FileType netrw nmap <buffer> <2-LeftMouse> <CR>
 augroup END
 
 let g:auto_complete = 0
