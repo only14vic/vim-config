@@ -119,7 +119,7 @@ nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : &bt != '' && &bt != 'hel
 nnoremap ; q:
 vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
 vmap <C-x> ""x g`<
-nmap <C-v> ""gP
+"nmap <C-v> ""gP
 vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
