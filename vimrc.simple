@@ -22,7 +22,7 @@ set showtabline=2
 set virtualedit=onemore
 set nowrap
 set linebreak
-set showbreak=>\
+set showbreak=
 set wrapscan
 set list
 set listchars=tab:<->,trail:·
@@ -124,7 +124,7 @@ vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
-nnoremap <expr> <RightMouse> mode('1') == 'nt' ? "<CR>" : "<Esc>"
+nmap <expr> <RightMouse> mode('1') == 'nt' ? "\<CR>" : "\<Esc>"
 inoremap <RightMouse> <Esc>
 nnoremap <2-LeftMouse> i
 tnoremap <RightMouse> <LeftMouse><C-w>N
@@ -135,6 +135,7 @@ nmap <C-d> :Lexplore<CR>
 nmap <nowait> <S-d> :VsplitVifm .<CR>
 nmap <nowait> <A-d> :bo vert term ++close vifm .<CR>
 nmap r     :redo<CR>
+nmap <S-u> :u0<CR>
 nmap <C-z> u
 imap <C-u> <C-o>u
 imap <C-z> <C-o>u
