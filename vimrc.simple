@@ -35,6 +35,7 @@ set switchbuf=useopen,usetab,vsplit
 set cursorlineopt=number
 set cursorline
 set showcmd
+set showmode
 set noswapfile
 set undofile
 set undodir=~/.vim/undo
@@ -130,11 +131,14 @@ augroup help_position
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
 augroup END
 
-augroup auto_complete
-    au!
-    au CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0
-            \ && getline('.')[col('.')-2] =~ '[a-z]' | silent! call feedkeys("\<C-x>\<C-o>") | endif
-augroup END
+let g:auto_complete = 0
+if g:auto_complete == 1
+    augroup auto_complete
+        au!
+        au CursorHoldI *  pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0
+                \ && getline('.')[col('.')-2] =~ '[a-z]' | silent! call feedkeys("\<C-x>\<C-o>") | endif
+    augroup END
+endif
 
 let g:netrw_liststyle = 3
 let g:netrw_preview = 1
