@@ -154,6 +154,24 @@ imap     <A-Up>    <C-o><A-Up>
 imap     <A-Down>  <C-o><A-Down>
 tmap     <A-Left>  <C-w>gT
 tmap     <A-Right> <C-w>gt
+nnoremap <S-End>   viw
+nnoremap <S-Home>  viwo
+nnoremap <S-Right> ve
+nnoremap <S-Left>  vb
+nnoremap <S-Up>    <C-V>
+nnoremap <S-Down>  <S-V>
+inoremap <S-End>   <C-o>viw
+inoremap <S-Home>  <C-o>viwo
+inoremap <S-Right> <C-o>ve
+inoremap <S-Left>  <C-o><Left><C-o>vb
+inoremap <S-Up>    <C-o><C-V>
+inoremap <S-Down>  <C-o><S-V>
+vnoremap <S-Right> e
+vnoremap <S-Left>  b
+vnoremap <S-Up> k
+vnoremap <S-Down> j
+vnoremap <S-Home> g^
+vnoremap <S-End> $
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
