@@ -122,6 +122,9 @@ inoremap <C-BS> <C-w>
 inoremap <C-h>  <C-w>
 nnoremap <C-h>  :execute(printf(":help %s*",expand("<cword>")))<CR>
 
+" fix
+au VimEnter * nmap <S-q> :qa<CR>
+
 augroup help_position
     au!
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
