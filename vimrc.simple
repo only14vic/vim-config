@@ -119,11 +119,16 @@ nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : &bt != '' && &bt != 'hel
 nnoremap ; q:
 vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
 vmap <C-x> ""x g`<
-"nmap <C-v> ""gP
+nmap <C-v> ""gP
 vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
+nnoremap <expr> <RightMouse> mode('1') == 'nt' ? "<CR>" : "<Esc>"
+inoremap <RightMouse> <Esc>
+nnoremap <2-LeftMouse> i
+tnoremap <RightMouse> <LeftMouse><C-w>N
+tnoremap <2-LeftMouse> <CR>
 nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
 nmap <C-d> :Lexplore<CR>
