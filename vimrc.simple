@@ -154,6 +154,7 @@ tmap     <A-Right> <C-w>gt
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
+nnoremap <A-e> :set expandtab!<CR>
 
 autocmd! ColorScheme *
     \  hi clear SpellBad
