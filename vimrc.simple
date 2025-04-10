@@ -78,6 +78,7 @@ execute system('
 
 call plug#begin()
 Plug 'farmergreg/vim-lastplace'
+Plug 'vifm/vifm.vim'
 call plug#end()
 
 set laststatus=2
@@ -140,6 +141,8 @@ inoremap <C-h>  <C-w>
 nnoremap <C-h>  :execute(printf(":help %s*",expand("<cword>")))<CR>
 nnoremap f /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f "zy<Esc>/<C-r>z<CR>
+nmap <nowait> dd :VsplitVifm .<CR>
+nmap <nowait> <A-d> :bo vert term ++close vifm .<CR>
 nnoremap <S-t>     :tabnew .<CR>
 nnoremap <A-Left>  :tabN<CR>
 nnoremap <A-Right> :tabn<CR>
