@@ -63,6 +63,13 @@ let &t_SI = "\e[5 q\<Esc>]12;green\x7"
 let &t_SR = "\e[5 q\<Esc>]12;magenta\x7"
 let &t_EI = "\e[2 q\<Esc>]12;red\x7"
 
+" Fix Alt Keys
+for i in range(33,61)+range(63,90)+[92]+range(94,122)
+  let c = i is 34 ? '\"' : i is 124 ? '\|' : nr2char(i)
+  exec printf("set <M-%s>=\<Esc>%s", c, c)
+  exec printf("tnoremap <silent> <M-%s> <Esc>%s", c, c)
+endfor
+
 execute system('test -e ~/.vim/undo || mkdir ~/.vim/undo')
 execute system('
     \ test -e ~/.vim/autoload/plug.vim ||
@@ -117,7 +124,6 @@ imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
 nnoremap = <C-w>=
-exec "set <M-v>=\<Esc>v"
 nnoremap <A-v> <C-v>
 nmap <C-d> :Lexplore<CR>
 nmap r     :redo<CR>
@@ -134,11 +140,19 @@ inoremap <C-h>  <C-w>
 nnoremap <C-h>  :execute(printf(":help %s*",expand("<cword>")))<CR>
 nnoremap f /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f "zy<Esc>/<C-r>z<CR>
-exec "set <M-w>=\<Esc>w"
+nnoremap <S-t>     :tabnew .<CR>
+nnoremap <A-Left>  :tabN<CR>
+nnoremap <A-Right> :tabn<CR>
+nnoremap <A-Up>    :tabmove -<CR>
+nnoremap <A-Down>  :tabmove +<CR>
+imap     <A-Left>  <C-o><A-Left>
+imap     <A-Right> <C-o><A-Right>
+imap     <A-Up>    <C-o><A-Up>
+imap     <A-Down>  <C-o><A-Down>
+tmap     <A-Left>  <C-w>gT
+tmap     <A-Right> <C-w>gt
 nnoremap <A-w> :set wrap!<CR>
-exec "set <M-s>=\<Esc>s"
 nnoremap <A-s> :set spell!<CR>
-exec "set <M-r>=\<Esc>r"
 nnoremap <A-r> :set readonly!<CR>
 
 augroup defaults
