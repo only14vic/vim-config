@@ -6,6 +6,9 @@ colorscheme slate
 
 set path=.:**
 set encoding=utf-8
+set errorbells
+set visualbell t_vb=
+set autoread
 set shiftwidth=4
 set tabstop=4
 set expandtab
@@ -83,6 +86,8 @@ set statusline+=\ [%{&fileformat}\]
 set statusline+=%#Position#
 set statusline+=\ [%l/%L]
 
+let g:mapleader = '-'
+
 nmap <Enter> i
 nmap <S-q> :qa<CR>
 nmap <C-q> :bd<CR>
@@ -102,7 +107,7 @@ imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
 nmap = <C-w>=
-nnoremap x     <C-v>
+exec "set <M-v>=\<Esc>v"
 nnoremap <A-v> <C-v>
 nmap <C-d> :Lexplore<CR>
 nmap <C-z> u
@@ -141,4 +146,3 @@ let g:netrw_mousemaps = 0
 let g:netrw_banner = 0
 let g:netrw_sort_options = 'i'
 let g:netrw_list_hide = '^\.+'
-
