@@ -25,7 +25,7 @@ set linebreak
 set showbreak=
 set wrapscan
 set list
-set listchars=tab:<->,trail:·
+set listchars=tab:«·»,trail:·
 set mouse=a
 set mousemodel=popup
 set number
