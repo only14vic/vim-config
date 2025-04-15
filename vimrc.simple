@@ -20,6 +20,7 @@ set wildignorecase
 set wildoptions=fuzzy,pum
 set showtabline=2
 set virtualedit=onemore
+set selection=inclusive
 set nowrap
 set linebreak
 set showbreak=
@@ -151,6 +152,22 @@ nnoremap <C-h>  :execute(printf(":help %s*",expand("<cword>")))<CR>
 nnoremap f /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f "zy<Esc>/<C-r>z<CR>
 nnoremap <S-t>     :tabnew .<CR>
+nnoremap + :resize +5<CR>
+nnoremap _ :resize -5<CR>
+nnoremap > :vertical resize +10<CR>
+nnoremap < :vertical resize -10<CR>
+noremap  <C-Right> e
+noremap  <C-Left>  b
+inoremap <C-Right> <C-o>e<Right>
+inoremap <C-Left>  <C-o>b
+noremap  <expr> <C-Up>      pumvisible() ? "\<PageUp>"     : "5k"
+noremap  <expr> <C-Down>    pumvisible() ? "\<PageDown>"   : "5j"
+inoremap <expr> <C-Up>      pumvisible() ? "\<PageUp>"     : "\<C-o>5k"
+inoremap <expr> <C-Down>    pumvisible() ? "\<PageDown>"   : "\<C-o>5j"
+noremap  <expr> <PageUp>    pumvisible() ? "\<PageUp>"     : "10k"
+noremap  <expr> <PageDown>  pumvisible() ? "\<PageDown>"   : "10j"
+inoremap <expr> <PageUp>    pumvisible() ? "\<PageUp>"     : "\<C-o>10k"
+inoremap <expr> <PageDown>  pumvisible() ? "\<PageDown>"   : "\<C-o>10j"
 nnoremap <A-Left>  :tabN<CR>
 nnoremap <A-Right> :tabn<CR>
 nnoremap <A-Up>    :tabmove -<CR>
@@ -170,15 +187,15 @@ nnoremap <S-Down>  <S-V>
 inoremap <S-End>   <C-o>viw
 inoremap <S-Home>  <C-o>viwo
 inoremap <S-Right> <C-o>ve
-inoremap <S-Left>  <C-o><Left><C-o>vb
+inoremap <S-Left>  <Left><C-o>vb
 inoremap <S-Up>    <C-o><C-V>
 inoremap <S-Down>  <C-o><S-V>
 vnoremap <S-Right> e
 vnoremap <S-Left>  b
-vnoremap <S-Up> k
-vnoremap <S-Down> j
-vnoremap <S-Home> g^
-vnoremap <S-End> $
+vnoremap <S-Up>    k
+vnoremap <S-Down>  j
+vnoremap <S-Home>  g^
+vnoremap <S-End>   $
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
