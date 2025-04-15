@@ -116,7 +116,7 @@ map  <C-s> :w<CR>
 inoremap <C-s>  <Esc>:w<CR>
 inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
-nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : &bt != '' && &bt != 'help' ? ":q<CR>" : ":redraw!<CR>"
+nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : &bt != '' && &bt != 'help' ? ":q<CR>" : ":lclose<bar>:pclose<bar>:redraw!<CR>"
 nnoremap ; q:
 vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
 vmap <C-x> ""x g`<
@@ -156,6 +156,10 @@ nnoremap + :resize +5<CR>
 nnoremap _ :resize -5<CR>
 nnoremap > :vertical resize +10<CR>
 nnoremap < :vertical resize -10<CR>
+nnoremap <C-\>          :lclose<CR><C-w>T
+nnoremap <silent> <A-\> :lclose<bar>let g:curbufnr=bufnr()<bar>let g:curtabnr=max([tabpagenr()-1,1])<bar>hide<bar>exe 'tabn '.g:curtabnr<bar>exe 'vert sb '.g:curbufnr<CR>
+nnoremap <silent> <A--> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'bel sb '.g:curbufnr<CR>
+nnoremap <silent> <A-=> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'vert rightb sb '.g:curbufnr<CR>
 noremap  <C-Right> e
 noremap  <C-Left>  b
 inoremap <C-Right> <C-o>e<Right>
@@ -200,6 +204,12 @@ nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
 nnoremap <A-e> :set expandtab!<CR>
+nmap dn :normal ]c<CR>
+nmap dg :diffget<CR> dn
+nmap dp :diffput<CR> dn
+nmap dr :diffget RE<CR>  " - get from REMOTE
+nmap db :diffget BA<CR>  " - get from BASE
+nmap dl :diffget LO<CR>  " - get from LOCAL
 
 autocmd! ColorScheme *
     \  hi clear SpellBad
@@ -243,3 +253,41 @@ let g:netrw_mousemaps = 0
 let g:netrw_banner = 0
 let g:netrw_sort_options = 'i'
 let g:netrw_list_hide = '^\.+'
+
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_extensions = ['tag', 'buffertag', 'dir', 'undo', 'changes', 'mixed']
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/](\.git|\.hg|\.svn|\.idea|node_modules|var|tmp|target|build)$',
+    \ 'file': '\v\.(exe|so|dll|lock)$',
+    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+    \ }
+let g:ctrlp_use_caching = 60
+let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_by_filename = 0
+let g:ctrlp_regexp = 1
+let g:ctrlp_mruf_relative = 1
+let g:ctrlp_mruf_case_sensitive = 0
+let g:ctrlp_working_path_mode = 'arw'
+let g:ctrlp_open_new_file = 'v'
+let g:ctrlp_open_multiple_files = 'v'
+let g:ctrlp_arg_map = 1
+let g:ctrlp_tabpage_position = 'ac'
+let g:ctrlp_reuse_window = ''
+let g:ctrlp_switch_buffer = 'ev'
+let g:ctrlp_lazy_update = 0
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:100'
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-o>'],
+    \ 'AcceptSelection("t")': ['<c-t>', '<RightMouse>'],
+    \ 'AcceptSelection("v")': ['<cr>', '<c-v>', '<2-LeftMouse>'],
+    \ }
+
+let g:gitgutter_enabled = 1
+let g:gitgutter_use_location_list = 1
+let g:gitgutter_highlight_lines = 0
+let g:gitgutter_sign_priority = 3
+let g:gitgutter_override_sign_column_highlight = 1
+let g:gitgutter_close_preview_on_escape = 1
+let g:gitgutter_use_location_list = 1
+
