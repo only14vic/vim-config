@@ -21,7 +21,7 @@ set wildoptions=fuzzy,pum
 set showtabline=2
 set virtualedit=onemore
 set selection=inclusive
-set nowrap
+set wrap
 set linebreak
 set showbreak=
 set wrapscan
@@ -228,6 +228,7 @@ augroup defaults
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
     au FileType netrw nmap <buffer> <2-LeftMouse> <CR>
+    au FileType gitcommit setlocal spell
 augroup END
 
 let g:auto_complete = 0
