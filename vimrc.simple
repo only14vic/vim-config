@@ -55,6 +55,7 @@ set nocompatible
 set omnifunc=syntaxcomplete#Complete
 set dictionary=spell
 set nospell spelllang=ru,en
+set foldenable foldmethod=syntax foldnestmax=3
 set t_md=
 set t_mb=
 set t_Co=256
@@ -116,7 +117,7 @@ map  <C-s> :w<CR>
 inoremap <C-s>  <Esc>:w<CR>
 inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
-nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : &bt != '' && &bt != 'help' ? ":q<CR>" : ":lclose<bar>:pclose<bar>:redraw!<CR>"
+nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt)<0,index(['netrw','qf'],&ft)>=0) ? ":q<CR>" : ":lclose<bar>:pclose<bar>:redraw!<CR>"
 nnoremap ; q:
 vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
 vmap <C-x> ""x g`<
