@@ -140,6 +140,7 @@ nmap <C-d> :Lexplore<CR>
 nmap <S-d> :VsplitVifm .<CR>
 nmap <A-d> :bo vert term ++close vifm .<CR>
 nmap <A-n> :bo vert term ++close tjournal <CR>
+nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
 nmap r     :redo<CR>
 nmap <S-u> :u0<CR>
 nmap <C-z> u
