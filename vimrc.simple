@@ -131,6 +131,7 @@ tnoremap <RightMouse> <LeftMouse><C-w>N
 tnoremap <2-LeftMouse> <CR>
 nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
+nnoremap <S-c> :term<CR>
 nmap <C-d> :Lexplore<CR>
 nmap <nowait> <S-d> :VsplitVifm .<CR>
 nmap <nowait> <A-d> :bo vert term ++close vifm .<CR>
