@@ -2,8 +2,6 @@ lang ru_RU.utf8
 syntax enable
 filetype plugin indent on
 
-colorscheme slate
-
 set shell=fish
 set path=.:**
 set encoding=utf-8
@@ -81,7 +79,11 @@ execute system('
 call plug#begin()
 Plug 'farmergreg/vim-lastplace'
 Plug 'vifm/vifm.vim'
+Plug 'jamessan/vim-gnupg'
+Plug 'rafi/awesome-vim-colorschemes'
 call plug#end()
+
+colorscheme deep-space
 
 set laststatus=2
 set statusline=
@@ -211,6 +213,7 @@ nmap dp :diffput<CR> dn
 nmap dr :diffget RE<CR>  " - get from REMOTE
 nmap db :diffget BA<CR>  " - get from BASE
 nmap dl :diffget LO<CR>  " - get from LOCAL
+inoremap <C-t> <C-R>=strftime('%Y-%m-%d %H:%M:%S')<C-M>
 
 autocmd! ColorScheme *
     \  hi clear SpellBad
