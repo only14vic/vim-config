@@ -137,8 +137,9 @@ nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
 nnoremap <S-c> :term<CR>
 nmap <C-d> :Lexplore<CR>
-nmap <nowait> <S-d> :VsplitVifm .<CR>
-nmap <nowait> <A-d> :bo vert term ++close vifm .<CR>
+nmap <S-d> :VsplitVifm .<CR>
+nmap <A-d> :bo vert term ++close vifm .<CR>
+nmap <A-n> :bo vert term ++close tjournal <CR>
 nmap r     :redo<CR>
 nmap <S-u> :u0<CR>
 nmap <C-z> u
