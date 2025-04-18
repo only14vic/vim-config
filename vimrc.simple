@@ -1,3 +1,7 @@
+
+" do not load defaults if ~/.vimrc is missing
+let skip_defaults_vim=1
+
 lang ru_RU.utf8
 syntax enable
 filetype plugin indent on
@@ -12,8 +16,11 @@ set autoread
 set shiftwidth=4
 set tabstop=4
 set expandtab
+set display=truncate
+set backspace=indent,eol,start
 set complete=.,d,kspell
 set completeopt=menu,menuone,popuphidden,noinsert
+set wildmenu
 set wildignorecase
 set wildoptions=fuzzy,pum
 set showtabline=2
@@ -42,7 +49,7 @@ set cursorline
 set showcmd
 set showmode
 set noswapfile
-set noundofile
+set undofile
 set undodir=~/.vim/undo
 set shortmess-=S
 set shortmess-=C
@@ -209,6 +216,7 @@ nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
 nnoremap <A-e> :set expandtab!<CR>
+nnoremap <A-u> :set undofile!<CR>
 nmap dn :normal ]c<CR>
 nmap dg :diffget<CR> dn
 nmap dp :diffput<CR> dn
@@ -227,8 +235,6 @@ doautocmd ColorScheme
 
 augroup defaults
     au!
-    " fix
-    au VimEnter * nmap <S-q> :qa<CR>
     au BufWinEnter * doau FileType
     au TerminalWinOpen * wincmd L | vert resize 80
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
