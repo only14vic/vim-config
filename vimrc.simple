@@ -123,7 +123,9 @@ nmap <Tab> <C-w>w
 nmap <S-Tab> <C-w>p
 tmap <S-Tab> <C-w>w
 map  <C-s> :w<CR>
+nnoremap s     :wall<CR>
 inoremap <C-s>  <Esc>:w<CR>
+nnoremap <S-s> :mksession!<CR>
 inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
 nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt)<0,index(['netrw','qf'],&ft)>=0) ? ":q<CR>" : ":lclose<bar>:pclose<bar>:redraw!<CR>"
@@ -303,4 +305,12 @@ let g:gitgutter_sign_priority = 3
 let g:gitgutter_override_sign_column_highlight = 1
 let g:gitgutter_close_preview_on_escape = 1
 let g:gitgutter_use_location_list = 1
+
+function! LoadSessionDefault()
+   if argc() == 0 && &diff == 0 && getenv('VIM_TERMINAL') == v:null && filereadable('Session.vim')
+       source Session.vim
+   endif
+endfunction
+
+silent! call LoadSessionDefault()
 
