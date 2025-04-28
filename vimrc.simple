@@ -126,8 +126,8 @@ map  <C-s> :w<CR>
 nnoremap s     :wall<CR>
 inoremap <C-s>  <Esc>:w<CR>
 nnoremap <S-s> :mksession!<CR>
-inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
-cnoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<C-c>"
+inoremap <expr> <Esc> pumvisible() ? "\<Esc>i" : "\<Esc>"
+cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
 nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt)<0,index(['netrw','qf'],&ft)>=0) ? ":q<CR>" : ":lclose<bar>:pclose<bar>:redraw!<CR>"
 nnoremap ; q:
 vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
