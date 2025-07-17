@@ -119,6 +119,7 @@ nmap <S-q> :qa<CR>
 nmap <C-q> :bd<CR>
 tmap <C-q> <C-w><C-c>
 nmap q     :q<CR>
+nmap <A-q> :q!<CR>
 nmap <Tab> <C-w>w
 nmap <S-Tab> <C-w>p
 tmap <S-Tab> <C-w>w
