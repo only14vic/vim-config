@@ -1039,7 +1039,7 @@ nnoremap _ :resize -5<CR>
 nnoremap > :vertical resize +10<CR>
 nnoremap < :vertical resize -10<CR>
 nnoremap ; q:
-noremap  <C-Right> e
+noremap  <C-Right> w
 noremap  <C-Left>  b
 inoremap <C-Right> <C-o>e<Right>
 inoremap <C-Left>  <C-o>b

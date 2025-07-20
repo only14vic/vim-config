@@ -176,7 +176,7 @@ nnoremap <C-\>          :lclose<CR><C-w>T
 nnoremap <silent> <A-\> :lclose<bar>let g:curbufnr=bufnr()<bar>let g:curtabnr=max([tabpagenr()-1,1])<bar>hide<bar>exe 'tabn '.g:curtabnr<bar>exe 'vert sb '.g:curbufnr<CR>
 nnoremap <silent> <A--> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'bel sb '.g:curbufnr<CR>
 nnoremap <silent> <A-=> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'vert rightb sb '.g:curbufnr<CR>
-noremap  <C-Right> e
+noremap  <C-Right> w
 noremap  <C-Left>  b
 inoremap <C-Right> <C-o>e<Right>
 inoremap <C-Left>  <C-o>b
