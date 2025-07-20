@@ -1,0 +1,1406 @@
+lang ru_RU.utf8
+
+syntax enable
+filetype plugin indent on
+
+set path=.:**
+set errorbells
+set visualbell t_vb=
+"set colorcolumn=+1
+set tabstop=4
+set shiftwidth=4
+set encoding=utf-8
+set ignorecase
+set smartcase
+set smartindent
+set autoread
+set incsearch
+set hlsearch
+set cursorline
+set cursorlineopt=number
+set number
+set expandtab
+set smarttab
+set nowrap
+set linebreak
+set wrapscan
+set shell=fish
+set nopaste " if enabled then autocomplete not work
+set showbreak=
+set list
+set listchars=tab:»·,trail:·
+set foldenable          "foldenable, nofoldenable
+set foldmethod=syntax   "syntax, indent
+set foldnestmax=2
+set foldlevel=0
+set showfulltag
+set selection=inclusive
+set switchbuf=useopen,usetab,vsplit
+set termguicolors
+set wildmenu
+set wildmode=longest:full
+set wildoptions=fuzzy,pum
+set wildignore=*/.git/*,*/node_modules/*,*/var/*,*/tmp/*,*/target/*,*/build/*,*/bin/*,*/lib/*,*/doc/*
+set nowildignorecase
+set nofileignorecase
+set noswapfile
+set nocompatible
+set showcmd
+set showmode
+set splitright
+set ballooneval
+set noballoonevalterm
+set virtualedit=onemore
+set mouse=a
+set mousemodel=popup
+set ttymouse=sgr
+set dictionary=spell
+set nospell spelllang=ru,en
+set spelloptions=camel
+set spellsuggest=double
+set backspace=indent,eol,start
+set sessionoptions=buffers,curdir,help,tabpages
+set equalalways
+set eadirection=hor
+set ttyfast
+set winminheight=0
+set winminwidth=0
+set smoothscroll
+set scroll=5
+set noconfirm
+set copyindent
+set iminsert=0
+set imsearch=0
+set helplang=ru,en
+set langremap
+set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,рh,оj,лk,дl,ж\\;,э\\'
+            \,яz,чx,сc,мv,иb,тn,ьm,б\\,ю.,Ж:,Э\\",Б<,Ю>,Х{,Ъ},ЙQ,ЦW,УE,КR
+            \,ЕT,НY,ГU,ШI,ЩO,ЗP,ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,ЯZ,ЧX,СC,МV,ИB,ТN,ЬM
+set conceallevel=0
+set concealcursor=nc
+set shortmess-=S
+set shortmess-=C
+set complete=.,d,kspell " ctrl-n show popup
+set completeopt=menu,menuone,popuphidden,noinsert
+set omnifunc=syntaxcomplete#Complete
+set updatetime=500
+set timeout timeoutlen=700 ttimeoutlen=10
+set history=1000
+set undofile
+set undodir=~/.vim/undo
+set tags=.ctags/app.ctags
+set t_md= " disable font bold
+set t_mb= " disable blink mode
+set t_Co=256
+
+" Cursor reference chart of values:
+"   Ps = 0  -> blinking block.
+"   Ps = 1  -> blinking block (default).
+"   Ps = 2  -> steady block.
+"   Ps = 3  -> blinking underline.
+"   Ps = 4  -> steady underline.
+"   Ps = 5  -> blinking bar (xterm).
+"   Ps = 6  -> steady bar (xterm).
+let &t_SI = "\e[5 q\<Esc>]12;green\x7"
+let &t_SR = "\e[5 q\<Esc>]12;magenta\x7"
+let &t_EI = "\e[2 q\<Esc>]12;red\x7"
+
+"call ch_logfile(expand('vim.log'), 'w')
+
+" Fix Alt keys
+for ord in range(33,61)+range(63,90)+[92]+range(94,122)
+  let char = ord is 34 ? '\"' : ord is 124 ? '\|' : nr2char(ord)
+  exec printf("set <M-%s>=\<Esc>%s", char, char)
+  exec printf("tnoremap <silent> <M-%s> <Esc>%s", char, char)
+endfor
+
+execute system('test -e ~/.vim/undo || mkdir ~/.vim/undo')
+execute system('
+    \ test -e ~/.vim/autoload/plug.vim ||
+    \ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    \')
+
+let g:is_development = $APP_ENV == 'dev' && $USER != 'root' && &diff == 0 && getenv('VIM_TERMINAL') == v:null
+
+if getenv('CARGO_TARGET_DIR') == v:null
+    let $CARGO_TARGET_DIR=getcwd().'/target/vim-local'
+endif
+
+let g:ale_enabled = g:is_development
+let g:ale_fix_on_save = g:is_development
+let g:ale_disable_lsp = 1
+let g:ale_completion_enabled = 1
+let b:ale_completion_enabled = 1
+let g:ale_completion_autoimport = 1
+let g:ale_floating_preview = 1
+let g:ale_detail_to_floating_preview = 1
+let g:ale_completion_max_suggestions = 100
+let g:ale_sign_column_always = 1
+"    \ 'sqloracle': ['pgformatter','trim_whitespace','remove_trailing_lines'],
+"    \ 'sql': ['pgformatter','trim_whitespace','remove_trailing_lines'],
+let g:ale_fixers = {
+    \ 'rust': ['trim_whitespace','remove_trailing_lines'],
+    \ 'xml': ['tidy','trim_whitespace','remove_trailing_lines'],
+    \ 'html': ['html-beautify','trim_whitespace','remove_trailing_lines'],
+    \ 'javascript': ['eslint','trim_whitespace','remove_trailing_lines'],
+    \ 'json': ['jq','trim_whitespace','remove_trailing_lines'],
+    \ 'css': ['stylelint','trim_whitespace','remove_trailing_lines'],
+    \ 'sass': ['stylelint','trim_whitespace','remove_trailing_lines'],
+    \ 'c': ['clang-format','trim_whitespace','remove_trailing_lines'],
+    \ 'cpp': ['clang-format','trim_whitespace','remove_trailing_lines'],
+    \ '*': ['trim_whitespace','remove_trailing_lines']
+    \ }
+let g:ale_linters_explicit = 1
+" 'rust': ['analyzer','cargo']
+let g:ale_linters = {
+    \ 'rust': [],
+    \ 'html': ['eslint'],
+    \ 'xml': ['tidy'],
+    \ 'sql': [],
+    \ 'javascript': ['eslint'],
+    \ 'json': ['eslint'],
+    \ 'css': ['stylelint'],
+    \ 'sass': ['stylelint'],
+    \ }
+let g:ale_html_beautify_executable = 'js-beautify'
+let g:ale_html_beautify_options = '--type html --editorconfig'
+let g:ale_rust_cargo_target_dir = $CARGO_TARGET_DIR
+let g:ale_rust_cargo_avoid_whole_workspace = 0
+let g:ale_rust_cargo_use_clippy = 1
+let g:ale_rust_cargo_check_examples = 1
+let g:ale_rust_cargo_check_tests = 1
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_default_navigation = 'vsplit'
+let g:ale_lsp_suggestions = 1
+let g:ale_list_window_size = 1
+let g:ale_open_list = 1
+let g:ale_set_loclist = 1
+let g:ale_set_quickfix = 0
+let g:ale_set_balloons = 1
+let g:ale_sql_pgformatter_options = '-c ~/.pg_format'
+let g:ale_html_tidy_options = '-q -e -omit -config ~/.tidyrc'
+let g:ale_hover_cursor = 1
+let g:ale_hover_to_preview = 1
+let b:ale_hover_to_floating_preview = 1
+let g:ale_popup_menu_enabled = 0
+let g:ale_cursor_detail = 1
+let g:ale_virtualtext_cursor = 0
+
+"\   'cmd': {server_info->['rust-analyzer']},
+let g:rustfmt_config_file = printf('%s/.rustfmt.toml', getcwd())
+
+au User lsp_setup call lsp#register_server({
+    \   'name': 'rust-analyzer',
+    \   'cmd': ['rust-analyzer'],
+    \   'allowlist': ['rust'],
+    \   'initialization_options': {
+    \       'rustfmt': {
+    \           'overrideCommand': ['rustup','run','nightly','rustfmt'],
+    \           'extraArgs': ['--config-path', get(g:, 'rustfmt_config_file')]
+    \       },
+    \       'lens': {
+    \           'enable': v:false,
+    \           'debug': { 'enable': v:false }
+    \       },
+    \       'hover': {
+    \           'actions': {
+    \               'enable': v:true,
+    \               'debug': { 'enable': v:false },
+    \               'run': { 'enable': v:false } ,
+    \               'references': { 'enable': v:true },
+    \               'implementations': { 'enable': v:true }
+    \           },
+    \           'memoryLayout': { 'enable': v:true, 'offset': 'both', 'alignment': 'both' },
+    \           'links': { 'enable': v:false },
+    \           'documentation': { 'enable': v:true },
+    \           'show': { 'fields': 20, 'enumVariants': 20 }
+    \       },
+    \       'imports': {
+    \           'preferPrelude': v:true,
+    \           'preferNoStd': v:true,
+    \           'prefix': 'crate',
+    \           'group': { 'enable': v:true },
+    \           'merge': { 'glob': v:true },
+    \           'granularity': {
+    \               'group': 'one',
+    \               'enforce': v:true
+    \           }
+    \       },
+    \       'inlayHints': {
+    \           'bindingModeHints': { 'enable': v:true },
+    \           'chainingHints': { 'enable': v:true },
+    \           'closingBraceHints': { 'enable': v:true },
+    \           'closureStyle': 'rust_analyzer',
+    \           'closureCaptureHints': { 'enable': v:true },
+    \           'closureReturnTypeHints': { 'enable': 'always' },
+    \           'implicitDrops': { 'enable': v:false },
+    \           'parameterHints': { 'enable': v:false },
+    \           'typeHints': { 'enable': v:true },
+    \           'rangeExclusiveHints': { 'enable': v:true },
+    \           'lifetimeElisionHints': { 'enable': 'skip_trivial' },
+    \           'expressionAdjustmentHints': { 'enable': 'never' },
+    \           'discriminantHints': { 'enable': 'fieldless' },
+    \           'reborrowHints': { 'enable': 'never' },
+    \       },
+    \       'cachePriming': { 'enable': v:true },
+    \       'procMacro': {
+    \           'enable': v:true,
+    \           'attributes': { 'enable': v:true },
+    \           'ignored': { 'sqlx-macros':['*'], 'sea-orm-macros':['sea_orm'], 'serde_derive':['serde'], 'validator_derive':['validate'], 'actix-web-codegen':['*'] }
+    \       },
+    \       'restartServerOnConfigChange': v:true,
+    \       'completion': {
+    \           'autoimport': { 'enable': v:true },
+    \           'callable': { 'snippets': 'add_parentheses' },
+    \           'fullFunctionSignatures': { 'enable': v:true },
+    \           'snippets': { 'custom': {} },
+    \           'postfix': { 'enable': v:false },
+    \           'termSearch': { 'enable': v:true, 'fuel': 10000 }
+    \       },
+    \       'diagnostics': {
+    \           'enable': v:true,
+    \           'useRustcErrorCode': v:true,
+    \           'previewRustcOutput': v:true,
+    \           'styleLints': { 'enable': v:true }
+    \       },
+    \       'server': {
+    \           'extraEnv': {
+    \               'CARGO_TARGET_DIR': $CARGO_TARGET_DIR,
+    \           },
+    \       },
+    \       'checkOnSave': v:true,
+    \       'check': {
+    \           'extraArgs': ['--lib','--bins','--tests','--examples'],
+    \           'extraEnv': {
+    \           },
+    \           'allTargets': v:false,
+    \           'workspace': v:true,
+    \           'invocationStrategy': 'once',
+    \       },
+    \       'cargo': {
+    \           'allTargets': v:false,
+    \           'buildScripts': {
+    \               'enable': v:true,
+    \               'useRustcWrapper': v:true,
+    \               'invocationStrategy': 'once',
+    \               'rebuildOnSave': v:true,
+    \           },
+    \       },
+    \       'workspace': {
+    \           'symbol': {
+    \               'search': { 'kind': 'all_symbols', 'scope': 'workspace' },
+    \           },
+    \       },
+    \       'signatureInfo': {
+    \           'detail': 'parameters',
+    \           'documentation': { 'enable': v:false },
+    \       },
+    \       'semanticHighlighting': {
+    \           'strings': { 'enable': v:true },
+    \           'doc': { 'comment': { 'inject': { 'enable': v:true } } },
+    \           'nonStandardTokens': v:true,
+    \           'punctuation': { 'enable': v:true }
+    \       },
+    \       'files': {
+    \           'excludeDirs': ['../../usr/local/cargo', '../../usr/local/rustup', 'node_modules', 'target', 'var', 'assets', 'public', '.git'],
+    \           'watcherExclude': ['../../usr/local/cargo', '../../usr/local/rustup', 'node_modules', 'target', 'var', 'assets', 'public', '.git'],
+    \       }
+    \   },
+    \})
+
+
+if executable('clangd')
+    augroup lsp_clangd
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'clangd',
+                    \ 'cmd': {server_info->['clangd']},
+                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                    \ })
+        "autocmd FileType c,cpp,objc,objcpp setlocal omnifunc=lsp#complete formatprg=clang-format
+    augroup end
+endif
+
+let g:asyncomplete_auto_popup = 0
+let g:asyncomplete_enable_for_all = 1
+let g:asyncomplete_matchfuzzy = 1
+let g:asyncomplete_min_chars = 1
+let g:asyncomplete_popup_delay = 0
+let g:asyncomplete_auto_completeopt = 0
+
+function! s:sort_by_sorttext_preprocessor(options, matches) abort
+  let items = []
+  for [source_name, matches] in items(a:matches)
+    "call writefile([a:options['base'],string(matches['items'])],'vim.log','a')
+    for item in matches['items']
+      let pos = stridx(tolower(item['word']), tolower(a:options['base']))
+      if pos >= 0
+        let user_data = lsp#omni#get_managed_user_data_from_completed_item(item)
+        let completion_item = get(user_data, 'completion_item', {})
+        "call writefile([string(completion_item)],'vim.log','a')
+        let item['sort'] = strlen(get(completion_item, 'filterText', get(completion_item, 'label', ''))) + pos
+        if index(['',' ','.',':','>'],a:options['base'][strlen(a:options['base'])-1]) >= 0
+            let item['sort'] += char2nr(get(item,'kind','')[0])*10
+        endif
+        call add(items, item)
+      endif
+    endfor
+  endfor
+
+  let items = sort(items, {a, b -> a['sort'] - b['sort']})
+
+  call asyncomplete#preprocess_complete(a:options, items)
+endfunction
+
+if g:is_development
+    let g:asyncomplete_preprocessor = [function('s:sort_by_sorttext_preprocessor')]
+endif
+
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+\ 'name': 'omni',
+\ 'allowlist': ['*'],
+\ 'blacklist': ['rust','c','cpp'],
+\ 'completor': function('asyncomplete#sources#omni#completor'),
+\ 'config': {
+\   'show_source_kind': 1,
+\ },
+\ }))
+
+"au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#clang#get_source_options({
+"\ 'config': {
+"\   'clang_path': '/usr/bin/clang',
+"\   'clang_args': {
+"\      'default': ['-I/usr/include','-I./include','-I./src'],
+"\      'cpp': ['-std=c++14', '-I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include']
+"\   }
+"\ }
+"\ }))
+
+function! s:RustCapabilities(server_info) abort
+  let caps = lsp#default_get_supported_capabilities(a:server_info)
+  if get(a:server_info, 'name', '') ==# 'rust-analyzer'
+    let sid = getscriptinfo()->filter('v:val.name =~ "/vsnip_integ/integration/vimlsp.vim"')[0].sid
+    let caps = function('<SNR>'.sid.'_get_supported_capabilities')(a:server_info)
+    let caps.textDocument.completion.completionItem.resolveSupport = {
+          \ 'properties': ['additionalTextEdits', 'tags', 'labelDetails', 'detail', 'documentation', 'filterText', 'textEdit', 'command']
+          \ }
+  endif
+  "call writefile([string(caps)],'vim.log','a')
+  return caps
+endfunction
+let g:lsp_get_supported_capabilities = [function('s:RustCapabilities')]
+
+let g:lsp_async_completion = 1
+let g:lsp_auto_enable = g:is_development
+let g:lsp_fold_enabled = 0
+let g:lsp_show_workspace_edits = 0
+let g:lsp_peek_alignment = 'top'
+let g:lsp_hover_ui = 'float'
+let g:lsp_hover_conceal = 0
+let g:lsp_preview_keep_focus = 0
+let g:lsp_preview_float = 1
+let g:lsp_preview_autoclose = 1
+let g:lsp_preview_doubletap = 0
+let g:lsp_work_done_progress_enabled = 1
+let g:lsp_signature_help_enabled = 1
+let g:lsp_signature_help_delay = 200
+let g:lsp_semantic_enabled = 0
+let g:lsp_semantic_delay = 1000
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_highlights_enabled = 0
+let g:lsp_diagnostics_highlights_insert_mode_enabled = 0
+let g:lsp_diagnostics_highlights_delay = 300
+let g:lsp_document_highlight_enabled = 1
+let g:lsp_document_highlight_delay = 300
+let g:lsp_diagnostics_signs_enabled = 1
+let g:lsp_diagnostics_signs_insert_mode_enabled = 1
+let g:lsp_diagnostics_signs_delay = 300
+let g:lsp_diagnostics_signs_priority = 100
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_echo_delay = 300
+let g:lsp_diagnostics_float_insert_mode_enabled = 0
+let g:lsp_diagnostics_float_cursor = 1
+let g:lsp_diagnostics_float_delay = 700
+let g:lsp_document_symbol_detail = 1
+let g:lsp_document_code_action_signs_enabled = 0
+let g:lsp_document_code_action_signs_delay = 100
+let g:lsp_inlay_hints_enabled = 1
+let g:lsp_inlay_hints_delay = 300
+let g:lsp_inlay_hints_mode = {'normal': ['curline']}
+let g:lsp_diagnostics_virtual_text_enabled = 0
+let g:lsp_diagnostics_virtual_text_insert_mode_enabled = 0
+let g:lsp_diagnostics_virtual_text_delay = 1000
+let g:lsp_diagnostics_virtual_text_align = 'below'
+let g:lsp_diagnostics_virtual_text_wrap = 'truncate'
+let g:lsp_diagnostics_virtual_text_prefix = "> "
+let g:lsp_completion_documentation_enabled = 1
+let g:lsp_completion_documentation_delay = 0
+let g:lsp_insert_text_enabled = 1
+let g:lsp_text_edit_enabled = 1 " on/off autoimport
+"let g:lsp_log_file = expand('vim-lsp.log')
+
+call plug#begin()
+"Plug 'preservim/nerdtree'
+Plug 'mileszs/ack.vim'
+Plug 'mechatroner/rainbow_csv'
+Plug 'devsjc/vim-jb', {'commit': '408d5ad504d1a46ff054dd31d6ecce6a0570d326'}
+Plug 'nordtheme/vim'
+Plug 'cocopon/iceberg.vim'
+Plug 'nanotech/jellybeans.vim'
+Plug 'vim-scripts/vcscommand.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'cespare/vim-toml', { 'branch': 'main' }
+Plug 'jamessan/vim-gnupg'
+Plug 'rafi/awesome-vim-colorschemes'
+Plug 'w0ng/vim-hybrid'
+Plug 'farmergreg/vim-lastplace'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'yami-beta/asyncomplete-omni.vim'
+Plug 'skywind3000/vim-quickui'
+Plug 'vifm/vifm.vim'
+if getenv('VIM_TERMINAL') == v:null && &diff == 0 && get(g:,'is_development') == 1
+    Plug 'editorconfig/editorconfig-vim'
+    Plug 'prabirshrestha/asyncomplete-lsp.vim'
+    Plug 'keremc/asyncomplete-clang.vim'
+    Plug 'hrsh7th/vim-vsnip'
+    Plug 'hrsh7th/vim-vsnip-integ'
+    Plug 'prabirshrestha/vim-lsp'
+    "Plug 'dense-analysis/ale'
+    Plug 'ctrlpvim/ctrlp.vim'
+    Plug 'mattn/ctrlp-lsp'
+    "Plug 'preservim/tagbar'
+    Plug 'rust-lang/rust.vim'
+    Plug 'mhinz/vim-crates'
+    Plug 'vim-scripts/dbext.vim'
+    Plug 'pangloss/vim-javascript'
+    Plug 'blindFS/vim-taskwarrior'
+endif
+call plug#end()
+
+let g:lastplace_ignore = "gitcommit,gitrebase,hgcommit,svn,xxd"
+let g:lastplace_ignore_buftype = "help,nofile,quickfix"
+
+let g:is_fullwin = 0
+
+au ModeChanged          i:n silent call cursor([getpos('.')[1], getpos('.')[2]+1])
+au InsertEnter          * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
+au BufWritePre          * if &bt == '' | let g:syntastic_auto_loc_list = 1 | silent! ALEResetBuffer
+                            \| silent for w in filter(getwininfo(), 'v:val.quickfix')->filter('v:val.variables.quickfix_title =~ "syntastic\\|l:lsp_cursor_diagnostic"')
+                            \| if win_id2win(w.winid) != 0 | exe printf('keepjumps %swincmd c', win_id2win(w.winid)) | endif
+                            \| endfor
+                            \| endif
+au BufEnter             * if &bt == '' && getcmdtype() == '' | doau FileType | silent! checktime | endif
+au BufEnter             * if &diff == 0 && &bt == '' && getcmdtype() == '' | let g:syntastic_auto_loc_list = 2 | let g:asyncomplete_auto_popup = 1 | endif
+au BufEnter             * if &ft =~ 'vim\|gitcommit\|git\|sql\|javascript' | let g:asyncomplete_auto_popup = 0 | endif
+au BufEnter             * if &ft == 'nerdtree' && winnr('$') > 1 | setlocal winfixwidth | exe 'vert resize '.g:NERDTreeWinSize | call nerdtree#ui_glue#invokeKeyMap('r') | exe 'ReadBookmarks' | endif
+"au BufLeave             * if &diff == 0 && &bt == '' && getcmdtype() == '' && g:is_fullwin == 0 | set nowinfixheight | endif
+au BufWinEnter          * set noballoonevalterm | augroup webdevicons_cursor_hold | au! | augroup END
+au BufWinEnter          * if bufname() == 'Result' && line('$') > 1 | setlocal winfixheight | exe 'resize '.min([get(g:,'dbext_default_buffer_lines'),line('$')]) | endif
+au BufEnter,VimResized  * if g:is_fullwin == 1 && index(['','help'], &bt) >= 0 && index(['nerdtree','netrw'],&ft) < 0 && bufname() != 'Result' && mode() == 'n' | exe "normal \<C-w>\<Bar>\<C-w>_" | endif
+au BufWinEnter          * if index(['help','ale-info'],&ft) >= 0 | wincmd L | setlocal winfixwidth | vert resize 80 | endif
+au TerminalWinOpen      * wincmd L | vert resize 100
+au WinClosed            * if or(index(['qf','nerdtree','help'], &ft) >= 0, bufname() == 'Result') | wincmd p | doau VimResized | endif
+au CursorHold,CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0 && foldclosed('.') >= 0 | silent! exe "normal o" | endif
+au CursorHold           * if &ft=='taskreport' | exe "normal \<Plug>(taskwarrior_refresh)" | endif
+au VimResume            * redraw! | silent! checktime
+au VimEnter             * if &diff == 1 && winnr() == 1 | setlocal readonly nomodifiable | endif
+au VimEnter             * if &diff == 1 | exe "windo doau FileType | setlocal foldmethod=diff" | wincmd p | exe "silent! normal! gg ]c [c zo" | endif
+au QuickFixCmdPost [^l]* if len(getqflist())  > 0 | exe 'hor bo copen '.min([10,len(getqflist())])  | endif
+au QuickFixCmdPost l*    if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.min([10,len(getloclist(winnr()))]) | endif
+au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh)
+au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
+                            \| nnoremap <buffer> <Enter> <Enter> | nmap <buffer> <2-LeftMouse> <CR>
+                            \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
+au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
+au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2
+au FileType html,htmldjango,css,scss,sass setlocal shiftwidth=4 complete=t foldmethod=indent foldnestmax=4 tags=.ctags/css.ctags
+au FileType yaml       setlocal shiftwidth=4
+au FileType javascript setlocal foldmethod=syntax foldnestmax=4
+au FileType netrw      nmap <buffer> <2-LeftMouse> <CR>
+au FileType nerdtree   setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q | noremap <buffer> a :Bookmark<CR>
+                \| noremap <buffer> <Del> :ClearBookmarks <C-r>=expand('<cword>')<CR><CR> | noremap <buffer> e :EditBookmarks<CR>
+                "\| nnoremap <silent><buffer> <Enter> :call nerdtree#ui_glue#invokeKeyMap('r')<CR> :call nerdtree#ui_glue#invokeKeyMap('<'.'CR>')<CR>
+au FileType taskreport nnoremap <buffer> <C-q> :tabclose!<CR> | nmap <buffer> q <C-q>
+                \| nnoremap <buffer> s      :exe printf('!timew summary :all :ids "%s"',escape(taskwarrior#data#get_value_by_column(line('.'),'description'),'"'))<CR>
+                \| nnoremap <buffer> e      :exe printf('!task "%s" edit',taskwarrior#data#get_uuid() ? taskwarrior#data#get_uuid() : expand('<cword>'))<CR>
+                \| nnoremap <buffer> <S-d>d :exe printf('!task "%s" purge',expand('<cword>'))<CR>
+                \| nnoremap <buffer> \      :TWReportInfo <C-r>=expand('<cword>')<CR><CR><C-w>p
+                \| nnoremap <buffer> <S-d>  :TWDelete<CR>
+                \| nnoremap <buffer> <S-c>  :TWComplete<CR>
+                \| nmap     <buffer> <2-LeftMouse> <CR>
+                \| nmap     <buffer> <RightMouse> <LeftMouse>e
+au BufRead,BufNewFile *.csv  setlocal filetype=csv_semicolon
+au BufRead,BufNewFile *.dat  setlocal filetype=csv_pipe
+au BufRead,BufNewFile *.html setlocal filetype=htmldjango.html
+au BufRead,BufNewFile *.sql  setlocal filetype=sql.sqloracle
+au BufRead,BufNewFile Makefile setlocal filetype=make
+au BufRead,BufNewFile .gitmodules setlocal filetype=gitconfig noexpandtab
+"au BufEnter,BufRead * if &ft =~ '^\(gitconfig\|make\)$' | setlocal noexpandtab | endif
+"au BufEnter,BufRead * if &ft =~ '^\(gitcommit\)$' | setlocal nofoldenable | endif
+
+let g:lsp_float_opened = 0
+let g:lsp_float_can_show = 1
+
+if get(g:,'is_development') == 1
+    function! LspHoverShow()
+        if pumvisible() == 0 && g:lsp_float_can_show == 1
+            \ && getline('.')[charcol('.') - 1] =~? '[a-z0-9(_]'
+            \ && or(lsp#internal#diagnostics#under_cursor#get_diagnostic() == {}, mode() == 'i')
+            silent execute(':LspHover --ui=float')
+            let g:lsp_float_can_show = 0
+        else
+            let g:lsp_float_can_show = 1
+        endif
+    endfunction
+
+    function! LspDiagnosticCursorToggle() abort
+        if &bt == ''
+            let l:lsp_cursor_diagnostic = lsp#internal#diagnostics#under_cursor#get_diagnostic()
+            let l:quickfix_wininfo = filter(getwininfo(), 'v:val.quickfix && !v:val.loclist')
+
+            if empty(l:lsp_cursor_diagnostic) && !empty(l:quickfix_wininfo->filter('v:val.variables.quickfix_title =~ "l:lsp_cursor_diagnostic"'))
+                silent cclose
+                doau VimResized
+            endif
+
+            if !empty(l:lsp_cursor_diagnostic) && has_key(l:lsp_cursor_diagnostic, 'data')
+                if empty(l:quickfix_wininfo) || !empty(l:quickfix_wininfo->filter('v:val.variables.quickfix_title =~ "l:lsp_cursor_diagnostic"'))
+                    silent cgetexpr l:lsp_cursor_diagnostic.data.rendered
+                    if &bt == 'quickfix'
+                        wincmd p
+                    endif
+                endif
+            endif
+        endif
+    endfunction
+
+    au User lsp_buffer_enabled setlocal omnifunc=lsp#complete
+                \ tagfunc=lsp#tagfunc
+                "\ foldmethod=expr
+                "\ foldexpr=lsp#ui#vim#folding#foldexpr()
+                "\ foldtext=lsp#ui#vim#folding#foldtext()
+
+    au User lsp_float_opened call setwinvar(lsp#document_hover_preview_winid(), '&wincolor', 'PopupWindow') | let g:lsp_float_opened = 1
+    au User lsp_float_closed let g:lsp_float_opened = 0
+    au User lsp_diagnostics_updated if mode() == 'n' | silent! call LspDiagnosticCursorToggle() | endif
+
+    "packadd termdebug
+
+    au VimEnter        * let g:lsp_get_supported_capabilities = [function('s:RustCapabilities')]
+    au BufEnter        Cargo.toml imap <buffer> <C-@> <C-x><C-u>
+    au BufEnter        * if index(['rust'], &ft) < 0 | call lsp#disable_diagnostics_for_buffer() | endif
+    au BufWritePost    *.toml silent! !taplo format <afile>:p 2>/dev/null
+    au BufRead,BufNew  *.rs let g:rust_fold = 2
+    au BufReadPost     *.rs let g:rust_fold = 0
+    au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
+    au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
+    au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
+    au CursorMovedI    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
+    au InsertEnter     *.rs exe "normal \<Plug>(lsp-float-close)"
+    au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
+    au BufEnter        *.rs let g:syntastic_enable_signs = 0 | let g:syntastic_echo_current_error = 0 | let g:syntastic_enable_highlighting = 0 | let g:rust_fold = 0 | let g:termdebugger = 'rust-gdb'
+    au BufLeave        *.rs let g:syntastic_enable_signs = 1 | let g:syntastic_echo_current_error = 1 | let g:syntastic_enable_highlighting = 1
+    au FileType rust   au! rust.vim.PreWrite BufWrite | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
+    au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
+        \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
+        \| nmap     <buffer> <C-g> t
+        \| nnoremap <buffer> e :DBExecSQL   <C-r>=expand('<cword>')<CR><S-Left><Left><Left>
+        \| vnoremap <buffer> e "zy<Esc>:DBExecSQL   <C-r>z<S-Left><Left><Left>
+endif
+
+autocmd! ColorScheme *
+    \ hi Directory term=NONE cterm=NONE |
+    \ hi ErrorMsg cterm=bold gui=bold |
+    \ hi WarningMsg cterm=bold ctermfg=white ctermbg=darkyellow gui=bold guifg=darkyellow guibg=NONE |
+    \ hi clear SpellBad |
+    \ hi SpellBad cterm=underline,italic gui=undercurl,italic |
+    \ hi clear SpellCap |
+    \ hi clear Todo |
+    \ hi clear ALEError |
+    \ hi clear SyntasticError |
+    \ hi clear Conceal |
+    \ hi link markdownError Normal |
+    \ hi Conceal ctermfg=yellow guifg=yellow |
+    \ hi Visual gui=reverse cterm=reverse |
+    \ hi ColorColumn ctermbg=gray guibg=gray |
+    \ hi CursorLine guibg=NONE ctermbg=NONE term=underline cterm=underline |
+    \ hi Search gui=underline,bold guifg=yellow guibg=gray30 |
+    \ hi IncSearch gui=underline,bold guifg=white guibg=gray30 |
+    \ hi Error term=reverse cterm=bold ctermfg=white ctermbg=darkred guifg=white guibg=darkred |
+    \ hi DiffDelete term=bold ctermfg=white ctermbg=darkred guifg=white guibg=darkred |
+    \ hi LspReference ctermfg=darkyellow guifg=darkyellow ctermbg=NONE guibg=NONE term=underline cterm=underline |
+    \ hi SignColumn ctermbg=NONE guibg=NONE ctermfg=darkgray guifg=darkgray |
+    \ hi link LspInlayHintsType NonText |
+    \ hi link LspInlayHintsParameter LspInlayHintsType |
+    \ hi link LspHintText NonText |
+    \ hi lspErrorHighlight cterm=bold ctermfg=red guifg=red |
+    \ hi link LspErrorVirtualText Error |
+    \ hi link LspErrorText Error |
+    \ hi link SyntasticErrorSign Error |
+    \ hi link ALEErrorSign Error |
+    \ hi lspWarningHighlight cterm=bold ctermfg=darkyellow guifg=darkyellow |
+    \ hi link LspWarningVirtualText WarningMsg |
+    \ hi link LspWarningText WarningMsg |
+    \ hi link SyntasticWarningSign WarningMsg |
+    \ hi link ALEWarningSign WarningMsg
+au ColorScheme jb,hybrid if get(g:,'jb_style') == 'light' |
+    \ hi LspReference ctermfg=darkyellow guifg=darkorange ctermbg=NONE guibg=NONE term=underline cterm=underline |
+    \ hi LspInlayHintsType ctermfg=gray guifg=gray70 ctermbg=NONE guibg=NONE |
+    \ hi LspInlayHintsParameter ctermfg=gray guifg=gray70 ctermbg=NONE guibg=NONE |
+    \ hi Search gui=underline,bold guifg=yellow guibg=gray50 |
+    \ hi IncSearch gui=underline,bold guifg=gray50 guibg=white |
+    \ hi Pmenu guibg=#F0F0F0 ctermbg=black guifg=gray30 ctermfg=black |
+    \ hi PmenuSel guibg=gray10 ctermbg=darkgray guifg=white ctermfg=white cterm=bold |
+    \ let &t_SI = "\e[5 q\<Esc>]12;red\x7" |
+    \ endif
+au ColorScheme morning,delek,default,shine,zellner,pyte,onehalflight
+    \ hi LspReference ctermfg=darkyellow guifg=darkorange ctermbg=NONE guibg=NONE term=underline cterm=underline |
+    \ hi Search gui=underline,bold guifg=yellow guibg=gray50 |
+    \ hi IncSearch gui=underline,bold guifg=gray50 guibg=white |
+    \ hi Pmenu guibg=#F0F0F0 ctermbg=black guifg=gray20 ctermfg=black |
+    \ hi PmenuSel guibg=gray20 ctermbg=darkgray guifg=white ctermfg=white cterm=bold |
+    \ hi Visual gui=reverse cterm=reverse |
+    \ let &t_SI = "\e[5 q\<Esc>]12;red\x7"
+au ColorScheme blue,darkblue,desert,elflord,evening,industry,koehler,murphy,pablo,ron,slate,torte,habamax,jellybeans,onedark,onehalfdark,deep-space,hybrid if &background == 'dark' |
+    \ hi Normal guibg=NONE ctermbg=NONE |
+    \ hi Pmenu guibg=gray30 ctermbg=darkgray guifg=gray90 ctermfg=white |
+    \ hi PmenuSel guibg=gray50 ctermbg=lightgray guifg=white ctermfg=white cterm=bold |
+    \ let &t_SI = "\e[5 q\<Esc>]12;green\x7"
+
+let g:jellybeans_use_lowcolor_black = 1
+let g:jb_style = 'dark'
+"colorscheme jb
+colorscheme jellybeans
+colorscheme hybrid
+"colorscheme onehalfdark
+colorscheme deep-space
+
+function! AirlineRefreshGitBranch()
+    let b:VCSCommandBufferInfo=[trim(system(printf('cd "%s" && git symbolic-ref --short HEAD',expand('%:p:h'))))]
+    AirlineRefresh
+endfunction
+
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'base16_shell' "base16_monokai,dark,base16_shell,base16_snazzy,base16_pop,base16_monokai,badwolf,jet,base16_summerfruit_dark
+let g:airline_section_x = '%{&filetype}'
+let g:airline_section_z = airline#section#create(['[%l:%v]']) "%{strftime(\"%H:%M:%S\")}'])
+let g:airline#parts#ffenc#skip_expected_string = 'utf-8[unix]'
+let g:airline#extensions#tagbar#enabled = 0
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamecollapse = 1
+let g:airline#extensions#tabline#fnamemod = ':p:.'
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#show_splits = 0
+let g:airline#extensions#tabline#show_tabs = 1
+let g:airline#extensions#tabline#show_tab_nr = 0
+let g:airline#extensions#bufferline#enabled = 0
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#branch#use_vcscommand = 0
+let g:airline#extensions#hunks#enabled = 1
+let g:airline#extensions#capslock#enabled = 1
+let g:airline#extensions#cursormode#enabled = 0 " crashes cursor colors
+
+let g:netrw_liststyle = 3
+let g:netrw_preview = 1
+let g:netrw_keepdir = 1
+let g:netrw_usetab = 1
+let g:netrw_browse_split = 2
+let g:netrw_silent = 1
+let g:netrw_altv = 1
+let g:netrw_alto = 0
+let g:netrw_winsize = 70
+let g:netrw_fastbrowse = 1
+let g:netrw_mousemaps = 0
+let g:netrw_banner = 0
+let g:netrw_sort_options = 'i'
+let g:netrw_list_hide = '^\.+'
+
+let NERDTreeRespectWildIgnore = 0
+let NERDTreeShowHidden = 1
+let NERDTreeQuitOnOpen = 1
+let NERDTreeShowBookmarks = 1
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeCascadeSingleChildDir = 0
+let NERDTreeWinSize = 40
+let NERDTreeWinSizeMax = 50
+let NERDTreeCustomOpenArgs = {'file':{'where':'v', 'reuse':'currenttab', 'keepopen':0, 'stay':0}}
+let NERDTreeIgnore = []
+let NERDTreeChDirMode = 0
+let NERDTreeMapPreview = 'p'
+autocmd VimEnter * call NERDTreeAddKeyMap({'key':'<2-LeftMouse>', 'scope':'FileNode', 'callback':'NERDTreeOpenCallback', 'override':1})
+function! NERDTreeOpenCallback(node)
+    call a:node.activate({'reuse':'currenttab', 'where':'v'})
+endfunction
+
+let g:tagbar_ctags_bin = 'ctags'
+let g:tagbar_ctags_options = ['NONE', $HOME.'/.ctags.cfg']
+let g:tagbar_position = 'botright vertical'
+let g:tagbar_autoclose = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_case_insensetive = 1
+let g:tagbar_compact = 0
+let g:tagbar_expand = 1
+let g:tagbar_sort = 1
+let g:tagbar_autoshowtag = 1
+let g:tagbar_autopreview = 0
+let g:tagbar_width = max([25, winwidth(0) / 3])
+let g:tagbar_show_data_type = 1
+let g:tagbar_show_tag_linenumbers = 0
+
+let g:mapleader = '-'
+
+function! SwitchColorScheme()
+    if get(g:,'jb_style') == 'light'
+        set background=dark
+        let g:jb_style = 'dark'
+        "colorscheme jb
+        "colorscheme jellybeans
+        colorscheme hybrid
+    else
+        set background=light
+        let g:jb_style = 'light'
+        "colorscheme jb
+        colorscheme hybrid
+    endif
+endfunction
+
+function! SendClipboard(text)
+    "call system('pbcopy', a:text)
+    call system('xclip -i -sel p -f | xclip -i -sel c', a:text)
+    "call system('nc -q 0 -u host.docker.internal 18111', a:text)
+endfunction
+
+function! Translate(text)
+    if a:text =~? '[а-я]'
+        let l:trans_src = 'ru'
+        let l:trans_dst = 'en'
+    else
+        let l:trans_src = 'en'
+        let l:trans_dst = 'ru'
+    endif
+    lclose
+    lexpr system(printf(
+        \ 'trans %s %s:%s "%s"',
+        \ join(['-e google -no-ansi -no-theme -no-pager -no-view',
+        \       '-show-original 0 -show-original-phonetics 0 ',
+        \       '-show-translation-phonetics 0 -show-alternatives 1'
+        \ ], ' '),
+        \ l:trans_src, l:trans_dst,
+        \ trim(substitute(substitute(substitute(
+        \   escape(a:text,'"'),
+        \   '[^[:print:]\n\t]', '', 'g'),
+        \   '\n\([^\n]\)',' \1','g'),
+        \   '\t\+',' ','g'))
+        \ ))
+endfunction
+
+function! EscapeRegex(str)
+    return escape(a:str, '\/\.{}[]()-''"|*+^$%?#')
+endfunction
+
+function! MyTabLine()
+    return airline#extensions#tabline#get().' %{strftime("%H:%M:%S")}'
+endfunction
+"set tabline=%!MyTabLine()
+
+"nnoremap <C-e> :Vexplore<CR>
+nnoremap <expr> <CR> pumvisible() == 0 ? 'i' : "\<CR>"
+"noremap  dd "_dd
+noremap  dd <Nop>
+noremap  d  <Nop>
+noremap  a  <Nop>
+noremap  s  <Nop>
+noremap  p  <Nop>
+noremap  c  <Nop>
+noremap  x  <Nop>
+noremap  .  <C-O>
+noremap  ,  <C-I>
+" start/stop recording macro
+nnoremap x  q
+nnoremap <leader>t :tabnew<bar>:TW<CR>
+inoremap <C-t> <C-R>=strftime('%Y-%m-%d %H:%M:%S')<C-M>
+nnoremap aa zg
+nnoremap au zug
+nnoremap a  :call Translate(expand('<cword>'))<CR>
+vnoremap a  "zy<Esc>:call Translate(expand(@z))<CR>
+nnoremap <S-x> :doau QuickFixCmdPost l<CR>
+nnoremap <C-x> :doau QuickFixCmdPost q<CR>
+nnoremap <A-x> :DBResultsOpen<CR>
+nnoremap c  yiw :let @x=@"<CR> :<Space><C-r>x<Home>
+vnoremap c  "xzy<Esc>:<Space><C-r>x<Home>
+nnoremap <C-t> :CtrlPTag<CR>
+nnoremap t  :stjump <C-r>=expand("<cword>")<CR><CR>
+nnoremap p  :CtrlPMixed<CR>
+"nnoremap b  :CtrlPBuffer<CR>
+map      \    <C-c>:call quickui#tools#list_buffer('tabedit')<CR>
+map      <A-b> \
+nnoremap \|    :vsp<CR>
+nnoremap <C-j> :m +1<CR>==
+nnoremap <C-k> :m -2<CR>==
+inoremap <C-j> <C-o>:m +1<CR><C-o>==
+inoremap <C-k> <C-o>:m -2<CR><C-o>==
+vnoremap <C-j> :m'>+<CR>gv
+vnoremap <C-k> :m-2<CR>gv
+nnoremap <C-l>  :call SwitchColorScheme()<CR>
+nnoremap <Tab> :wincmd w<CR>
+nnoremap <S-Tab> :wincmd p<CR>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+vnoremap <C-a> <Esc>ggVG
+vnoremap <nowait> <CR> <Esc>
+vnoremap <nowait> <C-x> "xx :call SendClipboard(@x)<CR> g`<
+vnoremap <nowait> <C-c> "xy :call SendClipboard(@x)<CR> g`<
+nnoremap <nowait> <C-c><C-f> :let @"=expand("%:t") <bar> :call SendClipboard(@") <CR>
+nnoremap <nowait> <C-c><C-d> :let @"=expand("%:c") <bar> :call SendClipboard(@") <CR>
+tnoremap <C-x> <C-\><C-n>
+tnoremap <S-Tab> <C-w><C-w>
+inoremap <C-c> <C-o>":P
+nnoremap <A-v> <C-v>
+inoremap <A-v> <C-r>=trim(execute(@:))<CR>
+nnoremap <C-v> "xgP
+vnoremap <C-v> "xPgvy
+imap <expr> <C-v> pumvisible() ? "\<C-e>\<C-o>\<C-v>" : "\<C-o>\<C-v>"
+cnoremap <C-v> <C-r>=substitute(trim(@"), '[\ \|]*\n[\ \|\\]*', ' \| ', 'g')<CR>
+tnoremap        <ScrollWheelUp>     <Up>
+tnoremap        <ScrollWheelDown>   <Down>
+cnoremap        <ScrollWheelUp>     <Up>
+cnoremap        <ScrollWheelDown>   <Down>
+inoremap <expr> <ScrollWheelUp>     pumvisible() ? "\<Up>"     : "\<ScrollWheelUp>"
+inoremap <expr> <ScrollWheelDown>   pumvisible() ? "\<Down>"   : "\<ScrollWheelDown>"
+imap     <expr> <C-ScrollWheelUp>   pumvisible() ? "\<C-Up>"   : "\<PageUp>"
+imap     <expr> <C-ScrollWheelDown> pumvisible() ? "\<C-Down>" : "\<PageDown>"
+inoremap <expr> <LeftMouse>         pumvisible() ? "\<CR>"     : "\<LeftMouse>"
+"nnoremap <MiddleMouse> gp
+map      <MiddleMouse> <F9>
+"vmap     <LeftRelease> <C-c>
+vmap     <LeftMouse>  <C-c>
+vmap     <RightMouse> <C-F10>
+"nmap     <RightMouse> <F9>
+nmap     <expr> <RightMouse> mode('1') == 'nt' ? "<CR>" : "\<LeftMouse>\<LeftRelease>\<C-F10>"
+inoremap <RightMouse> <Esc>
+nnoremap <2-LeftMouse> i
+tnoremap <RightMouse> <LeftMouse><C-w>N
+tnoremap <2-LeftMouse> <CR>
+nnoremap <S-u> :u0<CR>
+noremap  <C-u> <C-c>u
+nmap     <C-z> u
+imap     <C-u> <C-o>u
+imap     <C-z> <C-o>u
+nnoremap r     <C-c>:redo<CR>
+nnoremap <C-r> <C-c>:redo<CR>
+inoremap <C-r> <C-o>:redo<CR>
+vnoremap <C-r> "zy<Esc>:%s/<C-r>=printf('%s\C',EscapeRegex(getreg('z')))<CR>//Igc
+nnoremap <S-t>     :tabnew .<CR>
+nnoremap <C-w><C-q> :tabclose<CR>
+nnoremap <A-Left>  :tabN<CR>
+nnoremap <A-Right> :tabn<CR>
+nnoremap <A-Up>    :tabmove -<CR>
+nnoremap <A-Down>  :tabmove +<CR>
+imap     <A-Left>  <C-o><A-Left>
+imap     <A-Right> <C-o><A-Right>
+imap     <A-Up>    <C-o><A-Up>
+imap     <A-Down>  <C-o><A-Down>
+tmap     <A-Left>  <C-w>gT
+tmap     <A-Right> <C-w>gt
+tmap     <C-q>     <C-w><C-c>
+nnoremap <S-End>   viw
+nnoremap <S-Home>  viwo
+nnoremap <S-Right> ve
+nnoremap <S-Left>  vb
+nnoremap <S-Up>    <C-V>
+nnoremap <S-Down>  <S-V>
+inoremap <S-End>   <C-o>viw
+inoremap <S-Home>  <C-o>viwo
+inoremap <S-Right> <C-o>ve
+inoremap <S-Left>  <Left><C-o>vb
+inoremap <S-Up>    <C-o><C-V>
+inoremap <S-Down>  <C-o><S-V>
+vnoremap <S-Right> e
+vnoremap <S-Left>  b
+vnoremap <S-Up>    k
+vnoremap <S-Down>  j
+vnoremap <S-Home>  g^
+vnoremap <S-End>   $
+noremap  <C-s> <C-c>:write<CR>
+inoremap <C-s> <Esc>:write<CR>
+noremap  s     :wall<CR>
+nnoremap <S-s> :mksession!<CR>
+nnoremap o zv
+nnoremap z za<Up>
+nnoremap <S-o> zx <bar> zc <bar> zO
+nnoremap <S-z> zx <bar> zA<Up>
+nnoremap q :q<CR>
+nnoremap <A-q> :q!<CR>
+nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <CR>
+imap     <C-q> <C-o><C-q>
+nnoremap <S-q> :silent tabdo windo <bar> :if &bt == 'terminal' <bar> :bdelete! <bar> :endif<CR> :qa<CR>
+nnoremap <C-c><S-q> :cquit<CR>
+inoremap [A <Up>
+inoremap [B <Down>
+inoremap [C <Right>
+inoremap [D <Left>
+inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
+inoremap <expr> <C-e> pumvisible() ? asyncomplete#cancel_popup() : "\<C-e>"
+inoremap <expr> <CR>  pumvisible() ? "\<C-y>" : "\<CR>"
+cnoremap <expr> <CR>  pumvisible() ? "\<C-y><Space>" : "\<CR>"
+cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
+inoremap <expr> <Esc> pumvisible() ? "\<Esc>" : "\<Esc>"
+" \| exec('silent! normal m` z ``')
+nnoremap <expr> <Esc> pumvisible() ? "\<Esc>" : get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt) < 0, index(['Result','taskinfo'],bufname()) >= 0) && index(['taskreport'],&ft) < 0
+        \? ":q<CR>" : ":noh <bar> :pclose <bar> :cclose <bar> :lclose <bar> :exe 'silent! SyntasticReset' <bar> :exe 'silent! DBResultsClose' <bar> :NERDTreeClose <bar> :GitGutterAll <bar> :doau VimResized <bar> :redraw! <CR>"
+nnoremap <S-c> :term<CR>
+noremap  <silent> <F8>    :TagbarToggle<CR>
+map      <silent> <F9>     <C-c>:call quickui#menu#open()<CR>
+noremap  <silent> <F10>   :<c-u>popup  Menu<CR>
+noremap  <silent> <C-F10> :<c-u>popup! Menu<CR>
+map      <silent> m       <F9>
+map      <silent> <S-m>   <F10>
+xmap     <silent> <S-m>   :<c-u>popup ]Edit<CR>
+nnoremap <C-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-d>  :NERDTreeFind<bar>doau BufEnter<CR>
+nnoremap <S-d>  :NERDTreeToggle<bar>doau BufEnter<CR>
+nmap <nowait> d  <S-d>
+nmap <nowait> <A-d> :VsplitVifm .<CR>
+nmap <nowait> dd :bo vert term ++close vifm .<CR>
+imap     <C-d> <C-o><C-d>
+nnoremap <Leader>r R
+nnoremap <S-r> :<C-r>=printf('%%s/%s/что-то/Igc', expand("<cword>"))<CR>
+vnoremap <S-r> "zy<Esc>:<C-r>=printf('%%s/%s/что-то/Igc', EscapeRegex(getreg('z')))<CR>
+nnoremap <C-f> :Ack!<Space><C-r>=printf('"%s"',expand("<cword>"))<CR>
+vnoremap <C-f> "zy<Esc>:Ack!<Space><C-r>=printf('"%s"',EscapeRegex(getreg('z')))<CR>
+nnoremap f     /<C-r>=expand("<cword>")<CR><CR>
+vnoremap f     "zy<Esc>/<C-r>z<CR>
+nnoremap <expr> <S-f> index(['',' '],getline('.')[col('.')-1]) >= 0 ? ':LspWorkspaceSymbol<CR>' : ':LspWorkspaceSymbol<CR><C-r>=expand("<cword>")<CR><CR>'
+nnoremap <A-f> :vimgrep!<Space><C-r>=printf('/%s/gjf **/*',expand("<cword>"))<CR>
+nnoremap <A-r> :cfdo!<Space><C-r>=printf('%%s/%s/что-то_другое/Igc \| update \| bdelete',expand("<cword>"))<CR>
+"nnoremap <S-F6> :ALERename<CR>
+nnoremap <S-F6> :LspRename<CR>
+imap     <S-F6> <C-o><S-F6>
+"nnoremap <C-g> :ALEGoToDefinition<CR>
+"nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
+nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':rightbelow vertical LspDefinition<CR>'
+nmap            <C-LeftMouse> <LeftMouse><C-g>
+imap            <C-g> <C-c><C-g>
+vnoremap <C-_>  I// <Esc>
+nnoremap <C-_> :LspReferences<CR>
+imap     <C-_> <Esc><C-_>
+nnoremap <C-b> :b#<CR>
+inoremap <C-p>  <C-x><C-]>
+nmap     <C-n> i<C-n>
+inoremap <C-@>  <C-x><C-o>
+nmap     <C-@> i<C-@>
+"inoremap <C-a> <Esc> :ALECodeAction <CR>
+nmap <C-a> :LspCodeAction --ui=float<CR>
+imap <C-a> <C-o><C-a>
+nmap <C-g>n     <Plug>(GitGutterNextHunk)
+nmap <nowait> <C-g>p <Plug>(GitGutterPreviewHunk)
+nmap <nowait> <C-g>a <Plug>(GitGutterStageHunk)
+nmap <C-g>u     <Plug>(GitGutterUndoHunk)
+nmap <C-g>l     :GitLog<CR>
+nmap <C-g><C-l> :GitLogAll<CR>
+nmap <C-g><S-l> :GitLogLine<CR>
+nmap <C-g>uu    <Plug>VCSRevert
+nmap <C-g>d     :GitDiffTool<CR>
+nmap <C-g>dd    :GitDiffToolAll<CR>
+nmap <C-g><C-d> :GitDiffTool "--staged"<CR>
+nmap <C-g><C-d><C-d> :GitDiffToolAll "--staged"<CR>
+nmap <C-g>m     :GitMergeTool<CR>
+nmap <C-g><C-a> <Plug>VCSAdd  <bar> :if &ft=='gitadd' <bar> :bd <bar> :GitGutterAll <bar> :endif <CR>
+nmap <C-g><C-a><C-a> :GitAddAll<CR> :GitGutterAll<CR>
+nmap <C-g><C-r> :GitRestore "--staged"<CR>
+nmap <C-g>r     :GitRestore<CR>
+nmap <C-g><C-g> :exe printf(':GitShow "%s"',expand('<cword>'))<CR>
+nmap <C-g><C-t> :GitGutterToggle<CR>
+nmap <C-g>c     :GitCommit<CR>
+nmap <C-g><C-c> :GitCommitAll<CR>
+nmap <C-g>s     :GitStatus<CR>
+nmap <C-g>ds    :lexpr system('git diff --staged && git submodule foreach git diff --staged')<CR>:lopen<CR>
+nnoremap <silent> <S-w> :let g:is_fullwin=1<bar>let g:curwinnr = winnr()<bar>windo if index(['','help','nofile'], &bt) >= 0 <bar> set equalalways winfixheight winfixwidth <bar> endif <CR>
+                        \<C-w>:call win_gotoid(win_getid(g:curwinnr))<CR><Bar><C-w><Bar><C-w>_
+nnoremap <silent> = :let g:is_fullwin=0<bar>let g:curwinnr = winnr()<bar>windo if index(['','help','nofile'], &bt) >= 0 <bar> cclose <bar> lclose <bar> set equalalways nowinfixheight nowinfixwidth <bar> endif <CR>
+                        \<C-w>:call win_gotoid(win_getid(g:curwinnr))<CR><C-w><Bar><C-w>=
+"<Bar>:call win_execute(win_getid(1),'set winfixheight')<CR>
+nnoremap <C-w>t <C-w>T
+nnoremap <C-\>          :lclose<CR><C-w>T
+nnoremap <silent> <A-\> :lclose<bar>let g:curbufnr=bufnr()<bar>let g:curtabnr=max([tabpagenr()-1,1])<bar>hide<bar>exe 'tabn '.g:curtabnr<bar>exe 'vert sb '.g:curbufnr<CR>
+nnoremap <silent> <A--> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'bel sb '.g:curbufnr<CR>
+nnoremap <silent> <A-=> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'vert rightb sb '.g:curbufnr<CR>
+nnoremap + :resize +5<CR>
+nnoremap _ :resize -5<CR>
+nnoremap > :vertical resize +10<CR>
+nnoremap < :vertical resize -10<CR>
+nnoremap ; q:
+noremap  <C-Right> e
+noremap  <C-Left>  b
+inoremap <C-Right> <C-o>e<Right>
+inoremap <C-Left>  <C-o>b
+noremap  <expr> <C-Up>      pumvisible() ? "\<PageUp>"     : "5k"
+noremap  <expr> <C-Down>    pumvisible() ? "\<PageDown>"   : "5j"
+inoremap <expr> <C-Up>      pumvisible() ? "\<PageUp>"          : "\<C-o>5k"
+inoremap <expr> <C-Down>    pumvisible() ? "\<PageDown>"        : "\<C-o>5j"
+noremap  <expr> <C-Up>      g:lsp_float_opened ? lsp#scroll(-2) : "5k"
+noremap  <expr> <C-Down>    g:lsp_float_opened ? lsp#scroll(+2) : "5j"
+inoremap <expr> <C-Up>      g:lsp_float_opened ? lsp#scroll(-2) : "\<C-o>5k"
+inoremap <expr> <C-Down>    g:lsp_float_opened ? lsp#scroll(+2) : "\<C-o>5j"
+noremap  <expr> <PageUp>    pumvisible() ? "\<PageUp>"     : "10k"
+noremap  <expr> <PageDown>  pumvisible() ? "\<PageDown>"   : "10j"
+inoremap <expr> <PageUp>    pumvisible() ? "\<PageUp>"     : "\<C-o>10k"
+inoremap <expr> <PageDown>  pumvisible() ? "\<PageDown>"   : "\<C-o>10j"
+vnoremap <Del> "_d
+vnoremap <BS> "_d
+inoremap <C-Del> <C-\><C-o>"_dw
+inoremap <C-BS> <C-w>
+inoremap <C-h> <C-w>
+nnoremap <C-h> :execute(or(&ft=='c',&ft=='cpp') ? ":term ++close man ".expand("<cword>") : printf(":help %s*",expand("<cword>")))<CR>
+vnoremap <C-h> "zy<Esc>:help <C-r>=printf("%s*", @z)<CR><CR>
+nnoremap <C-w><Left> <C-W>H
+nnoremap <C-w><Right> <C-W>L
+nnoremap <C-w><Up> <C-W>K
+nnoremap <C-w><Down> <C-W>J
+nnoremap <C-w><C-Right> <C-W>r
+nnoremap <C-w><C-Down> <C-W>r
+nnoremap <C-w><C-Up> <C-W>R
+nnoremap <C-w><C-Left> <C-W>R
+inoremap <nowait><expr> [  index(['',' ',']'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "[]\<Left>" : "["
+inoremap <nowait><expr> {  index(['',' ','}'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "{}\<Left>" : "{"
+inoremap <nowait><expr> (  index(['',' ',')'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "()\<Left>" : "("
+inoremap <nowait><expr> <  index(['',' ','>'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "<>\<Left>" : "<"
+inoremap <expr> ]  strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
+inoremap <expr> }  strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
+inoremap <expr> )  strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
+inoremap <expr> >  strpart(getline('.'), col('.')-1, 1) == ">" ? "\<Right>" : ">"
+inoremap <expr> "  strpart(getline('.'), col('.')-1, 1) == '"' ? "\<Right>" : '"'
+inoremap <expr> '  strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "'"
+inoremap <expr> `  strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "`"
+nnoremap <C-e>  :DBExecSQL select * from <C-r>=expand("<cword>")<CR> limit 10
+vnoremap <C-e>  :DBExecVisualSQL<CR>:DBResultsOpen<CR>
+vnoremap <C-e>e "zy<Esc>:DBExecSQL select * from <C-r>z limit 10
+nnoremap <C-e>d :DBExecSQL \d+  <C-r>=expand('<cword>')<CR><CR>:DBResultsOpen<CR>
+nnoremap <C-e>f :DBExecSQL \df+ <C-r>=expand('<cword>')<CR><CR>:DBResultsOpen<CR>
+nnoremap <A-s> :set spell!<CR>
+nnoremap <A-w> :set wrap!<CR>
+nnoremap <A-e> :set expandtab!<CR>
+nnoremap <A-z> :set winfixheight!<CR>
+nnoremap <A-g> :GitGutterToggle<CR>
+nmap dn :normal ]c<CR>
+nmap dg :diffget<CR> dn
+nmap dp :diffput<CR> dn
+nmap dr :diffget RE<CR>  " - get from REMOTE
+nmap db :diffget BA<CR>  " - get from BASE
+nmap dl :diffget LO<CR>  " - get from LOCAL
+
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_extensions = ['tag', 'buffertag', 'dir', 'undo', 'changes', 'mixed']
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/](\.git|\.hg|\.svn|\.idea|node_modules|var|tmp|target|build)$',
+    \ 'file': '\v\.(exe|so|dll|lock)$',
+    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+    \ }
+let g:ctrlp_use_caching = 60
+let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_by_filename = 0
+let g:ctrlp_regexp = 1
+let g:ctrlp_mruf_relative = 1
+let g:ctrlp_mruf_case_sensitive = 0
+let g:ctrlp_working_path_mode = 'arw'
+let g:ctrlp_open_new_file = 'v'
+let g:ctrlp_open_multiple_files = 'v'
+let g:ctrlp_arg_map = 1
+let g:ctrlp_tabpage_position = 'ac'
+let g:ctrlp_reuse_window = ''
+let g:ctrlp_switch_buffer = 'ev'
+let g:ctrlp_lazy_update = 0
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:100'
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-o>'],
+    \ 'AcceptSelection("t")': ['<c-t>', '<RightMouse>'],
+    \ 'AcceptSelection("v")': ['<cr>', '<c-v>', '<2-LeftMouse>'],
+    \ }
+let g:ctrlp_buftag_types = {
+    \ 'rust': '--language-force=css',
+    \ 'css': '--language-force=rust'
+    \ }
+
+" uses :LspDocumentFormatSync instead rustfmt
+let g:rustfmt_autosave_if_config_present = 0
+let b:rustfmt_autosave = 0 " g:is_development
+let g:rustfmt_autosave = 0 " g:is_development
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+let g:syntastic_rust_checkers = g:is_development ? ['cargo'] : []
+let g:syntastic_rust_cargo_post_args = '--workspace --lib --bins --tests --examples'
+let g:rustfmt_command = 'rustup run nightly rustfmt'
+let g:rustfmt_options = ''
+let g:rust_clip_command = 'xclip -selection clipboard'
+let g:rust_use_custom_ctags_defs = 1
+let g:rust_cargo_avoid_whole_workspace = 0
+let g:rust_conceal = 0
+let g:rust_fold = g:is_development ? 2 : 0
+let g:rust_bang_comment_leader = 0
+" options below reduce check performance
+let g:rust_cargo_check_examples = 0
+let g:rust_cargo_check_tests = 0
+let g:rust_cargo_check_benches = 0
+let g:rust_cargo_check_all_features = 0
+
+" disable by default
+let g:gitgutter_enabled = 0
+let g:gitgutter_use_location_list = 1
+let g:gitgutter_highlight_lines = 1
+let g:gitgutter_sign_priority = 3
+let g:gitgutter_override_sign_column_highlight = 1
+let g:gitgutter_close_preview_on_escape = 1
+let g:gitgutter_use_location_list = 1
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let b:syntastic_mode = g:is_development ? 'active' : 'passive'
+let g:syntastic_auto_jump = 0
+let g:syntastic_loc_list_height = 1
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = g:is_development
+let g:syntastic_check_on_wq = 0
+let g:syntastic_html_checkers=[]
+"let g:syntastic_html_tidy_empty_tags = ['span','i']
+let g:syntastic_html_tidy_ignore_errors = [
+            \ 'proprietary attribute',
+            \ 'trimming empty <',
+            \ 'unescaped &',
+            \ 'lacks \"action',
+            \ 'is not recognized!',
+            \ 'discarding unexpected',
+            \ "plain text isn\'t allowed in <",
+            \ "attribute \"{%",
+            \ "attribute \"%}",
+            \ "escaping malformed URI",
+            \ "illegal characters found in URI"
+            \ ]
+"let g:syntastic_html_tidy_quiet_messages = { "level" : "warnings" }
+let g:syntastic_c_compiler_options = '-Wall -Wextra -std=gnu18 -I./src -I./include'
+
+function! SyntasticCheckHook(errors)
+    if !empty(a:errors)
+        let g:syntastic_loc_list_height = min([5, len(a:errors)])
+    endif
+endfunction
+
+let g:ack_autoclose = 0
+let g:ack_default_options = ' -s -H -i -R -k --nocolor --nogroup --column --type-add=docker:is:Dockerfile '
+let g:ack_mappings = {
+    \ 'v':  '<C-W><CR><C-W>L'
+\}
+
+let g:disable_rainbow_hover = 1
+let g:disable_rainbow_csv_autodetect = 1
+
+let g:VCSCommandSplit = 'vertical'
+
+let g:sql_type_default = 'sql.sqloracle'
+let g:omni_sql_default_compl_type = 'procedure' " 'syntax\w*'
+let g:ftplugin_sql_omni_key = '<C-@>'
+let g:ftplugin_sql_omni_key_right = '<C-Right>'
+let g:ftplugin_sql_omni_key_left  = '<C-Left>'
+
+let g:dbext_default_autoclose = 0
+let g:dbext_default_autoclose_min_lines = 2
+let g:dbext_default_buffer_lines = 10
+let g:dbext_default_always_prompt_for_variables = 0
+let g:dbext_default_profile_app = printf('type=PGSQL:host=%s:user=%s:dbname=%s', $DATABASE_HOST, $DATABASE_USER, $DATABASE_NAME)
+let g:dbext_default_profile = 'app'
+let g:dbext_default_display_cmd_line = 0
+let g:dbext_default_query_statements = 'select,update,delete,insert,create,grant,revoke,alter,call,exec,merge,with,explain,show,comment,do,drop,set,begin,reset,vacuum'
+let g:dbext_default_PGSQL_cmd_options = '-c "\x on"'
+
+let g:task_info_vsplit = 0
+let g:task_info_size = 20
+let g:task_log_directory = '~/.task'
+let g:task_log_max = 0
+let g:task_highlight_field = 0
+let g:task_report_name = 'next'
+let g:task_rc_override = 'rc.defaultwidth=180'
+
+let g:git_log_last_dir = '.'
+let g:git_log_format = 'format:%C(auto)%H | %cs | %cr | %an | %s | %d'
+
+command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_
+                \ | diffthis | wincmd p | diffthis
+command GitCommit        execute(printf('!cd "%s" && git commit -n %s "%s"', expand('%:p:h'), <q-args>, expand('%:t'))) | GitGutterAll
+command GitCommitAll     !git commit -a
+command GitPush          !git push
+command GitRestore       lexpr system('cd '.expand('%:p:h').' && git restore '.<q-args>.' '.expand('%:t')) | GitGutterAll
+command GitDiffStaged    lexpr system('cd '.expand('%:p:h').' && git diff --staged '.expand('%:t')) | lopen | GitGutterAll
+command GitDiffTool      silent! execute(printf('!cd "%s" && git difftool %s "%s"', expand('%:p:h'), <q-args>, expand('%:t'))) | GitGutterAll | :redraw!
+command GitDiffToolAll   silent! execute(printf('!git difftool %s && git submodule foreach git difftool %s', <q-args>, <q-args>)) | GitGutterAll | :redraw!
+command GitMergeTool     silent! execute('!git mergetool && git submodule foreach git mergetool') | GitGutterAll | :redraw!
+command GitAddAll        lexpr system('git submodule foreach "git add . && git status -s" && git add . && git status -s') | lopen | GitGutterAll
+command GitStashSave     lexpr system('git stash save') | checktime | lopen
+command GitStashPop      lexpr system('git stash pop')  | checktime | lopen
+command GitStashList     lexpr system('git stash list') | lopen
+command GitStatus        lexpr system('git status -s && git submodule foreach git status -s') | lopen
+command GitLog           let g:git_log_last_dir = expand('%:p:h')
+            \| lexpr system(printf('cd "%s" && git log --graph --pretty="%s" --decorate --submodule --max-count=10000 -- "%s"', get(g:,'git_log_last_dir'), get(g:,'git_log_format'), expand('%:t'))) | lopen
+command GitLogAll        let g:git_log_last_dir = '.'
+            \| lexpr system(printf('git log --graph --pretty="%s" --decorate --submodule --max-count=10000', get(g:,'git_log_format'))) | lopen
+command GitLogLine       let g:git_log_last_dir = expand('%:p:h')
+            \| let cmd = printf('cd "%s" && git log --graph --pretty="%s" --decorate --submodule --max-count=1000 -L%s,+1:"%s"', get(g:,'git_log_last_dir'), get(g:,'git_log_format'), line('.'), expand('%:t'))
+            \| vnew | put = system(cmd) | setlocal readonly nomodifiable nomodified nofoldenable filetype=diff | wincmd L
+command GitShow          let cmd = printf('cd "'.g:git_log_last_dir.'" && git show %s',<q-args>)
+            \| vnew | put = system(cmd) | setlocal readonly nomodifiable nomodified nofoldenable filetype=git | wincmd L
+command RustCheck        lexpr system('cargo check --workspace --lib --bins --examples --tests --benches') | lopen
+command RustFixFolding   lexpr system('cd ~/.vim/plugged/rust.vim && git apply ~/.vim/rust.vim.fold.patch') | lopen
+
+" menu: Menu
+amenu       10.01 &Menu.≡\ &Buffers \
+amenu       10.02 &Menu.◫\ &Directories <C-d>
+amenu       10.03 &Menu.❖\ &Tagbar <F8>
+amenu       10.04 &Menu.⟋\ &Find\ File <C-p>
+amenu       10.09 &Menu.≞\ M&ain\ Menu <F9>
+amenu       10.10 &Menu.-\ -Sep- :
+amenu       10.11 &Menu.+\ &New\ Tab <S-t>
+amenu       10.12 &Menu.⮻\ &Split\ Tab <C-\>
+amenu       10.13 &Menu.⮺\ &Merge\ Tab <A-\>
+amenu       10.20 &Menu.--\ -Sep- :
+amenu       10.21 &Menu.↧\ &Unfold    <S-o>
+amenu       10.22 &Menu.↥\ F&old      z
+amenu       10.23 &Menu.⇈\ Fold\ All <S-z>
+amenu       10.30 &Menu.---\ -Sep- :
+amenu       10.31 &Menu.⮽\ &Close <C-q>
+amenu       10.32 &Menu.⮾\ &Quit  q
+amenu       10.33 &Menu.⇦\ Back   <C-b>
+amenu       10.34 &Menu.⊘\ Esc    <Esc>
+amenu       10.40 &Menu.----\ -Sep- :
+amenu       11.50 &Menu.↶\ &Undo u
+amenu       11.51 &Menu.↷\ &Redo r
+amenu       11.53 &Menu.⏍\ &Paste <C-v>
+" amenu       10.41 &Menu.✎\ &Edit\ ▸ :silent popup ]Edit<CR>
+" " menu: Edit
+" amenu       11.01 ]Edit.↶\ &Undo u
+" amenu       11.02 ]Edit.↷\ &Redo r
+" anoremenu   11.03 ]Edit.⏤⏤⏤⏤⏤⏤⏤  <Esc>
+" amenu       11.11 ]Edit.⏍\ &Paste <C-v>
+
+" https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md
+let g:quickui_show_tip = 1
+let g:quickui_border_style = 2
+let g:quickui_color_scheme = 'papercol dark'
+
+call quickui#menu#reset()
+call quickui#menu#install('&File', [
+\ [ "&New File",     'vnew' ],
+\ [ "&Open File\td", 'NERDTree' ],
+\ [ "&Find File\tCtrl+p", 'CtrlPMixed' ],
+\ [ "Find &In Files\tCtrl+f", 'call feedkeys("\<C-f>")' ],
+\ [ "Find By &Tag\tCtrl+t",  'CtrlPTag ' ],
+\ [ "--", '' ],
+\ [ "&Save\tCtrl+s", 'call feedkeys("\<C-s>")'],
+\ [ "Save &All\ts", 'normal s' ],
+\ [ "Save Session\tShift+s", 'normal S' ],
+\ [ "--", '' ],
+\ [ "Settings .&vimrc", 'tabedit .vimrc' ],
+\ [ "--", '' ],
+\ [ "E&xit\tShift+q", 'normal Q' ],
+\ ])
+call quickui#menu#install('&Options', [
+\ ['&Spell Check: %{&spell? "Off" : "On"}', 'setlocal spell!'],
+\ ['&Wrap Lines: %{&wrap? "Off" : "On"}', 'setlocal wrap!'],
+\ ['Expand &Tab: %{&expandtab? "Off" : "On"}', 'setlocal expandtab!'],
+\ ['&Read Only: %{&readonly? "Off" : "On"}', 'setlocal readonly!'],
+\ ['&Modifiable: %{&modifiable? "Off" : "On"}', 'setlocal modifiable!'],
+\ [ "--", '' ],
+\ [ 'Options &Info','options' ],
+\ ])
+call quickui#menu#install('&Tools', [
+\ [ '&Terminal', 'call feedkeys("\<S-c>")' ],
+\ [ '&Buffers',  'call feedkeys("\\")' ],
+\ [ '&Files',    'call feedkeys("\<A-d>")' ],
+\ [ 'T&asks',    'call feedkeys("\<S-a>")' ],
+\ [ "--", '' ],
+\ [ 'Show .&env','call quickui#textbox#command("cat .env", {})' ],
+\ ])
+call quickui#menu#install('&Git', [
+\ [ '&Branch',  'call quickui#textbox#command("git branch",{"title":"Git Branch"})' ],
+\ [ '&Status',  'call feedkeys("\<C-g>s")' ],
+\ [ 'Lo&g File','call feedkeys("\<C-g>l")' ],
+\ [ '&Log All', 'call feedkeys("\<C-g>\<C-l>")' ],
+\ [ "--", '' ],
+\ [ 'Check&out','call quickui#textbox#command("git checkout ".quickui#input#open("Checkout branch:", "", "?"), {}) | call AirlineRefreshGitBranch()' ],
+\ [ '&Merge',   'call quickui#textbox#command("git merge ".quickui#input#open("Merge with branch:", "master", "?"), {})' ],
+\ [ '&Rebase (-i)',  'exe "!git rebase -i ".quickui#input#open("Rebase arguments:", "HEAD~2", "?")' ],
+\ [ "--", '' ],
+\ [ 'Add File',      'call feedkeys("\<C-g>\<C-a>")' ],
+\ [ '&Add All Files','call feedkeys("\<C-g>\<C-a>\<C-a>")' ],
+\ [ 'Commit &File',  'call feedkeys("\<C-g>c")' ],
+\ [ '&Commit All',   'call feedkeys("\<C-g>\<C-c>")' ],
+\ [ 'Stash Save',    'call quickui#textbox#command("git stash save", {})' ],
+\ [ 'Stash Pop',     'call quickui#textbox#command("git stash pop", {})' ],
+\ [ '&Diff',         'call feedkeys("\<C-g>dd")' ],
+\ [ 'D&iff Staged','call feedkeys("\<C-g>\<C-d>\<C-d>")' ],
+\ [ "--", '' ],
+\ [ '&Push', '!git push' ],
+\ [ 'P&ull', '!git pull' ],
+\ [ "--", '' ],
+\ [ 'Highlight &toggle',  'call feedkeys("\<C-g>\<C-t>")' ],
+\ ])
+if g:is_development == 1
+    let g:make_debug_arg = 'n=target/debug/examples/..'
+    let g:make_arg = 'all'
+    let g:make_run_arg = ''
+    let g:make_test_arg = 't='
+    call quickui#menu#install('&Run', [
+    \ [ '&Migrations',  'exe "term make migrate"' ],
+    \ [ '&Format Code', 'exe "term make fmt"' ],
+    \ [ "--", '' ],
+    \ [ 'M&ake ...',                'let g:make_arg = quickui#input#open("make [arg]", g:make_arg) | exe "term make ".g:make_arg' ],
+    \ [ '&Run ...',                 'let g:make_run_arg = quickui#input#open("make run [p=package e=example b=binary]", g:make_run_arg) | exe "term make run ".g:make_run_arg' ],
+    \ [ '&Debug ...',               'let g:make_debug_arg = quickui#input#open("make rust-gdb n=<exec_file> [args=arguments]", g:make_debug_arg) | exe "term make rust-gdb ".g:make_debug_arg' ],
+    \ [ '&Tests ...',               'let g:make_test_arg = quickui#input#open("make test [p=package t=test bench=bench]", g:make_test_arg) | exe "term make test ".g:make_test_arg' ],
+    \ [ 'Tests (&no migrate) ...',  'let g:make_test_arg = quickui#input#open("make test-only [p=package t=test bench=bench]", g:make_test_arg) | exe "term make test-only ".g:make_test_arg' ],
+    \ ])
+endif
+
+" ======================
+"       End of file
+" ======================
+function! LoadSessionDefault()
+   if argc() == 0 && &diff == 0 && getenv('VIM_TERMINAL') == v:null && filereadable('Session.vim')
+       source Session.vim
+   endif
+endfunction
+
+silent! call LoadSessionDefault()
+
+" Fix /home/vic/.archlinux/.vim/plugged/vim-lsp/autoload/lsp/ui/vim/completion.vim
+" add to line 116: let l:overflow_after = 0
+"
+" git mergetool:
+"
+" git config --global merge.tool vimdiff
+" git config --global mergetool.keepBackup false
+" git config --global mergetool.prompt false
+" git config --global mergetool.vimdiff.layout "(LOCAL/BASE/REMOTE),MERGED"
+"
+"
+" git difftool --staged:
+"
+" git config --global diff.tool vimdiff
+" git config --global difftool.prompt false
+"
+" git eof:
+"
+" git config --global core.autocrlf input
+" git config --global core.whitespace -blank-at-eof
+"

@@ -143,6 +143,7 @@ inoremap <RightMouse> <Esc>
 nnoremap <2-LeftMouse> i
 tnoremap <RightMouse> <LeftMouse><C-w>N
 tnoremap <2-LeftMouse> <CR>
+nnoremap \| :vsp<CR>
 nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
 nnoremap <S-c> :term<CR>
