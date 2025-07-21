@@ -1014,7 +1014,7 @@ nmap <C-g>dd    :GitDiffToolAll<CR>
 nmap <C-g><C-d> :GitDiffTool "--staged"<CR>
 nmap <C-g><C-d><C-d> :GitDiffToolAll "--staged"<CR>
 nmap <C-g>m     :GitMergeTool<CR>
-nmap <C-g><C-a> <Plug>VCSAdd  <bar> :if &ft=='gitadd' <bar> :bd <bar> :GitGutterAll <bar> :endif <CR>
+nmap <C-g><C-a> <Plug>VCSAdd  :if &bt=='nofile' <bar> :bd <bar> :GitGutterAll <bar> :endif <CR>
 nmap <C-g><C-a><C-a> :GitAddAll<CR> :GitGutterAll<CR>
 nmap <C-g><C-r> :GitRestore "--staged"<CR>
 nmap <C-g>r     :GitRestore<CR>
