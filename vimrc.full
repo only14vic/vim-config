@@ -462,6 +462,7 @@ Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'yami-beta/asyncomplete-omni.vim'
 Plug 'skywind3000/vim-quickui'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vifm/vifm.vim'
 if getenv('VIM_TERMINAL') == v:null && &diff == 0 && get(g:,'is_development') == 1
     Plug 'editorconfig/editorconfig-vim'
@@ -471,7 +472,6 @@ if getenv('VIM_TERMINAL') == v:null && &diff == 0 && get(g:,'is_development') ==
     Plug 'hrsh7th/vim-vsnip-integ'
     Plug 'prabirshrestha/vim-lsp'
     "Plug 'dense-analysis/ale'
-    Plug 'ctrlpvim/ctrlp.vim'
     Plug 'mattn/ctrlp-lsp'
     "Plug 'preservim/tagbar'
     Plug 'rust-lang/rust.vim'
@@ -1101,7 +1101,7 @@ nmap dl :diffget LO<CR>  " - get from LOCAL
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_extensions = ['tag', 'buffertag', 'dir', 'undo', 'changes', 'mixed']
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/](\.git|\.hg|\.svn|\.idea|node_modules|var|tmp|target|build)$',
+    \ 'dir':  '\v[\/](\.git|\.hg|\.svn|\.idea|node_modules|var|tmp|target|build|cache)$',
     \ 'file': '\v\.(exe|so|dll|lock)$',
     \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
     \ }

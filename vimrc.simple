@@ -114,6 +114,12 @@ set statusline+=\ [%l/%L]
 
 let g:mapleader = '-'
 
+function! SendClipboard(text)
+    "call system('pbcopy', a:text)
+    "call system('xclip -i -sel p -f | xclip -i -sel c', a:text)
+   call system('nc -q 0 -u host.docker.internal 18111', a:text)
+endfunction
+
 nmap <Enter> i
 nmap <S-q> :qa<CR>
 nmap <C-q> :bd<CR>
@@ -131,8 +137,12 @@ inoremap <expr> <Esc> pumvisible() ? "\<Esc>"  : "\<Esc>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
 nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt)<0,index(['netrw','qf'],&ft)>=0) ? ":q<CR>" : ":lclose<bar>:pclose<bar>:redraw!<CR>"
 nnoremap ; q:
-vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
-vmap <C-x> ""x g`<
+vnoremap <nowait> <C-c> "xy :call SendClipboard(@x)<CR> g`<
+vnoremap <nowait> <C-x> "xx :call SendClipboard(@x)<CR> g`<
+nnoremap <nowait> <C-c><C-f> :let @"=expand("%:t") <bar> :call SendClipboard(@") <CR>
+nnoremap <nowait> <C-c><C-d> :let @"=expand("%:c") <bar> :call SendClipboard(@") <CR>
+"vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
+"vmap <C-x> ""x g`<
 nmap <C-v> ""gP
 vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
@@ -148,8 +158,8 @@ nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
 nnoremap <S-c> :term<CR>
 nmap <C-d> :Lexplore<CR>
-nmap <S-d> :VsplitVifm .<CR>
-nmap <A-d> :bo vert term ++close vifm .<CR>
+nmap <A-d> :VsplitVifm .<CR>
+nmap <S-d> :bo vert term ++close vifm .<CR>
 nmap <A-n> :bo vert term ++close tjournal <CR>
 nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
 nmap r     :redo<CR>
