@@ -5,6 +5,8 @@ set dotfiles
 
 set nowrap
 
+colorscheme nord zenburn_1 dwmlight Default-256 Default
+
 " Syntax highlighting in preview
 "
 " Explicitly set highlight type for some extensions
@@ -46,4 +48,3 @@ nnoremap q     :q<CR>
 nnoremap \     <S-Tab>
 qnoremap \     <Tab>
 nnoremap <C-l> :colorscheme dwmlight<CR>
-

@@ -175,9 +175,19 @@ cnoremap <expr> <CR>  pumvisible() ? "\<C-y><Space>" : "\<CR>"
 nmap     <C-n> i<C-n>
 inoremap <C-@>  <C-x><C-o>
 nmap     <C-@> i<C-@>
+nnoremap <C-w>t <C-w>T
+nnoremap <C-\>  :lclose<CR><C-w>T
 inoremap <C-BS> <C-w>
 inoremap <C-h>  <C-w>
 nnoremap <C-h>  :execute(printf(":help %s*",expand("<cword>")))<CR>
+nnoremap <C-w><Left>    <C-W>H
+nnoremap <C-w><Right>   <C-W>L
+nnoremap <C-w><Up>      <C-W>K
+nnoremap <C-w><Down>    <C-W>J
+nnoremap <C-w><C-Right> <C-W>r
+nnoremap <C-w><C-Left>  <C-W>R
+nnoremap <C-w><C-Down>  <C-W>r
+nnoremap <C-w><C-Up>    <C-W>R
 nnoremap f /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f "zy<Esc>/<C-r>z<CR>
 nnoremap <S-t>     :tabnew .<CR>
