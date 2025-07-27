@@ -168,6 +168,9 @@ nmap <C-z> u
 imap <C-u> <C-o>u
 imap <C-z> <C-o>u
 vnoremap <BS> "_d
+nnoremap <C-b> :b#<CR>
+nnoremap . <C-O>
+nnoremap , <C-I>
 cnoremap <expr> <CR>  pumvisible() ? "\<C-y><Space>" : "\<CR>"
 nmap     <C-n> i<C-n>
 inoremap <C-@>  <C-x><C-o>
@@ -325,4 +328,3 @@ function! LoadSessionDefault()
 endfunction
 
 silent! call LoadSessionDefault()
-
