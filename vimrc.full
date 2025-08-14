@@ -69,6 +69,7 @@ set smoothscroll
 set scroll=5
 set noconfirm
 set copyindent
+set lazyredraw
 set iminsert=0
 set imsearch=0
 set helplang=ru,en
@@ -770,6 +771,7 @@ function! SwitchColorScheme()
         "colorscheme jb
         colorscheme hybrid
     endif
+    doau VimResized
 endfunction
 
 function! SendClipboard(text)
@@ -1199,7 +1201,7 @@ function! SyntasticCheckHook(errors)
 endfunction
 
 let g:ack_autoclose = 0
-let g:ack_default_options = ' -s -H -i -R -k --nocolor --nogroup --column --type-add=docker:is:Dockerfile '
+let g:ack_default_options = ' -s -S -H -R -k --nocolor --nogroup --column --type-add=docker:is:Dockerfile '
 let g:ack_mappings = {
     \ 'v':  '<C-W><CR><C-W>L'
 \}
@@ -1341,7 +1343,7 @@ call quickui#menu#install('&Git', [
 \ [ '&Merge',   'call quickui#textbox#command("git merge ".quickui#input#open("Merge with branch:", "master", "?"), {})' ],
 \ [ '&Rebase (-i)',  'exe "!git rebase -i ".quickui#input#open("Rebase arguments:", "HEAD~2", "?")' ],
 \ [ "--", '' ],
-\ [ 'Add File',      'call feedkeys("\<C-g>\<C-a>")' ],
+\ [ 'Add Fil&e',     'call feedkeys("\<C-g>\<C-a>")' ],
 \ [ '&Add All Files','call feedkeys("\<C-g>\<C-a>\<C-a>")' ],
 \ [ 'Commit &File',  'call feedkeys("\<C-g>c")' ],
 \ [ '&Commit All',   'call feedkeys("\<C-g>\<C-c>")' ],
