@@ -90,7 +90,9 @@ Plug 'jamessan/vim-gnupg'
 Plug 'rafi/awesome-vim-colorschemes'
 call plug#end()
 
-colorscheme deep-space
+"colorscheme deep-space
+set background=light
+colorscheme hybrid
 
 set laststatus=2
 set statusline=
