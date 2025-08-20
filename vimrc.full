@@ -504,7 +504,7 @@ au BufWinEnter          * set noballoonevalterm | augroup webdevicons_cursor_hol
 au BufWinEnter          * if bufname() == 'Result' && line('$') > 1 | setlocal winfixheight | exe 'resize '.min([get(g:,'dbext_default_buffer_lines'),line('$')]) | endif
 au BufEnter,VimResized  * if g:is_fullwin == 1 && index(['','help'], &bt) >= 0 && index(['nerdtree','netrw'],&ft) < 0 && bufname() != 'Result' && mode() == 'n' | exe "normal \<C-w>\<Bar>\<C-w>_" | endif
 au BufWinEnter          * if index(['help','ale-info'],&ft) >= 0 | wincmd L | setlocal winfixwidth | vert resize 80 | endif
-au TerminalWinOpen      * wincmd L | vert resize 100
+au TerminalWinOpen      * wincmd L | vert resize 100%
 au WinClosed            * if or(index(['qf','nerdtree','help'], &ft) >= 0, bufname() == 'Result') | wincmd p | doau VimResized | endif
 au CursorHold,CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0 && foldclosed('.') >= 0 | silent! exe "normal o" | endif
 au CursorHold           * if &ft=='taskreport' | exe "normal \<Plug>(taskwarrior_refresh)" | endif
@@ -769,7 +769,8 @@ function! SwitchColorScheme()
         set background=light
         let g:jb_style = 'light'
         "colorscheme jb
-        colorscheme hybrid
+        "colorscheme hybrid
+        colorscheme lightning
     endif
     doau VimResized
 endfunction
