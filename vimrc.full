@@ -709,7 +709,7 @@ let g:airline#extensions#hunks#enabled = 1
 let g:airline#extensions#capslock#enabled = 1
 let g:airline#extensions#cursormode#enabled = 0 " crashes cursor colors
 
-let g:netrw_liststyle = 3
+let g:netrw_liststyle = 0
 let g:netrw_preview = 1
 let g:netrw_keepdir = 1
 let g:netrw_usetab = 1
@@ -723,6 +723,7 @@ let g:netrw_mousemaps = 0
 let g:netrw_banner = 0
 let g:netrw_sort_options = 'i'
 let g:netrw_list_hide = '^\.+'
+let g:netrw_bufsettings="noma nomod nonu nobl nowrap ro rnu"
 
 let NERDTreeRespectWildIgnore = 0
 let NERDTreeShowHidden = 1
