@@ -264,7 +264,7 @@ doautocmd ColorScheme
 
 augroup defaults
     au!
-    au BufWinEnter * doau FileType
+    au BufWinEnter * doau FileType | redraw!
     au TerminalWinOpen * wincmd L | vert resize 100%
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif

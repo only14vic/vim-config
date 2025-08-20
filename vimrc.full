@@ -500,7 +500,7 @@ au BufEnter             * if &diff == 0 && &bt == '' && getcmdtype() == '' | let
 au BufEnter             * if &ft =~ 'vim\|gitcommit\|git\|sql\|javascript' | let g:asyncomplete_auto_popup = 0 | endif
 au BufEnter             * if &ft == 'nerdtree' && winnr('$') > 1 | setlocal winfixwidth | exe 'vert resize '.g:NERDTreeWinSize | call nerdtree#ui_glue#invokeKeyMap('r') | exe 'ReadBookmarks' | endif
 "au BufLeave             * if &diff == 0 && &bt == '' && getcmdtype() == '' && g:is_fullwin == 0 | set nowinfixheight | endif
-au BufWinEnter          * set noballoonevalterm | augroup webdevicons_cursor_hold | au! | augroup END
+au BufWinEnter          * set noballoonevalterm | redraw! | augroup webdevicons_cursor_hold | au! | augroup END
 au BufWinEnter          * if bufname() == 'Result' && line('$') > 1 | setlocal winfixheight | exe 'resize '.min([get(g:,'dbext_default_buffer_lines'),line('$')]) | endif
 au BufEnter,VimResized  * if g:is_fullwin == 1 && index(['','help'], &bt) >= 0 && index(['nerdtree','netrw'],&ft) < 0 && bufname() != 'Result' && mode() == 'n' | exe "normal \<C-w>\<Bar>\<C-w>_" | endif
 au BufWinEnter          * if index(['help','ale-info'],&ft) >= 0 | wincmd L | setlocal winfixwidth | vert resize 80 | endif
