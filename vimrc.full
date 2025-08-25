@@ -479,7 +479,6 @@ if getenv('VIM_TERMINAL') == v:null && &diff == 0 && get(g:,'is_development') ==
     Plug 'mhinz/vim-crates'
     Plug 'vim-scripts/dbext.vim'
     Plug 'pangloss/vim-javascript'
-    Plug 'blindFS/vim-taskwarrior'
 endif
 call plug#end()
 
@@ -507,7 +506,6 @@ au BufWinEnter          * if index(['help','ale-info'],&ft) >= 0 | wincmd L | se
 au TerminalWinOpen      * wincmd L | vert resize 100%
 au WinClosed            * if or(index(['qf','nerdtree','help'], &ft) >= 0, bufname() == 'Result') | wincmd p | doau VimResized | endif
 au CursorHold,CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0 && foldclosed('.') >= 0 | silent! exe "normal o" | endif
-au CursorHold           * if &ft=='taskreport' | exe "normal \<Plug>(taskwarrior_refresh)" | endif
 au VimResume            * redraw! | silent! checktime
 au VimEnter             * if &diff == 1 && winnr() == 1 | setlocal readonly nomodifiable | endif
 au VimEnter             * if &diff == 1 | exe "windo doau FileType | setlocal foldmethod=diff" | wincmd p | exe "silent! normal! gg ]c [c zo" | endif
@@ -526,15 +524,6 @@ au FileType netrw      nmap <buffer> <2-LeftMouse> <CR>
 au FileType nerdtree   setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q | noremap <buffer> a :Bookmark<CR>
                 \| noremap <buffer> <Del> :ClearBookmarks <C-r>=expand('<cword>')<CR><CR> | noremap <buffer> e :EditBookmarks<CR>
                 "\| nnoremap <silent><buffer> <Enter> :call nerdtree#ui_glue#invokeKeyMap('r')<CR> :call nerdtree#ui_glue#invokeKeyMap('<'.'CR>')<CR>
-au FileType taskreport nnoremap <buffer> <C-q> :tabclose!<CR> | nmap <buffer> q <C-q>
-                \| nnoremap <buffer> s      :exe printf('!timew summary :all :ids "%s"',escape(taskwarrior#data#get_value_by_column(line('.'),'description'),'"'))<CR>
-                \| nnoremap <buffer> e      :exe printf('!task "%s" edit',taskwarrior#data#get_uuid() ? taskwarrior#data#get_uuid() : expand('<cword>'))<CR>
-                \| nnoremap <buffer> <S-d>d :exe printf('!task "%s" purge',expand('<cword>'))<CR>
-                \| nnoremap <buffer> \      :TWReportInfo <C-r>=expand('<cword>')<CR><CR><C-w>p
-                \| nnoremap <buffer> <S-d>  :TWDelete<CR>
-                \| nnoremap <buffer> <S-c>  :TWComplete<CR>
-                \| nmap     <buffer> <2-LeftMouse> <CR>
-                \| nmap     <buffer> <RightMouse> <LeftMouse>e
 au BufRead,BufNewFile *.csv  setlocal filetype=csv_semicolon
 au BufRead,BufNewFile *.dat  setlocal filetype=csv_pipe
 au BufRead,BufNewFile *.html setlocal filetype=htmldjango.html
@@ -659,7 +648,7 @@ au ColorScheme jb,hybrid if get(g:,'jb_style') == 'light' |
     \ hi PmenuSel guibg=gray10 ctermbg=darkgray guifg=white ctermfg=white cterm=bold |
     \ let &t_SI = "\e[5 q\<Esc>]12;red\x7" |
     \ endif
-au ColorScheme morning,delek,default,shine,zellner,pyte,onehalflight
+au ColorScheme morning,delek,default,shine,zellner,pyte,onehalflight,lightning
     \ hi LspReference ctermfg=darkyellow guifg=darkorange ctermbg=NONE guibg=NONE term=underline cterm=underline |
     \ hi Search gui=underline,bold guifg=yellow guibg=gray50 |
     \ hi IncSearch gui=underline,bold guifg=gray50 guibg=white |
@@ -958,7 +947,7 @@ cnoremap <expr> <CR>  pumvisible() ? "\<C-y><Space>" : "\<CR>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
 inoremap <expr> <Esc> pumvisible() ? "\<Esc>" : "\<Esc>"
 " \| exec('silent! normal m` z ``')
-nnoremap <expr> <Esc> pumvisible() ? "\<Esc>" : get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt) < 0, index(['Result','taskinfo'],bufname()) >= 0) && index(['taskreport'],&ft) < 0
+nnoremap <expr> <Esc> pumvisible() ? "\<Esc>" : get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt) < 0, index(['Result'],bufname()) >= 0)
         \? ":q<CR>" : ":noh <bar> :pclose <bar> :cclose <bar> :lclose <bar> :exe 'silent! SyntasticReset' <bar> :exe 'silent! DBResultsClose' <bar> :NERDTreeClose <bar> :GitGutterAll <bar> :doau VimResized <bar> :redraw! <CR>"
 nnoremap <S-c> :term<CR>
 noremap  <silent> <F8>    :TagbarToggle<CR>
@@ -975,6 +964,8 @@ nnoremap <S-d>  :NERDTreeToggle<bar>doau BufEnter<CR>
 nmap <nowait> d  <S-d>
 nmap <nowait> <A-d> :VsplitVifm .<CR>
 nmap <nowait> dd :bo vert term ++close vifm .<CR>
+nmap <A-n> :bo vert term ++close tjournal <CR>
+nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
 imap     <C-d> <C-o><C-d>
 nnoremap <Leader>r R
 nnoremap <S-r> :<C-r>=printf('%%s/%s/что-то/Igc', expand("<cword>"))<CR>
@@ -1018,8 +1009,8 @@ nmap <C-g>dd    :GitDiffToolAll<CR>
 nmap <C-g><C-d> :GitDiffTool "--staged"<CR>
 nmap <C-g><C-d><C-d> :GitDiffToolAll "--staged"<CR>
 nmap <C-g>m     :GitMergeTool<CR>
-nmap <C-g><C-a> <Plug>VCSAdd  :if &bt=='nofile' <bar> :bd <bar> :GitGutterAll <bar> :endif <CR>
-nmap <C-g><C-a><C-a> :GitAddAll<CR> :GitGutterAll<CR>
+nmap <C-g><C-a>      :GitAdd<CR>
+nmap <C-g><C-a><C-a> :GitAddAll<CR>
 nmap <C-g><C-r> :GitRestore "--staged"<CR>
 nmap <C-g>r     :GitRestore<CR>
 nmap <C-g><C-g> :exe printf(':GitShow "%s"',expand('<cword>'))<CR>
@@ -1229,14 +1220,6 @@ let g:dbext_default_display_cmd_line = 0
 let g:dbext_default_query_statements = 'select,update,delete,insert,create,grant,revoke,alter,call,exec,merge,with,explain,show,comment,do,drop,set,begin,reset,vacuum'
 let g:dbext_default_PGSQL_cmd_options = '-c "\x on"'
 
-let g:task_info_vsplit = 0
-let g:task_info_size = 20
-let g:task_log_directory = '~/.task'
-let g:task_log_max = 0
-let g:task_highlight_field = 0
-let g:task_report_name = 'next'
-let g:task_rc_override = 'rc.defaultwidth=180'
-
 let g:git_log_last_dir = '.'
 let g:git_log_format = 'format:%C(auto)%H | %cs | %cr | %an | %s | %d'
 
@@ -1250,6 +1233,7 @@ command GitDiffStaged    lexpr system('cd '.expand('%:p:h').' && git diff --stag
 command GitDiffTool      silent! execute(printf('!cd "%s" && git difftool %s "%s"', expand('%:p:h'), <q-args>, expand('%:t'))) | GitGutterAll | :redraw!
 command GitDiffToolAll   silent! execute(printf('!git difftool %s && git submodule foreach git difftool %s', <q-args>, <q-args>)) | GitGutterAll | :redraw!
 command GitMergeTool     silent! execute('!git mergetool && git submodule foreach git mergetool') | GitGutterAll | :redraw!
+command GitAdd           lexpr system('cd '.expand('%:p:h').' && git add '.<q-args>.' '.expand('%:t').' && git status -s') | GitGutterAll
 command GitAddAll        lexpr system('git submodule foreach "git add . && git status -s" && git add . && git status -s') | lopen | GitGutterAll
 command GitStashSave     lexpr system('git stash save') | checktime | lopen
 command GitStashPop      lexpr system('git stash pop')  | checktime | lopen
