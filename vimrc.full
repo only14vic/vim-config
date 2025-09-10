@@ -487,6 +487,7 @@ let g:lastplace_ignore_buftype = "help,nofile,quickfix"
 
 let g:is_fullwin = 0
 
+au BufLeave             * doau CursorMoved
 au ModeChanged          i:n silent call cursor([getpos('.')[1], getpos('.')[2]+1])
 au InsertEnter          * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
 au BufWritePre          * if &bt == '' | let g:syntastic_auto_loc_list = 1 | silent! ALEResetBuffer
@@ -593,8 +594,7 @@ if get(g:,'is_development') == 1
     au CursorMovedI    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
     au InsertEnter     *.rs exe "normal \<Plug>(lsp-float-close)"
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
-    au BufEnter        *.rs let g:syntastic_enable_signs = 0 | let g:syntastic_echo_current_error = 0 | let g:syntastic_enable_highlighting = 0 | let g:rust_fold = 0 | let g:termdebugger = 'rust-gdb'
-    au BufLeave        *.rs let g:syntastic_enable_signs = 1 | let g:syntastic_echo_current_error = 1 | let g:syntastic_enable_highlighting = 1
+    au BufEnter        *.rs let g:rust_fold = 0 | let g:termdebugger = 'rust-gdb'
     au FileType rust   au! rust.vim.PreWrite BufWrite | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
         \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
@@ -742,7 +742,7 @@ let g:tagbar_expand = 1
 let g:tagbar_sort = 1
 let g:tagbar_autoshowtag = 1
 let g:tagbar_autopreview = 0
-let g:tagbar_width = max([25, winwidth(0) / 3])
+let g:tagbar_width = max([50, winwidth(0) / 3])
 let g:tagbar_show_data_type = 1
 let g:tagbar_show_tag_linenumbers = 0
 
@@ -817,18 +817,18 @@ noremap  x  <Nop>
 noremap  .  <C-O>
 noremap  ,  <C-I>
 " start/stop recording macro
-nnoremap x  q
+nnoremap <S-x> q
 nnoremap <leader>t :tabnew<bar>:TW<CR>
 inoremap <C-t> <C-R>=strftime('%Y-%m-%d %H:%M:%S')<C-M>
 nnoremap aa zg
 nnoremap au zug
 nnoremap a  :call Translate(expand('<cword>'))<CR>
 vnoremap a  "zy<Esc>:call Translate(expand(@z))<CR>
-nnoremap <S-x> :doau QuickFixCmdPost l<CR>
+nnoremap x     :doau QuickFixCmdPost l<CR>
 nnoremap <C-x> :doau QuickFixCmdPost q<CR>
 nnoremap <A-x> :DBResultsOpen<CR>
 nnoremap c  yiw :let @x=@"<CR> :<Space><C-r>x<Home>
-vnoremap c  "xzy<Esc>:<Space><C-r>x<Home>
+vnoremap c  "xzy<Esc>:<Space><C-r>=substitute(trim(@x), '[\ \|]*\n[\ \|\\]*', ' \| ', 'g')<CR><Home>
 nnoremap <C-t> :CtrlPTag<CR>
 nnoremap t  :stjump <C-r>=expand("<cword>")<CR><CR>
 nnoremap p  :CtrlPMixed<CR>
@@ -931,7 +931,7 @@ nnoremap z za<Up>
 nnoremap <A-o> zc <bar> zO
 nnoremap <A-z> zA<Up>
 nnoremap <S-o> zx <bar> zc <bar> zO
-nnoremap <S-z> zx <bar> zA<Up>
+nnoremap <S-z> zx <bar> zC<Up>
 nnoremap q :q<CR>
 nnoremap <A-q> :q!<CR>
 nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <CR>
@@ -1086,7 +1086,6 @@ nnoremap <C-e>f :DBExecSQL \df+ <C-r>=expand('<cword>')<CR><CR>:DBResultsOpen<CR
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-e> :set expandtab!<CR>
-nnoremap <A-z> :set winfixheight!<CR>
 nnoremap <A-g> :GitGutterToggle<CR>
 nmap dn :normal ]c<CR>
 nmap dg :diffget<CR> dn
