@@ -586,16 +586,15 @@ if get(g:,'is_development') == 1
     au BufEnter        Cargo.toml imap <buffer> <C-@> <C-x><C-u>
     au BufEnter        * if index(['rust'], &ft) < 0 | call lsp#disable_diagnostics_for_buffer() | endif
     au BufWritePost    *.toml silent! !taplo format <afile>:p 2>/dev/null
-    au BufRead,BufNew  *.rs let g:rust_fold = 2
-    au BufReadPost     *.rs let g:rust_fold = 0
+    au BufRead,BufNew       *.rs let g:rust_fold = 2
+    au BufReadPost,BufEnter *.rs let g:rust_fold = 0
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
     au CursorMovedI    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
     au InsertEnter     *.rs exe "normal \<Plug>(lsp-float-close)"
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
-    au BufEnter        *.rs let g:rust_fold = 0 | let g:termdebugger = 'rust-gdb'
-    au FileType rust   au! rust.vim.PreWrite BufWrite | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
+    au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
         \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
         \| nmap     <buffer> <C-g> t
@@ -986,7 +985,7 @@ nnoremap f     /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f     "zy<Esc>/<C-r>z<CR>
 nnoremap <expr> <S-f> index(['',' '],getline('.')[col('.')-1]) >= 0 ? ':LspWorkspaceSymbol<CR>' : ':LspWorkspaceSymbol<CR><C-r>=expand("<cword>")<CR><CR>'
 nnoremap <A-f> :vimgrep!<Space><C-r>=printf('/%s/gjf **/*',expand("<cword>"))<CR>
-nnoremap <A-r> :cfdo!<Space><C-r>=printf('%%s/%s/что-то_другое/Igc \| update \| bdelete',expand("<cword>"))<CR>
+nnoremap <A-r> :SyntasticToggleMode <bar> :cfdo!<Space><C-r>=printf('%%s/%s/%s/Igc \| update \| bdelete',expand("<cword>"),expand("<cword>"))<CR>
 "nnoremap <S-F6> :ALERename<CR>
 nnoremap <S-F6> :LspRename<CR>
 imap     <S-F6> <C-o><S-F6>
