@@ -18,6 +18,7 @@ set tabstop=4
 set expandtab
 set display=truncate
 set backspace=indent,eol,start
+set sessionoptions=buffers,curdir,help,tabpages
 set complete=.,d,kspell
 set completeopt=menu,menuone,popuphidden,noinsert
 set wildmenu
@@ -246,7 +247,8 @@ nnoremap z za<Up>
 nnoremap <A-o> zc <bar> zO
 nnoremap <A-z> zA<Up>
 nnoremap <S-o> zx <bar> zc <bar> zO
-nnoremap <S-z> zx <bar> zA<Up>
+nnoremap <S-z> zx <bar> zC<Up>
+nnoremap <C-o> zR
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
@@ -271,6 +273,9 @@ doautocmd ColorScheme
 augroup defaults
     au!
     au BufWinEnter * doau FileType | redraw!
+    au BufEnter    * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
+    au InsertEnter * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
+    au VimResume   * if &bt == '' && getcmdtype() == '' | redraw! | silent! checktime | endif
     au TerminalWinOpen * wincmd L | vert resize 100%
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif

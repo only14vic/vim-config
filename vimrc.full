@@ -504,9 +504,8 @@ au BufWinEnter          * set noballoonevalterm | redraw! | augroup webdevicons_
 au BufWinEnter          * if bufname() == 'Result' && line('$') > 1 | setlocal winfixheight | exe 'resize '.min([get(g:,'dbext_default_buffer_lines'),line('$')]) | endif
 au BufEnter,VimResized  * if g:is_fullwin == 1 && index(['','help'], &bt) >= 0 && index(['nerdtree','netrw'],&ft) < 0 && bufname() != 'Result' && mode() == 'n' | exe "normal \<C-w>\<Bar>\<C-w>_" | endif
 au BufWinEnter          * if index(['help','ale-info'],&ft) >= 0 | wincmd L | setlocal winfixwidth | vert resize 80 | endif
-au TerminalWinOpen      * wincmd L | vert resize 100%
 au WinClosed            * if or(index(['qf','nerdtree','help'], &ft) >= 0, bufname() == 'Result') | wincmd p | doau VimResized | endif
-au CursorHold,CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0 && foldclosed('.') >= 0 | silent! exe "normal o" | endif
+au CursorHold,CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0 && foldclosed('.') >= 0 && line('.') > 1 | silent! exe "normal o" | endif
 au VimResume            * redraw! | silent! checktime
 au VimEnter             * if &diff == 1 && winnr() == 1 | setlocal readonly nomodifiable | endif
 au VimEnter             * if &diff == 1 | exe "windo doau FileType | setlocal foldmethod=diff" | wincmd p | exe "silent! normal! gg ]c [c zo" | endif
@@ -533,6 +532,7 @@ au BufRead,BufNewFile Makefile setlocal filetype=make
 au BufRead,BufNewFile .gitmodules setlocal filetype=gitconfig noexpandtab
 "au BufEnter,BufRead * if &ft =~ '^\(gitconfig\|make\)$' | setlocal noexpandtab | endif
 "au BufEnter,BufRead * if &ft =~ '^\(gitcommit\)$' | setlocal nofoldenable | endif
+au TerminalWinOpen      * wincmd L | vert resize 100%
 
 let g:lsp_float_opened = 0
 let g:lsp_float_can_show = 1
@@ -779,6 +779,7 @@ function! Translate(text)
         let l:trans_src = 'en'
         let l:trans_dst = 'ru'
     endif
+
     lclose
     lexpr system(printf(
         \ 'trans %s %s:%s "%s"',
@@ -796,7 +797,7 @@ function! Translate(text)
 endfunction
 
 function! EscapeRegex(str)
-    return escape(a:str, '\/\.{}[]()-''"|*+^$%?#')
+    return escape(a:str, '\/\.[]-''"|*^$%?#')
 endfunction
 
 function! MyTabLine()
@@ -823,7 +824,7 @@ inoremap <C-t> <C-R>=strftime('%Y-%m-%d %H:%M:%S')<C-M>
 nnoremap aa zg
 nnoremap au zug
 nnoremap a  :call Translate(expand('<cword>'))<CR>
-vnoremap a  "zy<Esc>:call Translate(expand(@z))<CR>
+vnoremap a  "zy<Esc>:call Translate(@z)<CR>
 nnoremap x     :doau QuickFixCmdPost l<CR>
 nnoremap <C-x> :doau QuickFixCmdPost q<CR>
 nnoremap <A-x> :DBResultsOpen<CR>
@@ -932,6 +933,7 @@ nnoremap <A-o> zc <bar> zO
 nnoremap <A-z> zA<Up>
 nnoremap <S-o> zx <bar> zc <bar> zO
 nnoremap <S-z> zx <bar> zC<Up>
+nnoremap <C-o> zR
 nnoremap q :q<CR>
 nnoremap <A-q> :q!<CR>
 nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <CR>
@@ -972,7 +974,7 @@ imap     <C-d> <C-o><C-d>
 nnoremap <Leader>r R
 nnoremap <S-r> :<C-r>=printf('%%s/%s/что-то/Igc', expand("<cword>"))<CR>
 vnoremap <S-r> "zy<Esc>:<C-r>=printf('%%s/%s/что-то/Igc', EscapeRegex(getreg('z')))<CR>
-nnoremap <C-f> :Ack!<Space><C-r>=printf('"%s"',expand("<cword>"))<CR>
+nnoremap <C-f> :Ack!<Space><C-r>=printf('"%s"',EscapeRegex(expand("<cword>")))<CR>
 vnoremap <C-f> "zy<Esc>:Ack!<Space><C-r>=printf('"%s"',EscapeRegex(getreg('z')))<CR>
 nnoremap f     /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f     "zy<Esc>/<C-r>z<CR>
