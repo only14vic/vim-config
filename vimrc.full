@@ -665,8 +665,8 @@ au ColorScheme blue,darkblue,desert,elflord,evening,industry,koehler,murphy,pabl
 let g:jellybeans_use_lowcolor_black = 1
 let g:jb_style = 'dark'
 "colorscheme jb
-colorscheme jellybeans
-colorscheme hybrid
+"colorscheme jellybeans
+"colorscheme hybrid
 "colorscheme onehalfdark
 colorscheme deep-space
 
@@ -752,18 +752,24 @@ function! SwitchColorScheme()
     if get(g:,'jb_style') == 'light'
         set background=dark
         let g:jb_style = 'dark'
+        let $VIM_BG='dark'
         "colorscheme jb
         "colorscheme jellybeans
         colorscheme hybrid
     else
         set background=light
         let g:jb_style = 'light'
+        let $VIM_BG='light'
         "colorscheme jb
         "colorscheme hybrid
         colorscheme lightning
     endif
     doau VimResized
 endfunction
+
+if $VIM_BG == 'light'
+    call SwitchColorScheme()
+endif
 
 function! SendClipboard(text)
     "call system('pbcopy', a:text)
