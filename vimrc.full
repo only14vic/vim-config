@@ -58,7 +58,7 @@ set dictionary=spell
 set nospell spelllang=ru,en
 set spelloptions=camel
 set spellsuggest=double
-set backspace=indent,eol,start
+set backspace=indent,eol,nostop
 set sessionoptions=buffers,curdir,help,tabpages
 set equalalways
 set eadirection=hor
@@ -910,6 +910,10 @@ imap     <A-Down>  <C-o><A-Down>
 tmap     <A-Left>  <C-w>gT
 tmap     <A-Right> <C-w>gt
 tmap     <C-q>     <C-w><C-c>
+noremap  <C-Right> e<Right>
+noremap  <C-Left>  b
+inoremap <C-Right> <C-o>e<Right>
+inoremap <C-Left>  <C-o>b
 nnoremap <S-End>   viw
 nnoremap <S-Home>  viwo
 nnoremap <S-Right> ve
@@ -1043,10 +1047,6 @@ nnoremap _ :resize -5<CR>
 nnoremap > :vertical resize +10<CR>
 nnoremap < :vertical resize -10<CR>
 nnoremap ; q:
-noremap  <C-Right> w
-noremap  <C-Left>  b
-inoremap <C-Right> <C-o>e<Right>
-inoremap <C-Left>  <C-o>b
 noremap  <expr> <C-Up>      pumvisible() ? "\<PageUp>"     : "5k"
 noremap  <expr> <C-Down>    pumvisible() ? "\<PageDown>"   : "5j"
 inoremap <expr> <C-Up>      pumvisible() ? "\<PageUp>"          : "\<C-o>5k"
