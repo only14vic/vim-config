@@ -116,10 +116,10 @@ for ord in range(33,61)+range(63,90)+[92]+range(94,122)
 endfor
 
 execute system('test -e ~/.vim/undo || mkdir ~/.vim/undo')
-execute system('
-    \ test -e ~/.vim/autoload/plug.vim ||
-    \ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    \')
+"execute system('
+"    \ test -e ~/.vim/autoload/plug.vim ||
+"    \ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"    \')
 
 let g:is_development = $APP_ENV == 'dev' && $USER != 'root' && &diff == 0 && getenv('VIM_TERMINAL') == v:null
 
@@ -802,7 +802,7 @@ function! Translate(text)
 endfunction
 
 function! EscapeRegex(str)
-    return escape(a:str, '\/\.[]-''"|*^$%?#')
+    return escape(a:str, '\/\.[]-''"|*^$%?!#')
 endfunction
 
 function! MyTabLine()
@@ -956,7 +956,7 @@ inoremap [D <Left>
 inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
 inoremap <expr> <C-e> pumvisible() ? asyncomplete#cancel_popup() : "\<C-e>"
 inoremap <expr> <CR>  pumvisible() ? "\<C-y>" : "\<CR>"
-cnoremap <expr> <CR>  pumvisible() ? "\<C-y><Space>" : "\<CR>"
+cnoremap <expr> <CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
 inoremap <expr> <Esc> pumvisible() ? "\<Esc>" : "\<Esc>"
 " \| exec('silent! normal m` z ``')
@@ -986,7 +986,7 @@ vnoremap <S-r> "zy<Esc>:<C-r>=printf('%%s/%s/что-то/Igc', EscapeRegex(getre
 nnoremap <C-f> :Ack!<Space><C-r>=printf('"%s"',EscapeRegex(expand("<cword>")))<CR>
 vnoremap <C-f> "zy<Esc>:Ack!<Space><C-r>=printf('"%s"',EscapeRegex(getreg('z')))<CR>
 nnoremap f     /<C-r>=expand("<cword>")<CR><CR>
-vnoremap f     "zy<Esc>/<C-r>z<CR>
+vnoremap f     "zy<Esc>/<C-r>=EscapeRegex(trim(@z))<CR><CR>
 nnoremap <expr> <S-f> index(['',' '],getline('.')[col('.')-1]) >= 0 ? ':LspWorkspaceSymbol<CR>' : ':LspWorkspaceSymbol<CR><C-r>=expand("<cword>")<CR><CR>'
 nnoremap <A-f> :vimgrep!<Space><C-r>=printf('/%s/gjf **/*',expand("<cword>"))<CR>
 nnoremap <A-r> :SyntasticToggleMode <bar> :cfdo!<Space><C-r>=printf('%%s/%s/%s/Igc \| update \| bdelete',expand("<cword>"),expand("<cword>"))<CR>
