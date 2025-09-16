@@ -890,7 +890,6 @@ tnoremap <RightMouse> <LeftMouse><C-w>N
 tnoremap <2-LeftMouse> <CR>
 nnoremap <S-u> :u0<CR>
 noremap  <C-u> <C-c>u
-nmap     <C-z> u
 imap     <C-u> <C-o>u
 imap     <C-z> <C-o>u
 nnoremap r     <C-c>:redo<CR>
@@ -943,6 +942,7 @@ nnoremap <A-z> zA<Up>
 nnoremap <S-o> zx <bar> zc <bar> zO
 nnoremap <S-z> zx <bar> zC<Up>
 nnoremap <C-o> zR
+nnoremap <C-z> zM
 nnoremap q :q<CR>
 nnoremap <A-q> :q!<CR>
 nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <CR>
