@@ -17,7 +17,7 @@ set shiftwidth=4
 set tabstop=4
 set expandtab
 set display=truncate
-set backspace=indent,eol,start
+set backspace=indent,eol,nostop
 set sessionoptions=buffers,curdir,help,tabpages
 set complete=.,d,kspell
 set completeopt=menu,menuone,popuphidden,noinsert
@@ -119,8 +119,12 @@ let g:mapleader = '-'
 
 function! SendClipboard(text)
     "call system('pbcopy', a:text)
-    "call system('xclip -i -sel p -f | xclip -i -sel c', a:text)
-   call system('nc -q 0 -u host.docker.internal 18111', a:text)
+    call system('xclip -i -sel p -f | xclip -i -sel c', a:text)
+    "call system('nc -q 0 -u host.docker.internal 18111', a:text)
+endfunction
+
+function! EscapeRegex(str)
+    return escape(a:str, '\/\.[]-''"|*^$%?#')
 endfunction
 
 nmap <Enter> i
@@ -140,6 +144,8 @@ inoremap <expr> <Esc> pumvisible() ? "\<Esc>"  : "\<Esc>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
 nnoremap <expr> <Esc> get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt)<0,index(['netrw','qf'],&ft)>=0) ? ":q<CR>" : ":lclose<bar>:pclose<bar>:redraw!<CR>"
 nnoremap ; q:
+nnoremap c  yiw :let @x=@"<CR> :<Space><C-r>x<Home>
+vnoremap c  "xzy<Esc>:<Space><C-r>=substitute(trim(@x), '[\ \|]*\n[\ \|\\]*', ' \| ', 'g')<CR><Home>
 vnoremap <nowait> <C-c> "xy :call SendClipboard(@x)<CR> g`<
 vnoremap <nowait> <C-x> "xx :call SendClipboard(@x)<CR> g`<
 nnoremap <nowait> <C-c><C-f> :let @"=expand("%:t") <bar> :call SendClipboard(@") <CR>
@@ -167,14 +173,13 @@ nmap <A-n> :bo vert term ++close tjournal <CR>
 nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
 nmap r     :redo<CR>
 nmap <S-u> :u0<CR>
-nmap <C-z> u
 imap <C-u> <C-o>u
 imap <C-z> <C-o>u
 vnoremap <BS> "_d
 nnoremap <C-b> :b#<CR>
 nnoremap . <C-O>
 nnoremap , <C-I>
-cnoremap <expr> <CR>  pumvisible() ? "\<C-y><Space>" : "\<CR>"
+cnoremap <expr> <CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 nmap     <C-n> i<C-n>
 inoremap <C-@>  <C-x><C-o>
 nmap     <C-@> i<C-@>
@@ -192,7 +197,7 @@ nnoremap <C-w><C-Left>  <C-W>R
 nnoremap <C-w><C-Down>  <C-W>r
 nnoremap <C-w><C-Up>    <C-W>R
 nnoremap f /<C-r>=expand("<cword>")<CR><CR>
-vnoremap f "zy<Esc>/<C-r>z<CR>
+vnoremap f "zy<Esc>/<C-r>=EscapeRegex(trim(@z))<CR><CR>
 nnoremap <S-t>     :tabnew .<CR>
 nnoremap + :resize +5<CR>
 nnoremap _ :resize -5<CR>
@@ -202,10 +207,6 @@ nnoremap <C-\>          :lclose<CR><C-w>T
 nnoremap <silent> <A-\> :lclose<bar>let g:curbufnr=bufnr()<bar>let g:curtabnr=max([tabpagenr()-1,1])<bar>hide<bar>exe 'tabn '.g:curtabnr<bar>exe 'vert sb '.g:curbufnr<CR>
 nnoremap <silent> <A--> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'bel sb '.g:curbufnr<CR>
 nnoremap <silent> <A-=> :lclose<bar>let g:curbufnr=bufnr()<bar>hide<bar>exe 'vert rightb sb '.g:curbufnr<CR>
-noremap  <C-Right> w
-noremap  <C-Left>  b
-inoremap <C-Right> <C-o>e<Right>
-inoremap <C-Left>  <C-o>b
 noremap  <expr> <C-Up>      pumvisible() ? "\<PageUp>"     : "5k"
 noremap  <expr> <C-Down>    pumvisible() ? "\<PageDown>"   : "5j"
 inoremap <expr> <C-Up>      pumvisible() ? "\<PageUp>"     : "\<C-o>5k"
@@ -224,6 +225,10 @@ imap     <A-Up>    <C-o><A-Up>
 imap     <A-Down>  <C-o><A-Down>
 tmap     <A-Left>  <C-w>gT
 tmap     <A-Right> <C-w>gt
+noremap  <C-Right> e<Right>
+noremap  <C-Left>  b
+inoremap <C-Right> <C-o>e<Right>
+inoremap <C-Left>  <C-o>b
 nnoremap <S-End>   viw
 nnoremap <S-Home>  viwo
 nnoremap <S-Right> ve
@@ -249,6 +254,7 @@ nnoremap <A-z> zA<Up>
 nnoremap <S-o> zx <bar> zc <bar> zO
 nnoremap <S-z> zx <bar> zC<Up>
 nnoremap <C-o> zR
+nnoremap <C-z> zM
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
@@ -261,6 +267,7 @@ nmap dr :diffget RE<CR>  " - get from REMOTE
 nmap db :diffget BA<CR>  " - get from BASE
 nmap dl :diffget LO<CR>  " - get from LOCAL
 inoremap <C-t> <C-R>=strftime('%Y-%m-%d %H:%M:%S')<C-M>
+nnoremap <C-l> :colorscheme deep-space<CR>
 
 autocmd! ColorScheme *
     \  hi clear SpellBad
@@ -276,11 +283,11 @@ augroup defaults
     au BufEnter    * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
     au InsertEnter * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
     au VimResume   * if &bt == '' && getcmdtype() == '' | redraw! | silent! checktime | endif
-    au TerminalWinOpen * wincmd L | vert resize 100%
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
     au FileType netrw nmap <buffer> <2-LeftMouse> <CR>
     au FileType gitcommit setlocal spell
+    au TerminalWinOpen * wincmd L | vert resize 100%
 augroup END
 
 let g:auto_complete = 0
