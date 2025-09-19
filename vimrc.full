@@ -772,8 +772,11 @@ endif
 
 function! SendClipboard(text)
     "call system('pbcopy', a:text)
-    call system('xclip -i -sel p -f | xclip -i -sel c', a:text)
     "call system('nc -q 0 -u host.docker.internal 18111', a:text)
+    "call system('xclip -i -sel p -f | xclip -i -sel c', a:text)
+    let h = job_start('sh -c "cat | xclip -i -sel p -f | xclip -i -sel c"', {'in_io':'pipe', 'noblock':1})
+    call ch_sendraw(h, a:text)
+    call ch_close(h)
 endfunction
 
 function! Translate(text)
@@ -854,11 +857,11 @@ nnoremap <S-Tab> :wincmd p<CR>
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap <C-a> <Esc>ggVG
-vnoremap <nowait> <CR> <Esc>
-vnoremap <nowait> <C-x> "xx :call SendClipboard(@x)<CR> g`<
-vnoremap <nowait> <C-c> "xy :call SendClipboard(@x)<CR> g`<
-nnoremap <nowait> <C-c><C-f> :let @"=expand("%:t") <bar> :call SendClipboard(@") <CR>
-nnoremap <nowait> <C-c><C-d> :let @"=expand("%:c") <bar> :call SendClipboard(@") <CR>
+vnoremap <CR> <Esc>
+vnoremap <C-x> "xx :call SendClipboard(@x)<CR> g`<
+vnoremap <C-c> "xy :call SendClipboard(@x)<CR> g`<
+nnoremap <Leader>f :let @"=expand("%:t") <bar> :call SendClipboard(@") <CR>
+nnoremap <Leader>d :let @"=expand("%:c") <bar> :call SendClipboard(@") <CR>
 tnoremap <C-x> <C-\><C-n>
 tnoremap <S-Tab> <C-w><C-w>
 inoremap <C-c> <C-o>":P
@@ -942,13 +945,13 @@ nnoremap <A-z> zA<Up>
 nnoremap <S-o> zx <bar> zc <bar> zO
 nnoremap <S-z> zx <bar> zC<Up>
 nnoremap <C-o> zR
-nnoremap <C-z> zM
+nnoremap <C-z> zM<Up>
 nnoremap q :q<CR>
 nnoremap <A-q> :q!<CR>
 nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <CR>
 imap     <C-q> <C-o><C-q>
 nnoremap <S-q> :silent tabdo windo <bar> :if &bt == 'terminal' <bar> :bdelete! <bar> :endif<CR> :qa<CR>
-nnoremap <C-c><S-q> :cquit<CR>
+nnoremap <Leader>q :cquit!<CR>
 inoremap [A <Up>
 inoremap [B <Down>
 inoremap [C <Right>
@@ -1193,7 +1196,7 @@ let g:syntastic_html_tidy_ignore_errors = [
             \ "illegal characters found in URI"
             \ ]
 "let g:syntastic_html_tidy_quiet_messages = { "level" : "warnings" }
-let g:syntastic_c_compiler_options = '-Wall -Wextra -std=gnu18 -I./src -I./include'
+let g:syntastic_c_compiler_options = '-Wall -Wextra -std=gnu18 -I./src -I./include -I./crates/*/include'
 
 function! SyntasticCheckHook(errors)
     if !empty(a:errors)
