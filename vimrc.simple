@@ -2,6 +2,8 @@
 " do not load defaults if ~/.vimrc is missing
 let skip_defaults_vim=1
 
+" !!! If Vim becomes slowly then delete ~/.viminfo !!!
+
 lang ru_RU.utf8
 syntax enable
 filetype plugin indent on
@@ -251,6 +253,12 @@ vnoremap <S-Up>    k
 vnoremap <S-Down>  j
 vnoremap <S-Home>  g^
 vnoremap <S-End>   $
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==i
+inoremap <A-k> <Esc>:m .-2<CR>==i
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 nnoremap o zv
 nnoremap z za<Up>
 nnoremap <A-o> zc <bar> zO

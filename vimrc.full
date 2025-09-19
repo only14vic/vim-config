@@ -1,3 +1,5 @@
+" !!! If Vim becomes slowly then delete ~/.viminfo !!!
+
 lang ru_RU.utf8
 
 syntax enable
@@ -584,7 +586,7 @@ if get(g:,'is_development') == 1
 
     au VimEnter        * let g:lsp_get_supported_capabilities = [function('s:RustCapabilities')]
     au BufEnter        Cargo.toml imap <buffer> <C-@> <C-x><C-u>
-    au BufEnter        * if index(['rust'], &ft) < 0 | call lsp#disable_diagnostics_for_buffer() | endif
+    au BufEnter        * if index(['rust'], &ft) < 0 | silent! call lsp#disable_diagnostics_for_buffer() | endif
     au BufWritePost    *.toml silent! !taplo format <afile>:p 2>/dev/null
     au BufRead,BufNew       *.rs let g:rust_fold = 2
     au BufReadPost,BufEnter *.rs let g:rust_fold = 0
@@ -934,6 +936,12 @@ vnoremap <S-Up>    k
 vnoremap <S-Down>  j
 vnoremap <S-Home>  g^
 vnoremap <S-End>   $
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==i
+inoremap <A-k> <Esc>:m .-2<CR>==i
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 noremap  <C-s> <C-c>:write<CR>
 inoremap <C-s> <Esc>:write<CR>
 noremap  s     :wall<CR>
@@ -1081,13 +1089,13 @@ inoremap <nowait><expr> [  index(['',' ',']'], strpart(getline('.'), col('.')-1,
 inoremap <nowait><expr> {  index(['',' ','}'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "{}\<Left>" : "{"
 inoremap <nowait><expr> (  index(['',' ',')'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "()\<Left>" : "("
 inoremap <nowait><expr> <  index(['',' ','>'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "<>\<Left>" : "<"
-inoremap <expr> ]  strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
-inoremap <expr> }  strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
-inoremap <expr> )  strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
-inoremap <expr> >  strpart(getline('.'), col('.')-1, 1) == ">" ? "\<Right>" : ">"
-inoremap <expr> "  strpart(getline('.'), col('.')-1, 1) == '"' ? "\<Right>" : '"'
-inoremap <expr> '  strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "'"
-inoremap <expr> `  strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "`"
+"inoremap <expr> ]  strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
+"inoremap <expr> }  strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
+"inoremap <expr> )  strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
+"inoremap <expr> >  strpart(getline('.'), col('.')-1, 1) == ">" ? "\<Right>" : ">"
+"inoremap <expr> "  strpart(getline('.'), col('.')-1, 1) == '"' ? "\<Right>" : '"'
+"inoremap <expr> '  strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "'"
+"inoremap <expr> `  strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "`"
 nnoremap <C-e>  :DBExecSQL select * from <C-r>=expand("<cword>")<CR> limit 10
 vnoremap <C-e>  :DBExecVisualSQL<CR>:DBResultsOpen<CR>
 vnoremap <C-e>e "zy<Esc>:DBExecSQL select * from <C-r>z limit 10
