@@ -118,10 +118,10 @@ for ord in range(33,61)+range(63,90)+[92]+range(94,122)
 endfor
 
 execute system('test -e ~/.vim/undo || mkdir ~/.vim/undo')
-"execute system('
-"    \ test -e ~/.vim/autoload/plug.vim ||
-"    \ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-"    \')
+execute system('
+    \ test -e ~/.vim/autoload/plug.vim ||
+    \ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    \')
 
 let g:is_development = $APP_ENV == 'dev' && $USER != 'root' && &diff == 0 && getenv('VIM_TERMINAL') == v:null
 
@@ -474,9 +474,9 @@ if getenv('VIM_TERMINAL') == v:null && &diff == 0 && get(g:,'is_development') ==
     Plug 'hrsh7th/vim-vsnip'
     Plug 'hrsh7th/vim-vsnip-integ'
     Plug 'prabirshrestha/vim-lsp'
-    "Plug 'dense-analysis/ale'
+    Plug 'dense-analysis/ale'
     Plug 'mattn/ctrlp-lsp'
-    "Plug 'preservim/tagbar'
+    Plug 'preservim/tagbar'
     Plug 'rust-lang/rust.vim'
     Plug 'mhinz/vim-crates'
     Plug 'vim-scripts/dbext.vim'
@@ -666,10 +666,11 @@ au ColorScheme blue,darkblue,desert,elflord,evening,industry,koehler,murphy,pabl
 let g:jellybeans_use_lowcolor_black = 1
 let g:jb_style = 'dark'
 "colorscheme jb
-"colorscheme jellybeans
+colorscheme jellybeans
 "colorscheme hybrid
 "colorscheme onehalfdark
-colorscheme deep-space
+"colorscheme habamax
+"colorscheme deep-space
 
 function! AirlineRefreshGitBranch()
     let b:VCSCommandBufferInfo=[trim(system(printf('cd "%s" && git symbolic-ref --short HEAD',expand('%:p:h'))))]
@@ -727,10 +728,12 @@ let NERDTreeCustomOpenArgs = {'file':{'where':'v', 'reuse':'currenttab', 'keepop
 let NERDTreeIgnore = []
 let NERDTreeChDirMode = 0
 let NERDTreeMapPreview = 'p'
-autocmd VimEnter * call NERDTreeAddKeyMap({'key':'<2-LeftMouse>', 'scope':'FileNode', 'callback':'NERDTreeOpenCallback', 'override':1})
 function! NERDTreeOpenCallback(node)
     call a:node.activate({'reuse':'currenttab', 'where':'v'})
 endfunction
+if exists('g:NERDTree')
+    autocmd VimEnter * call NERDTreeAddKeyMap({'key':'<2-LeftMouse>', 'scope':'FileNode', 'callback':'NERDTreeOpenCallback', 'override':1})
+endif
 
 let g:tagbar_ctags_bin = 'ctags'
 let g:tagbar_ctags_options = ['NONE', $HOME.'/.ctags.cfg']
@@ -1089,10 +1092,10 @@ inoremap <nowait><expr> [  index(['',' ',']'], strpart(getline('.'), col('.')-1,
 inoremap <nowait><expr> {  index(['',' ','}'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "{}\<Left>" : "{"
 inoremap <nowait><expr> (  index(['',' ',')'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "()\<Left>" : "("
 inoremap <nowait><expr> <  index(['',' ','>'], strpart(getline('.'), col('.')-1, 1)) >= 0 ? "<>\<Left>" : "<"
-"inoremap <expr> ]  strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
-"inoremap <expr> }  strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
-"inoremap <expr> )  strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
-"inoremap <expr> >  strpart(getline('.'), col('.')-1, 1) == ">" ? "\<Right>" : ">"
+inoremap <expr> ]  strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
+inoremap <expr> }  strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
+inoremap <expr> )  strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
+inoremap <expr> >  strpart(getline('.'), col('.')-1, 1) == ">" ? "\<Right>" : ">"
 "inoremap <expr> "  strpart(getline('.'), col('.')-1, 1) == '"' ? "\<Right>" : '"'
 "inoremap <expr> '  strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "'"
 "inoremap <expr> `  strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "`"
@@ -1176,9 +1179,11 @@ let g:gitgutter_override_sign_column_highlight = 1
 let g:gitgutter_close_preview_on_escape = 1
 let g:gitgutter_use_location_list = 1
 
+if g:is_development
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+endif
 
 let b:syntastic_mode = g:is_development ? 'active' : 'passive'
 let g:syntastic_auto_jump = 0
@@ -1204,7 +1209,10 @@ let g:syntastic_html_tidy_ignore_errors = [
             \ "illegal characters found in URI"
             \ ]
 "let g:syntastic_html_tidy_quiet_messages = { "level" : "warnings" }
-let g:syntastic_c_compiler_options = '-Wall -Wextra -std=gnu18 -I./src -I./include -I./crates/*/include'
+let g:syntastic_c_checkers = g:is_development ? ['gcc'] : []
+let g:syntastic_c_compiler = 'clang'
+let g:syntastic_c_compiler_options = '-std=gnu18 -Wall -Wextra -Wno-c23-extensions -I./src -I./include -I./../include'
+"let g:syntastic_c_clang_check_args = '--extra-arg="'.g:syntastic_c_compiler_options.'"'
 
 function! SyntasticCheckHook(errors)
     if !empty(a:errors)
@@ -1382,6 +1390,7 @@ endif
 " ======================
 "       End of file
 " ======================
+
 function! LoadSessionDefault()
    if argc() == 0 && &diff == 0 && getenv('VIM_TERMINAL') == v:null && filereadable('Session.vim')
        source Session.vim
