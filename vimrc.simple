@@ -2,8 +2,6 @@
 " do not load defaults if ~/.vimrc is missing
 let skip_defaults_vim=1
 
-" !!! If Vim becomes slowly then delete ~/.viminfo !!!
-
 lang ru_RU.utf8
 syntax enable
 filetype plugin indent on
