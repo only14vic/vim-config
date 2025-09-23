@@ -85,6 +85,7 @@ execute system('
     \')
 
 call plug#begin()
+Plug 'mileszs/ack.vim'
 Plug 'farmergreg/vim-lastplace'
 Plug 'vifm/vifm.vim'
 Plug 'jamessan/vim-gnupg'
@@ -127,7 +128,7 @@ function! SendClipboard(text)
 endfunction
 
 function! EscapeRegex(str)
-    return escape(a:str, '\/\.[]-''"|*^$%?#')
+    return escape(a:str, '\/.[]-''"|*^$:#')
 endfunction
 
 nmap <Enter> i
@@ -200,8 +201,13 @@ nnoremap <C-w><C-Right> <C-W>r
 nnoremap <C-w><C-Left>  <C-W>R
 nnoremap <C-w><C-Down>  <C-W>r
 nnoremap <C-w><C-Up>    <C-W>R
-nnoremap f /<C-r>=expand("<cword>")<CR><CR>
-vnoremap f "zy<Esc>/<C-r>=EscapeRegex(trim(@z))<CR><CR>
+nnoremap <S-r> :<C-r>=printf('%%s/%s/что-то/Igc', expand("<cword>"))<CR>
+vnoremap <S-r> "zy<Esc>:<C-r>=printf('%%s/%s/что-то/Igc', EscapeRegex(trim(getreg('z'))))<CR>
+nnoremap <C-f> :Ack!<Space><C-r>=printf('"%s"',escape(expand("<cword>"),"\"%$#"))<CR>
+vnoremap <C-f> "zy<Esc>:Ack!<Space><C-r>=printf('"%s"',escape(trim(getreg('z')),"\\\"%$#\n"))<CR>
+nnoremap f     /<C-r>=expand("<cword>")<CR><CR>
+vnoremap f     "zy<Esc>/<C-r>=EscapeRegex(trim(@z))<CR><CR>
+nnoremap <C-g> <C-W>gF<CR>
 nnoremap <S-t>     :tabnew .<CR>
 nnoremap + :resize +5<CR>
 nnoremap _ :resize -5<CR>
@@ -308,6 +314,12 @@ if g:auto_complete == 1
                 \ && getline('.')[col('.')-2] =~ '[a-z]' | silent! call feedkeys("\<C-x>\<C-o>") | endif
     augroup END
 endif
+
+let g:ack_autoclose = 0
+let g:ack_default_options = ' -s -S -H -R -Q --nocolor --nogroup --column --type-add=docker:is:Dockerfile '
+let g:ack_mappings = {
+    \ 'v':  '<C-W><CR><C-W>L'
+\}
 
 let g:netrw_liststyle = 0
 let g:netrw_preview = 1

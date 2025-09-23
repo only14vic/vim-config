@@ -813,7 +813,7 @@ function! Translate(text)
 endfunction
 
 function! EscapeRegex(str)
-    return escape(a:str, '\/\.[]-''"|*^$%?!#')
+    return escape(a:str, '\/.[]-''"|*^$:#')
 endfunction
 
 function! MyTabLine()
@@ -999,9 +999,9 @@ nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
 imap     <C-d> <C-o><C-d>
 nnoremap <Leader>r R
 nnoremap <S-r> :<C-r>=printf('%%s/%s/что-то/Igc', expand("<cword>"))<CR>
-vnoremap <S-r> "zy<Esc>:<C-r>=printf('%%s/%s/что-то/Igc', EscapeRegex(getreg('z')))<CR>
-nnoremap <C-f> :Ack!<Space><C-r>=printf('"%s"',EscapeRegex(expand("<cword>")))<CR>
-vnoremap <C-f> "zy<Esc>:Ack!<Space><C-r>=printf('"%s"',EscapeRegex(getreg('z')))<CR>
+vnoremap <S-r> "zy<Esc>:<C-r>=printf('%%s/%s/что-то/Igc', EscapeRegex(trim(getreg('z'))))<CR>
+nnoremap <C-f> :Ack!<Space><C-r>=printf('"%s"',escape(expand("<cword>"),"\"%$#"))<CR>
+vnoremap <C-f> "zy<Esc>:Ack!<Space><C-r>=printf('"%s"',escape(trim(getreg('z')),"\\\"%$#\n"))<CR>
 nnoremap f     /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f     "zy<Esc>/<C-r>=EscapeRegex(trim(@z))<CR><CR>
 nnoremap <expr> <S-f> index(['',' '],getline('.')[col('.')-1]) >= 0 ? ':LspWorkspaceSymbol<CR>' : ':LspWorkspaceSymbol<CR><C-r>=expand("<cword>")<CR><CR>'
@@ -1224,7 +1224,7 @@ function! SyntasticCheckHook(errors)
 endfunction
 
 let g:ack_autoclose = 0
-let g:ack_default_options = ' -s -S -H -R -k --nocolor --nogroup --column --type-add=docker:is:Dockerfile '
+let g:ack_default_options = ' -s -S -H -R -Q --nocolor --nogroup --column --type-add=docker:is:Dockerfile '
 let g:ack_mappings = {
     \ 'v':  '<C-W><CR><C-W>L'
 \}
