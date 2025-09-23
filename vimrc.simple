@@ -92,10 +92,6 @@ Plug 'jamessan/vim-gnupg'
 Plug 'rafi/awesome-vim-colorschemes'
 call plug#end()
 
-"colorscheme deep-space
-set background=light
-colorscheme hybrid
-
 set laststatus=2
 set statusline=
 set statusline+=%#Icon#
@@ -155,8 +151,6 @@ vnoremap <C-c> "xy :call SendClipboard(@x)<CR> g`<
 vnoremap <C-x> "xx :call SendClipboard(@x)<CR> g`<
 nnoremap <Leader>f :let @"=expand("%:t") <bar> :call SendClipboard(@") <CR>
 nnoremap <Leader>d :let @"=expand("%:c") <bar> :call SendClipboard(@") <CR>
-"vmap <C-c> ""y g`< :call system("xclip -i -sel p -f \| xclip -i -sel c", trim(@"))<CR>
-"vmap <C-x> ""x g`<
 nmap <C-v> ""gP
 vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
@@ -284,6 +278,10 @@ nmap db :diffget BA<CR>  " - get from BASE
 nmap dl :diffget LO<CR>  " - get from LOCAL
 inoremap <C-t> <C-R>=strftime('%Y-%m-%d %H:%M:%S')<C-M>
 nnoremap <C-l> :colorscheme deep-space<CR>
+
+"colorscheme deep-space
+set background=light
+colorscheme hybrid
 
 autocmd! ColorScheme *
     \  hi clear SpellBad
