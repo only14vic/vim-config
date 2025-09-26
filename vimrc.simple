@@ -65,7 +65,7 @@ set foldenable foldmethod=syntax foldnestmax=3
 set t_md=
 set t_mb=
 set t_Co=256
-fixdel
+"fixdel
 
 let &t_SI = "\e[5 q\<Esc>]12;green\x7"
 let &t_SR = "\e[5 q\<Esc>]12;magenta\x7"
@@ -135,7 +135,7 @@ nmap q     :q<CR>
 nmap <A-q> :q!<CR>
 nmap <Leader>q :cquit<CR>
 nmap <Tab> <C-w>w
-nmap <S-Tab> <C-w>p
+nmap <S-Tab> :if winnr() > 1 <bar> :exe (winnr()-1).'wincmd w' <bar> :else <bar> :$wincmd w <bar> :endif <CR>
 tmap <S-Tab> <C-w>w
 map  <C-s> :w<CR>
 nnoremap s     :wall<CR>

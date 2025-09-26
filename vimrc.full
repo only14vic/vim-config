@@ -824,11 +824,10 @@ endfunction
 "nnoremap <C-e> :Vexplore<CR>
 nnoremap <expr> <CR> pumvisible() == 0 ? 'i' : "\<CR>"
 "noremap  dd "_dd
-noremap  dd <Nop>
-noremap  d  <Nop>
-noremap  a  <Nop>
-noremap  s  <Nop>
-noremap  p  <Nop>
+nnoremap dd <Nop>
+nnoremap d  <Nop>
+nnoremap a  <Nop>
+nnoremap s  <Nop>
 noremap  c  <Nop>
 noremap  x  <Nop>
 noremap  .  <C-O>
@@ -848,7 +847,7 @@ nnoremap c  yiw :let @x=@"<CR> :<Space><C-r>x<Home>
 vnoremap c  "xzy<Esc>:<Space><C-r>=substitute(trim(@x), '[\ \|]*\n[\ \|\\]*', ' \| ', 'g')<CR><Home>
 nnoremap <C-t> :CtrlPTag<CR>
 nnoremap t  :stjump <C-r>=expand("<cword>")<CR><CR>
-nnoremap p  :CtrlPMixed<CR>
+"nnoremap p  :CtrlPMixed<CR>
 "nnoremap b  :CtrlPBuffer<CR>
 map      \    <C-c>:call quickui#tools#list_buffer('tabedit')<CR>
 map      <A-b> \
@@ -861,7 +860,7 @@ vnoremap <C-j> :m'>+<CR>gv
 vnoremap <C-k> :m-2<CR>gv
 nnoremap <C-l>  :call SwitchColorScheme()<CR>
 nnoremap <Tab> :wincmd w<CR>
-nnoremap <S-Tab> :wincmd p<CR>
+nnoremap <S-Tab> :if winnr() > 1 <bar> :exe (winnr()-1).'wincmd w' <bar> :else <bar> :$wincmd w <bar> :endif <CR>
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 vnoremap <C-a> <Esc>ggVG
