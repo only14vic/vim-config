@@ -517,6 +517,7 @@ au QuickFixCmdPost l*    if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.m
 au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh)
 au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
                             \| nnoremap <buffer> <Enter> <Enter> | nmap <buffer> <2-LeftMouse> <CR>
+                            \| if mapcheck("\<CR>", "n") == 'i' | nnoremap <buffer> <CR> <C-W>gF | endif
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
 au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
 au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2

@@ -301,6 +301,7 @@ augroup defaults
     au VimEnter    * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
     au FileType netrw nmap <buffer> <2-LeftMouse> <CR>
     au FileType gitcommit setlocal spell
+    au FileType qf if mapcheck("\<CR>", "n") == 'i' | nnoremap <buffer> <CR> <C-W>gF | endif
     au TerminalWinOpen * wincmd L | vert resize 100%
 augroup END
 
