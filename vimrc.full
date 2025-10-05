@@ -508,7 +508,7 @@ au BufWinEnter          * if bufname() == 'Result' && line('$') > 1 | setlocal w
 au BufEnter,VimResized  * if g:is_fullwin == 1 && index(['','help'], &bt) >= 0 && index(['nerdtree','netrw'],&ft) < 0 && bufname() != 'Result' && mode() == 'n' | exe "normal \<C-w>\<Bar>\<C-w>_" | endif
 au BufWinEnter          * if index(['help','ale-info'],&ft) >= 0 | wincmd L | setlocal winfixwidth | vert resize 80 | endif
 au WinClosed            * if or(index(['qf','nerdtree','help'], &ft) >= 0, bufname() == 'Result') | wincmd p | doau VimResized | endif
-au CursorHold,CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0 && foldclosed('.') >= 0 && line('.') > 1 | silent! exe "normal o" | endif
+"au CursorHold,CursorHoldI * if pumvisible() == 0 && &bt == '' && getcmdtype() == '' && &diff == 0 && foldclosed('.') >= 0 && line('.') > 1 | silent! exe "normal o" | endif
 au VimResume            * redraw! | silent! checktime
 au VimEnter             * if &diff == 1 && winnr() == 1 | setlocal readonly nomodifiable | endif
 au VimEnter             * if &diff == 1 | exe "windo doau FileType | setlocal foldmethod=diff" | wincmd p | exe "silent! normal! gg ]c [c zo" | endif
@@ -888,6 +888,7 @@ inoremap <expr> <ScrollWheelDown>   pumvisible() ? "\<Down>"   : "\<ScrollWheelD
 imap     <expr> <C-ScrollWheelUp>   pumvisible() ? "\<C-Up>"   : "\<PageUp>"
 imap     <expr> <C-ScrollWheelDown> pumvisible() ? "\<C-Down>" : "\<PageDown>"
 inoremap <expr> <LeftMouse>         pumvisible() ? "\<CR>"     : "\<LeftMouse>"
+nnoremap <LeftMouse> <LeftMouse> :if foldclosed('.') <bar> silent! exe "normal o" <bar> endif <CR>
 "nnoremap <MiddleMouse> gp
 map      <MiddleMouse> <F9>
 "vmap     <LeftRelease> <C-c>
