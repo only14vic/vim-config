@@ -888,7 +888,7 @@ inoremap <expr> <ScrollWheelDown>   pumvisible() ? "\<Down>"   : "\<ScrollWheelD
 imap     <expr> <C-ScrollWheelUp>   pumvisible() ? "\<C-Up>"   : "\<PageUp>"
 imap     <expr> <C-ScrollWheelDown> pumvisible() ? "\<C-Down>" : "\<PageDown>"
 inoremap <expr> <LeftMouse>         pumvisible() ? "\<CR>"     : "\<LeftMouse>"
-nnoremap <LeftRelease> :if foldclosed('.') > -1 <bar> silent! exe "normal o" <bar> endif <CR>
+nnoremap <silent> <LeftRelease> :if foldclosed('.') > -1 <bar> exe "normal o" <bar> endif <CR>
 "nnoremap <MiddleMouse> gp
 map      <MiddleMouse> <F9>
 "vmap     <LeftRelease> <C-c>
