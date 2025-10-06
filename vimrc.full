@@ -888,7 +888,7 @@ inoremap <expr> <ScrollWheelDown>   pumvisible() ? "\<Down>"   : "\<ScrollWheelD
 imap     <expr> <C-ScrollWheelUp>   pumvisible() ? "\<C-Up>"   : "\<PageUp>"
 imap     <expr> <C-ScrollWheelDown> pumvisible() ? "\<C-Down>" : "\<PageDown>"
 inoremap <expr> <LeftMouse>         pumvisible() ? "\<CR>"     : "\<LeftMouse>"
-nnoremap <LeftMouse> <LeftMouse> :if foldclosed('.') <bar> silent! exe "normal o" <bar> endif <CR>
+nnoremap <LeftRelease> :if foldclosed('.') > -1 <bar> silent! exe "normal o" <bar> endif <CR>
 "nnoremap <MiddleMouse> gp
 map      <MiddleMouse> <F9>
 "vmap     <LeftRelease> <C-c>
@@ -1339,6 +1339,7 @@ call quickui#menu#install('&Options', [
 \ ['Expand &Tab: %{&expandtab? "Off" : "On"}', 'setlocal expandtab!'],
 \ ['&Read Only: %{&readonly? "Off" : "On"}', 'setlocal readonly!'],
 \ ['&Modifiable: %{&modifiable? "Off" : "On"}', 'setlocal modifiable!'],
+\ ['&Equalalways : %{&equalalways? "Off" : "On"}', 'setlocal equalalways!'],
 \ [ "--", '' ],
 \ [ 'Options &Info','options' ],
 \ ])
@@ -1362,8 +1363,7 @@ call quickui#menu#install('&Git', [
 \ [ "--", '' ],
 \ [ 'Add Fil&e',     'call feedkeys("\<C-g>\<C-a>")' ],
 \ [ '&Add All Files','call feedkeys("\<C-g>\<C-a>\<C-a>")' ],
-\ [ 'Commit &File',  'call feedkeys("\<C-g>c")' ],
-\ [ '&Commit All',   'call feedkeys("\<C-g>\<C-c>")' ],
+\ [ '&Commit',       'call feedkeys("\<C-g>c")' ],
 \ [ 'Stash Save',    'call quickui#textbox#command("git stash save", {})' ],
 \ [ 'Stash Pop',     'call quickui#textbox#command("git stash pop", {})' ],
 \ [ '&Diff',         'call feedkeys("\<C-g>dd")' ],

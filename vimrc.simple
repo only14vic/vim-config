@@ -156,7 +156,7 @@ vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
-nnoremap <LeftMouse> <LeftMouse> :if foldclosed('.') <bar> silent! exe "normal o" <bar> endif <CR>
+nnoremap <LeftRelease> :if foldclosed('.') > -1 <bar> silent! exe "normal o" <bar> endif <CR>
 nmap <expr> <RightMouse> mode('1') == 'nt' ? "\<CR>" : "\<Esc>"
 inoremap <RightMouse> <Esc>
 nnoremap <2-LeftMouse> i
