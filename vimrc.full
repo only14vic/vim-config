@@ -1048,6 +1048,7 @@ nmap <C-g><C-g> :exe printf(':GitShow "%s"',expand('<cword>'))<CR>
 nmap <C-g><C-t> :GitGutterToggle<CR>
 nmap <C-g>c     :GitCommit<CR>
 nmap <C-g><C-c> :GitCommitAll<CR>
+nmap <C-g>f     :GitCommitFile<CR>
 nmap <C-g>s     :GitStatus<CR>
 nmap <C-g>ds    :lexpr system('git diff --staged && git submodule foreach git diff --staged')<CR>:lopen<CR>
 nnoremap <silent> <S-w> :let g:is_fullwin=1<bar>let g:curwinnr = winnr()<bar>windo if index(['','help','nofile'], &bt) >= 0 <bar> set equalalways winfixheight winfixwidth <bar> endif <CR>
@@ -1256,7 +1257,8 @@ let g:git_log_format = 'format:%C(auto)%H | %cs | %cr | %an | %s | %d'
 
 command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_
                 \ | diffthis | wincmd p | diffthis
-command GitCommit        execute(printf('!cd "%s" && git commit -n %s "%s"', expand('%:p:h'), <q-args>, expand('%:t'))) | GitGutterAll
+command GitCommitFile    execute(printf('!cd "%s" && git commit -n %s "%s"', expand('%:p:h'), <q-args>, expand('%:t'))) | GitGutterAll
+command GitCommit        !git commit
 command GitCommitAll     !git commit -a
 command GitPush          !git push
 command GitRestore       lexpr system('cd '.expand('%:p:h').' && git restore '.<q-args>.' '.expand('%:t')) | GitGutterAll
