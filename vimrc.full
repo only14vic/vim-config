@@ -1363,7 +1363,7 @@ call quickui#menu#install('&Git', [
 \ [ '&Merge',   'call quickui#textbox#command("git merge ".quickui#input#open("Merge with branch:", "master", "?"), {})' ],
 \ [ '&Rebase (-i)',  'exe "!git rebase -i ".quickui#input#open("Rebase arguments:", "HEAD~2", "?")' ],
 \ [ "--", '' ],
-\ [ 'Add Fil&e',     'call feedkeys("\<C-g>\<C-a>")' ],
+\ [ 'Add &File',     'call feedkeys("\<C-g>\<C-a>")' ],
 \ [ '&Add All Files','call feedkeys("\<C-g>\<C-a>\<C-a>")' ],
 \ [ '&Commit',       'call feedkeys("\<C-g>c")' ],
 \ [ 'Stash Save',    'call quickui#textbox#command("git stash save", {})' ],

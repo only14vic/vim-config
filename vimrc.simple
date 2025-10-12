@@ -67,7 +67,7 @@ set t_mb=
 set t_Co=256
 "fixdel
 
-let &t_SI = "\e[5 q\<Esc>]12;green\x7"
+let &t_SI = "\e[5 q\<Esc>]12;red\x7"
 let &t_SR = "\e[5 q\<Esc>]12;magenta\x7"
 let &t_EI = "\e[2 q\<Esc>]12;red\x7"
 
@@ -127,6 +127,14 @@ function! EscapeRegex(str)
     return escape(a:str, '\/.[]-''"|*^$:#')
 endfunction
 
+nmap dd <Nop>
+nmap d  <Nop>
+nmap a  <Nop>
+nmap s  <Nop>
+nmap c  <Nop>
+nmap x  <Nop>
+nmap .  <C-O>
+nmap ,  <C-I>
 nmap <Enter> i
 nmap <S-q> :qa<CR>
 nmap <C-q> :bd<CR>
@@ -300,7 +308,8 @@ augroup defaults
     au VimResume   * if &bt == '' && getcmdtype() == '' | redraw! | silent! checktime | endif
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter    * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
-    au FileType netrw nmap <buffer> <2-LeftMouse> <CR>
+    au FileType netrw nmap <buffer> <2-LeftMouse> <CR> | noremap <nowait><buffer> q :q<CR>
+    au FileType nerdtree noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q
     au FileType gitcommit setlocal spell
     au FileType qf if mapcheck("\<CR>", "n") == 'i' | nnoremap <buffer> <CR> <C-W>gF | endif
     au TerminalWinOpen * wincmd L | vert resize 100%
@@ -336,6 +345,25 @@ let g:netrw_banner = 0
 let g:netrw_sort_options = 'i'
 let g:netrw_list_hide = '^\.+'
 let g:netrw_bufsettings="noma nomod nonu nobl nowrap ro rnu"
+
+let NERDTreeRespectWildIgnore = 0
+let NERDTreeShowHidden = 1
+let NERDTreeQuitOnOpen = 1
+let NERDTreeShowBookmarks = 1
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeCascadeSingleChildDir = 0
+let NERDTreeWinSize = 40
+let NERDTreeWinSizeMax = 50
+let NERDTreeCustomOpenArgs = {'file':{'where':'v', 'reuse':'currenttab', 'keepopen':0, 'stay':0}}
+let NERDTreeIgnore = []
+let NERDTreeChDirMode = 0
+let NERDTreeMapPreview = 'p'
+function! NERDTreeOpenCallback(node)
+    call a:node.activate({'reuse':'currenttab', 'where':'v'})
+endfunction
+if exists('g:NERDTree')
+    autocmd VimEnter * call NERDTreeAddKeyMap({'key':'<2-LeftMouse>', 'scope':'FileNode', 'callback':'NERDTreeOpenCallback', 'override':1})
+endif
 
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_extensions = ['tag', 'buffertag', 'dir', 'undo', 'changes', 'mixed']
@@ -381,3 +409,7 @@ function! LoadSessionDefault()
 endfunction
 
 silent! call LoadSessionDefault()
+
+" Fix /home/vic/.archlinux/.vim/plugged/vim-lsp/autoload/lsp/ui/vim/completion.vim
+" add to line 116: let l:overflow_after = 0
+
