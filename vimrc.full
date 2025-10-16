@@ -600,6 +600,7 @@ if get(g:,'is_development') == 1
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
+        \| silent! iunmap <Left> | silent! iunmap <Right>
         \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
         \| nmap     <buffer> <C-g> t
         \| nnoremap <buffer> e :DBExecSQL   <C-r>=expand('<cword>')<CR><S-Left><Left><Left>
@@ -864,6 +865,7 @@ nnoremap <Tab> :wincmd w<CR>
 nnoremap <S-Tab> :if winnr() > 1 <bar> :exe (winnr()-1).'wincmd w' <bar> :else <bar> :$wincmd w <bar> :endif <CR>
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
+nnoremap <S-a> ggVG
 vnoremap <C-a> <Esc>ggVG
 vnoremap <CR> <Esc>
 vnoremap <C-x> "xx :call SendClipboard(@x)<CR> g`<
@@ -1112,6 +1114,7 @@ nnoremap <C-e>f :DBExecSQL \df+ <C-r>=expand('<cword>')<CR><CR>:DBResultsOpen<CR
 nnoremap <A-s> :set spell!<CR>
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-e> :set expandtab!<CR>
+nnoremap <A-=> :set equalalways!<CR>
 nnoremap <A-g> :GitGutterToggle<CR>
 nmap dn :normal ]c<CR>
 nmap dg :diffget<CR> dn
@@ -1196,7 +1199,7 @@ let g:syntastic_loc_list_height = 1
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = g:is_development
+let g:syntastic_check_on_open = 0 "g:is_development
 let g:syntastic_check_on_wq = 0
 let g:syntastic_html_checkers=[]
 "let g:syntastic_html_tidy_empty_tags = ['span','i']
@@ -1241,16 +1244,17 @@ let g:omni_sql_default_compl_type = 'procedure' " 'syntax\w*'
 let g:ftplugin_sql_omni_key = '<C-@>'
 let g:ftplugin_sql_omni_key_right = '<C-Right>'
 let g:ftplugin_sql_omni_key_left  = '<C-Left>'
+let g:ftplugin_sql_statements = 'create,alter,select,update,delete,insert,create,grant,revoke,alter,call,exec,merge,with,explain,show,comment,do,drop,set,begin,reset,vacuum'
 
 let g:dbext_default_autoclose = 0
 let g:dbext_default_autoclose_min_lines = 2
 let g:dbext_default_buffer_lines = 10
 let g:dbext_default_always_prompt_for_variables = 0
-let g:dbext_default_profile_app = printf('type=PGSQL:host=%s:user=%s:dbname=%s', $DATABASE_HOST, $DATABASE_USER, $DATABASE_NAME)
+let g:dbext_default_profile_app = printf('type=PGSQL:host=%s:port=%s:user=%s:dbname=%s', $DATABASE_HOST, $DATABASE_PORT, $DATABASE_USER, $DATABASE_NAME)
 let g:dbext_default_profile = 'app'
 let g:dbext_default_display_cmd_line = 0
-let g:dbext_default_query_statements = 'select,update,delete,insert,create,grant,revoke,alter,call,exec,merge,with,explain,show,comment,do,drop,set,begin,reset,vacuum'
-let g:dbext_default_PGSQL_cmd_options = '-c "\x on"'
+let g:dbext_default_query_statements = g:ftplugin_sql_statements
+let g:dbext_default_PGSQL_cmd_options = '-c "\x off"' " '\x off' required sql-completion to work
 
 let g:git_log_last_dir = '.'
 let g:git_log_format = 'format:%C(auto)%H | %cs | %cr | %an | %s | %d'

@@ -145,6 +145,9 @@ nmap <Leader>q :cquit<CR>
 nmap <Tab> <C-w>w
 nmap <S-Tab> :if winnr() > 1 <bar> :exe (winnr()-1).'wincmd w' <bar> :else <bar> :$wincmd w <bar> :endif <CR>
 tmap <S-Tab> <C-w>w
+vmap <Tab> >gv
+vmap <S-Tab> <gv
+nmap <S-a> ggVG
 map  <C-s> :w<CR>
 nnoremap s     :wall<CR>
 inoremap <C-s>  <Esc>:w<CR>
