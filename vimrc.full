@@ -528,12 +528,12 @@ au FileType netrw      nmap <buffer> <2-LeftMouse> <CR>
 au FileType nerdtree   setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q | noremap <buffer> a :Bookmark<CR>
                 \| noremap <buffer> <Del> :ClearBookmarks <C-r>=expand('<cword>')<CR><CR> | noremap <buffer> e :EditBookmarks<CR>
                 "\| nnoremap <silent><buffer> <Enter> :call nerdtree#ui_glue#invokeKeyMap('r')<CR> :call nerdtree#ui_glue#invokeKeyMap('<'.'CR>')<CR>
-au BufRead,BufNewFile *.csv  setlocal filetype=csv_semicolon
-au BufRead,BufNewFile *.dat  setlocal filetype=csv_pipe
-au BufRead,BufNewFile *.html setlocal filetype=htmldjango.html
-au BufRead,BufNewFile *.sql  setlocal filetype=sql.sqloracle
-au BufRead,BufNewFile Makefile setlocal filetype=make
-au BufRead,BufNewFile .gitmodules setlocal filetype=gitconfig noexpandtab
+au BufRead,BufNewFile *.csv  set filetype=csv_semicolon
+au BufRead,BufNewFile *.dat  set filetype=csv_pipe
+au BufRead,BufNewFile,BufEnter *.html set filetype=htmldjango.html
+au BufRead,BufNewFile,BufEnter *.sql  set filetype=sql.sqloracle
+au BufRead,BufNewFile Makefile set filetype=make
+au BufRead,BufNewFile .gitmodules set filetype=gitconfig noexpandtab
 "au BufEnter,BufRead * if &ft =~ '^\(gitconfig\|make\)$' | setlocal noexpandtab | endif
 "au BufEnter,BufRead * if &ft =~ '^\(gitcommit\)$' | setlocal nofoldenable | endif
 au TerminalWinOpen      * wincmd L | vert resize 100%
@@ -601,6 +601,7 @@ if get(g:,'is_development') == 1
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
         \| silent! iunmap <Left> | silent! iunmap <Right>
+        \| nnoremap <buffer> h :DBHistory<CR>
         \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
         \| nmap     <buffer> <C-g> t
         \| nnoremap <buffer> e :DBExecSQL   <C-r>=expand('<cword>')<CR><S-Left><Left><Left>
