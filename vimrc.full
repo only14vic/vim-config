@@ -516,8 +516,7 @@ au QuickFixCmdPost [^l]* if len(getqflist())  > 0 | exe 'hor bo copen '.min([10,
 au QuickFixCmdPost l*    if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.min([10,len(getloclist(winnr()))]) | endif
 au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh)
 au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
-                            \| nnoremap <buffer> <Enter> <Enter> | nmap <buffer> <2-LeftMouse> <CR>
-                            \| if mapcheck("\<CR>", "n") == 'i' | nnoremap <buffer> <CR> <C-W>gF | endif
+                            \| nnoremap <buffer> <Enter> <Enter> | nmap <buffer> <2-LeftMouse> g
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
 au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
 au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2
@@ -600,7 +599,7 @@ if get(g:,'is_development') == 1
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
-        \| silent! iunmap <Left> | silent! iunmap <Right>
+        \| silent! iunmap <buffer> <Left> <bar> iunmap <buffer> <Right>
         \| nnoremap <buffer> h :DBHistory<CR>
         \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
         \| nmap     <buffer> <C-g> t
@@ -1016,9 +1015,10 @@ nnoremap <S-F6> :LspRename<CR>
 imap     <S-F6> <C-o><S-F6>
 "nnoremap <C-g> :ALEGoToDefinition<CR>
 "nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
+nnoremap g <C-W>gF
 nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':rightbelow vertical LspDefinition<CR>'
-nmap            <C-LeftMouse> <LeftMouse><C-g>
-imap            <C-g> <C-c><C-g>
+nmap     <C-LeftMouse> <LeftMouse><C-g>
+imap     <C-g> <C-c><C-g>
 vnoremap <C-_>  I// <Esc>
 nnoremap <C-_> :LspReferences<CR>
 imap     <C-_> <Esc><C-_>
@@ -1276,7 +1276,7 @@ command GitAddAll        lexpr system('git submodule foreach "git add . && git s
 command GitStashSave     lexpr system('git stash save') | checktime | lopen
 command GitStashPop      lexpr system('git stash pop')  | checktime | lopen
 command GitStashList     lexpr system('git stash list') | lopen
-command GitStatus        lexpr system('git status -s && git submodule foreach git status -s') | lopen
+command GitStatus        cexpr system('git status -s && git submodule foreach git status -s')
 command GitLog           let g:git_log_last_dir = expand('%:p:h')
             \| lexpr system(printf('cd "%s" && git log --graph --pretty="%s" --decorate --submodule --max-count=10000 -- "%s"', get(g:,'git_log_last_dir'), get(g:,'git_log_format'), expand('%:t'))) | lopen
 command GitLogAll        let g:git_log_last_dir = '.'
