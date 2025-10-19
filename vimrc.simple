@@ -170,9 +170,9 @@ vmap <LeftMouse> <C-c>
 nnoremap <silent> <LeftRelease> :if foldclosed('.') > -1 <bar> exe "normal o" <bar> endif <CR>
 nmap <expr> <RightMouse> mode('1') == 'nt' ? "\<CR>" : "\<Esc>"
 inoremap <RightMouse> <Esc>
-nnoremap <2-LeftMouse> i
 tnoremap <RightMouse> <LeftMouse><C-w>N
-tnoremap <2-LeftMouse> <CR>
+"tnoremap <2-LeftMouse> <CR>
+"nnoremap <2-LeftMouse> i
 nnoremap \| :vsp<CR>
 nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
@@ -311,7 +311,7 @@ augroup defaults
     au VimResume   * if &bt == '' && getcmdtype() == '' | redraw! | silent! checktime | endif
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter    * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
-    au FileType netrw nmap <buffer> <2-LeftMouse> <CR> | noremap <nowait><buffer> q :q<CR>
+    au FileType netrw noremap <nowait><buffer> q :q<CR>
     au FileType nerdtree noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q
     au FileType gitcommit setlocal spell
     au FileType qf if mapcheck("\<CR>", "n") == 'i' | nnoremap <buffer> <CR> <C-W>gF | endif
@@ -343,7 +343,7 @@ let g:netrw_alto = 0
 let g:netrw_silent = 1
 let g:netrw_wiw = 10
 let g:netrw_fastbrowse = 1
-let g:netrw_mousemaps = 0
+let g:netrw_mousemaps = 1
 let g:netrw_banner = 0
 let g:netrw_sort_options = 'i'
 let g:netrw_list_hide = '^\.+'

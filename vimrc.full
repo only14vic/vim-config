@@ -516,14 +516,14 @@ au QuickFixCmdPost [^l]* if len(getqflist())  > 0 | exe 'hor bo copen '.min([10,
 au QuickFixCmdPost l*    if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.min([10,len(getloclist(winnr()))]) | endif
 au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh)
 au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
-                            \| nnoremap <buffer> <Enter> <Enter> | nmap <buffer> <2-LeftMouse> g
+                            \| nnoremap <buffer> <Enter> <Enter>
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
 au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
 au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2
 au FileType html,htmldjango,css,scss,sass setlocal shiftwidth=4 complete=t foldmethod=indent foldnestmax=4 tags=.ctags/css.ctags
 au FileType yaml       setlocal shiftwidth=4
 au FileType javascript setlocal foldmethod=syntax foldnestmax=4
-au FileType netrw      nmap <buffer> <2-LeftMouse> <CR>
+"au FileType netrw      nmap <buffer> <2-LeftMouse> <CR>
 au FileType nerdtree   setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q | noremap <buffer> a :Bookmark<CR>
                 \| noremap <buffer> <Del> :ClearBookmarks <C-r>=expand('<cword>')<CR><CR> | noremap <buffer> e :EditBookmarks<CR>
                 "\| nnoremap <silent><buffer> <Enter> :call nerdtree#ui_glue#invokeKeyMap('r')<CR> :call nerdtree#ui_glue#invokeKeyMap('<'.'CR>')<CR>
@@ -669,7 +669,7 @@ au ColorScheme blue,darkblue,desert,elflord,evening,industry,koehler,murphy,pabl
 let g:jellybeans_use_lowcolor_black = 1
 let g:jb_style = 'dark'
 "colorscheme jb
-colorscheme jellybeans
+"colorscheme jellybeans
 "colorscheme hybrid
 "colorscheme onehalfdark
 "colorscheme habamax
@@ -715,7 +715,7 @@ let g:netrw_altv = 1
 let g:netrw_alto = 0
 let g:netrw_winsize = 70
 let g:netrw_fastbrowse = 1
-let g:netrw_mousemaps = 0
+let g:netrw_mousemaps = 1
 let g:netrw_banner = 0
 let g:netrw_sort_options = 'i'
 let g:netrw_list_hide = '^\.+'
@@ -899,9 +899,9 @@ vmap     <RightMouse> <C-F10>
 "nmap     <RightMouse> <F9>
 nmap     <expr> <RightMouse> mode('1') == 'nt' ? "<CR>" : "\<LeftMouse>\<LeftRelease>\<C-F10>"
 inoremap <RightMouse> <Esc>
-nnoremap <2-LeftMouse> i
 tnoremap <RightMouse> <LeftMouse><C-w>N
-tnoremap <2-LeftMouse> <CR>
+"nmap     <2-LeftMouse> <CR>
+"tnoremap <2-LeftMouse> <CR>
 nnoremap <S-u> :u0<CR>
 noremap  <C-u> <C-c>u
 imap     <C-u> <C-o>u
@@ -1015,7 +1015,7 @@ nnoremap <S-F6> :LspRename<CR>
 imap     <S-F6> <C-o><S-F6>
 "nnoremap <C-g> :ALEGoToDefinition<CR>
 "nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
-nnoremap g <C-W>gF
+nnoremap o <C-W>gF
 nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':rightbelow vertical LspDefinition<CR>'
 nmap     <C-LeftMouse> <LeftMouse><C-g>
 imap     <C-g> <C-c><C-g>
