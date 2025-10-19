@@ -516,7 +516,7 @@ au QuickFixCmdPost [^l]* if len(getqflist())  > 0 | exe 'hor bo copen '.min([10,
 au QuickFixCmdPost l*    if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.min([10,len(getloclist(winnr()))]) | endif
 au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh)
 au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
-                            \| nnoremap <buffer> <Enter> <Enter>
+                            \| nnoremap <buffer> <Enter> <Enter> | nnoremap <buffer> o <C-W>gF
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
 au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
 au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2
@@ -599,12 +599,15 @@ if get(g:,'is_development') == 1
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
-        \| silent! iunmap <buffer> <Left> <bar> iunmap <buffer> <Right>
+        \| silent! iunmap <buffer> <Left>
+        \| silent! iunmap <buffer> <Right>
         \| nnoremap <buffer> h :DBHistory<CR>
         \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
         \| nmap     <buffer> <C-g> t
         \| nnoremap <buffer> e :DBExecSQL   <C-r>=expand('<cword>')<CR><S-Left><Left><Left>
         \| vnoremap <buffer> e "zy<Esc>:DBExecSQL   <C-r>z<S-Left><Left><Left>
+    au InsertEnter     *.sql set iskeyword-=.
+    au InsertLeave     *.sql set iskeyword+=.
 endif
 
 autocmd! ColorScheme *
@@ -823,6 +826,18 @@ function! MyTabLine()
 endfunction
 "set tabline=%!MyTabLine()
 
+function OpenFileUnderCursor(job, status)
+    if a:status == 0
+        sleep 100m
+        let file = getline('.')
+        if file == ''
+            bdelete!
+        else
+            execute 'normal gF'
+        endif
+    endif
+endfunc
+
 "nnoremap <C-e> :Vexplore<CR>
 nnoremap <expr> <CR> pumvisible() == 0 ? 'i' : "\<CR>"
 "noremap  dd "_dd
@@ -996,9 +1011,9 @@ nnoremap <C-d>  :NERDTreeFind<bar>doau BufEnter<CR>
 nnoremap <S-d>  :NERDTreeToggle<bar>doau BufEnter<CR>
 nmap <nowait> d  <S-d>
 nmap <nowait> <A-d> :VsplitVifm .<CR>
-nmap <nowait> dd :bo vert term ++close vifm .<CR>
-nmap <A-n> :bo vert term ++close tjournal <CR>
-nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
+nnoremap <nowait> dd :call term_start('vifm --choose-files -',{'exit_cb':'OpenFileUnderCursor','norestore':1}) <CR>
+nmap <A-n> :bo vert term ++norestore ++close tjournal <CR>
+nmap <A-t> :bo vert term ++norestore ++close taskwarrior-tui <CR>
 imap     <C-d> <C-o><C-d>
 nnoremap <Leader>r R
 nnoremap <S-r> :<C-r>=printf('%%s/%s/что-то/Igc', expand("<cword>"))<CR>
@@ -1015,7 +1030,6 @@ nnoremap <S-F6> :LspRename<CR>
 imap     <S-F6> <C-o><S-F6>
 "nnoremap <C-g> :ALEGoToDefinition<CR>
 "nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
-nnoremap o <C-W>gF
 nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':rightbelow vertical LspDefinition<CR>'
 nmap     <C-LeftMouse> <LeftMouse><C-g>
 imap     <C-g> <C-c><C-g>
@@ -1086,7 +1100,7 @@ vnoremap <BS> "_d
 inoremap <C-Del> <C-\><C-o>"_dw
 inoremap <C-BS> <C-w>
 inoremap <C-h> <C-w>
-nnoremap <C-h> :execute(or(&ft=='c',&ft=='cpp') ? ":term ++close man ".expand("<cword>") : printf(":help %s*",expand("<cword>")))<CR>
+nnoremap <C-h> :execute(or(&ft=='c',&ft=='cpp') ? ":term ++norestore ++close man ".expand("<cword>") : printf(":help %s*",expand("<cword>")))<CR>
 vnoremap <C-h> "zy<Esc>:help <C-r>=printf("%s*", @z)<CR><CR>
 nnoremap <C-w><Left> <C-W>H
 nnoremap <C-w><Right> <C-W>L

@@ -314,7 +314,7 @@ augroup defaults
     au FileType netrw noremap <nowait><buffer> q :q<CR>
     au FileType nerdtree noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q
     au FileType gitcommit setlocal spell
-    au FileType qf if mapcheck("\<CR>", "n") == 'i' | nnoremap <buffer> <CR> <C-W>gF | endif
+    au FileType qf nnoremap <buffer> o <C-W>gF
     au TerminalWinOpen * wincmd L | vert resize 100%
 augroup END
 
