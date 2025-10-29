@@ -1100,6 +1100,7 @@ vnoremap <Del> "_d
 vnoremap <BS> "_d
 inoremap <C-Del> <C-\><C-o>"_dw
 inoremap <C-BS> <C-w>
+nnoremap <S-h> :hide<CR>
 inoremap <C-h> <C-w>
 nnoremap <C-h> :execute(or(&ft=='c',&ft=='cpp') ? ":term ++norestore ++close man ".expand("<cword>") : printf(":help %s*",expand("<cword>")))<CR>
 vnoremap <C-h> "zy<Esc>:help <C-r>=printf("%s*", @z)<CR><CR>
