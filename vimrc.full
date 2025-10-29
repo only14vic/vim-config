@@ -31,7 +31,7 @@ set list
 set listchars=tab:»·,trail:·
 set foldenable          "foldenable, nofoldenable
 set foldmethod=syntax   "syntax, indent
-set foldnestmax=2
+set foldnestmax=5
 set foldlevel=0
 set showfulltag
 set selection=inclusive
@@ -524,7 +524,7 @@ au FileType html,htmldjango,css,scss,sass setlocal shiftwidth=4 complete=t foldm
 au FileType yaml       setlocal shiftwidth=4
 au FileType javascript setlocal foldmethod=syntax foldnestmax=4
 "au FileType netrw      nmap <buffer> <2-LeftMouse> <CR>
-au FileType nerdtree   setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q | noremap <buffer> a :Bookmark<CR>
+au FileType nerdtree   setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | noremap <buffer> a :Bookmark<CR>
                 \| noremap <buffer> <Del> :ClearBookmarks <C-r>=expand('<cword>')<CR><CR> | noremap <buffer> e :EditBookmarks<CR>
                 "\| nnoremap <silent><buffer> <Enter> :call nerdtree#ui_glue#invokeKeyMap('r')<CR> :call nerdtree#ui_glue#invokeKeyMap('<'.'CR>')<CR>
 au BufRead,BufNewFile *.csv  set filetype=csv_semicolon
@@ -594,20 +594,20 @@ if get(g:,'is_development') == 1
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
-    au CursorMovedI    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
-    au InsertEnter     *.rs exe "normal \<Plug>(lsp-float-close)"
+    au CursorMovedI,InsertEnter,BufLeave    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
         \| silent! iunmap <buffer> <Left>
         \| silent! iunmap <buffer> <Right>
         \| nnoremap <buffer> h :DBHistory<CR>
+        \| nnoremap <buffer> d :DBDescribeTable<CR>
         \| nnoremap <buffer> t :stjump <C-r>=strpart(expand('<cword>'),stridx(expand('<cword>'),'.')+1)<CR><CR>
         \| nmap     <buffer> <C-g> t
         \| nnoremap <buffer> e :DBExecSQL   <C-r>=expand('<cword>')<CR><S-Left><Left><Left>
         \| vnoremap <buffer> e "zy<Esc>:DBExecSQL   <C-r>z<S-Left><Left><Left>
-    au InsertEnter     *.sql set iskeyword-=.
-    au InsertLeave     *.sql set iskeyword+=.
+    au InsertEnter     *.sql setlocal iskeyword-=.
+    au InsertLeave     *.sql setlocal iskeyword+=.
 endif
 
 autocmd! ColorScheme *
@@ -746,7 +746,7 @@ endif
 let g:tagbar_ctags_bin = 'ctags'
 let g:tagbar_ctags_options = ['NONE', $HOME.'/.ctags.cfg']
 let g:tagbar_position = 'botright vertical'
-let g:tagbar_autoclose = 1
+let g:tagbar_autoclose = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_case_insensetive = 1
 let g:tagbar_compact = 0
@@ -864,6 +864,7 @@ nnoremap c  yiw :let @x=@"<CR> :<Space><C-r>x<Home>
 vnoremap c  "xzy<Esc>:<Space><C-r>=substitute(trim(@x), '[\ \|]*\n[\ \|\\]*', ' \| ', 'g')<CR><Home>
 nnoremap <C-t> :CtrlPTag<CR>
 nnoremap t  :stjump <C-r>=expand("<cword>")<CR><CR>
+vnoremap t  "zy<Esc>:stjump <C-r>z<CR>
 "nnoremap p  :CtrlPMixed<CR>
 "nnoremap b  :CtrlPBuffer<CR>
 map      \    <C-c>:call quickui#tools#list_buffer('tabedit')<CR>
@@ -1024,7 +1025,7 @@ nnoremap f     /<C-r>=expand("<cword>")<CR><CR>
 vnoremap f     "zy<Esc>/<C-r>=EscapeRegex(trim(@z))<CR><CR>
 nnoremap <expr> <S-f> index(['',' '],getline('.')[col('.')-1]) >= 0 ? ':LspWorkspaceSymbol<CR>' : ':LspWorkspaceSymbol<CR><C-r>=expand("<cword>")<CR><CR>'
 nnoremap <A-f> :vimgrep!<Space><C-r>=printf('/%s/gjf **/*',expand("<cword>"))<CR>
-nnoremap <A-r> :SyntasticToggleMode <bar> :cfdo!<Space><C-r>=printf('%%s/%s/%s/Igc \| update \| bdelete',expand("<cword>"),expand("<cword>"))<CR>
+nnoremap <A-r> :cfdo!<Space><C-r>=printf('%%s/%s/%s/Igc \| update \| bdelete',expand("<cword>"),expand("<cword>"))<CR>
 "nnoremap <S-F6> :ALERename<CR>
 nnoremap <S-F6> :LspRename<CR>
 imap     <S-F6> <C-o><S-F6>
@@ -1121,9 +1122,9 @@ inoremap <expr> >  strpart(getline('.'), col('.')-1, 1) == ">" ? "\<Right>" : ">
 "inoremap <expr> "  strpart(getline('.'), col('.')-1, 1) == '"' ? "\<Right>" : '"'
 "inoremap <expr> '  strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "'"
 "inoremap <expr> `  strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "`"
-nnoremap <C-e>  :DBExecSQL select * from <C-r>=expand("<cword>")<CR> limit 10
+nnoremap <C-e>  :DBExecSQL select * from <C-r>=expand("<cword>")<CR> limit 100
 vnoremap <C-e>  :DBExecVisualSQL<CR>:DBResultsOpen<CR>
-vnoremap <C-e>e "zy<Esc>:DBExecSQL select * from <C-r>z limit 10
+vnoremap <C-e>e "zy<Esc>:DBExecSQL select * from <C-r>z limit 100
 nnoremap <C-e>d :DBExecSQL \d+  <C-r>=expand('<cword>')<CR><CR>:DBResultsOpen<CR>
 nnoremap <C-e>f :DBExecSQL \df+ <C-r>=expand('<cword>')<CR><CR>:DBResultsOpen<CR>
 nnoremap <A-s> :set spell!<CR>
