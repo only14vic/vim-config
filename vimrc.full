@@ -1358,10 +1358,10 @@ call quickui#menu#install('&File', [
 call quickui#menu#install('&Options', [
 \ ['&Spell Check: %{&spell? "Off" : "On"}', 'setlocal spell!'],
 \ ['&Wrap Lines: %{&wrap? "Off" : "On"}', 'setlocal wrap!'],
-\ ['Expand &Tab: %{&expandtab? "Off" : "On"}', 'setlocal expandtab!'],
+\ ['&Expand Tab: %{&expandtab? "Off" : "On"}', 'setlocal expandtab!'],
 \ ['&Read Only: %{&readonly? "Off" : "On"}', 'setlocal readonly!'],
 \ ['&Modifiable: %{&modifiable? "Off" : "On"}', 'setlocal modifiable!'],
-\ ['&Equalalways : %{&equalalways? "Off" : "On"}', 'setlocal equalalways!'],
+\ ['E&qualalways : %{&equalalways? "Off" : "On"}', 'setlocal equalalways!'],
 \ [ "--", '' ],
 \ [ 'Options &Info','options' ],
 \ ])
@@ -1369,7 +1369,7 @@ call quickui#menu#install('&Tools', [
 \ [ '&Terminal', 'call feedkeys("\<S-c>")' ],
 \ [ '&Buffers',  'call feedkeys("\\")' ],
 \ [ '&Files',    'call feedkeys("\<A-d>")' ],
-\ [ 'T&asks',    'call feedkeys("\<S-a>")' ],
+\ [ 'T&asks',    'call feedkeys("\<A-t>")' ],
 \ [ "--", '' ],
 \ [ 'Show .&env','call quickui#textbox#command("cat .env", {})' ],
 \ ])
@@ -1398,18 +1398,17 @@ call quickui#menu#install('&Git', [
 \ ])
 if g:is_development == 1
     let g:make_debug_arg = 'n=target/debug/examples/..'
-    let g:make_arg = 'all'
+    let g:make_arg = ''
     let g:make_run_arg = ''
-    let g:make_test_arg = 't='
+    let g:make_test_arg = ''
     call quickui#menu#install('&Run', [
-    \ [ '&Migrations',  'exe "term make migrate"' ],
-    \ [ '&Format Code', 'exe "term make fmt"' ],
+    \ [ '&Check',  'exe "term make check"' ],
     \ [ "--", '' ],
-    \ [ 'M&ake ...',                'let g:make_arg = quickui#input#open("make [arg]", g:make_arg) | exe "term make ".g:make_arg' ],
-    \ [ '&Run ...',                 'let g:make_run_arg = quickui#input#open("make run [p=package e=example b=binary]", g:make_run_arg) | exe "term make run ".g:make_run_arg' ],
-    \ [ '&Debug ...',               'let g:make_debug_arg = quickui#input#open("make rust-gdb n=<exec_file> [args=arguments]", g:make_debug_arg) | exe "term make rust-gdb ".g:make_debug_arg' ],
-    \ [ '&Tests ...',               'let g:make_test_arg = quickui#input#open("make test [p=package t=test bench=bench]", g:make_test_arg) | exe "term make test ".g:make_test_arg' ],
-    \ [ 'Tests (&no migrate) ...',  'let g:make_test_arg = quickui#input#open("make test-only [p=package t=test bench=bench]", g:make_test_arg) | exe "term make test-only ".g:make_test_arg' ],
+    \ [ 'M&ake ...',  'let g:make_arg = quickui#input#open("make [arg]", g:make_arg) | exe "term make ".g:make_arg' ],
+    \ [ '&Run ...',   'let g:make_run_arg = quickui#input#open("make run[...]", g:make_run_arg) | exe "term make run".g:make_run_arg' ],
+    \ [ '&Debug ...', 'let g:make_debug_arg = quickui#input#open("make rust-gdb n=<exec_file> [args=arguments]", g:make_debug_arg) | exe "term make rust-gdb ".g:make_debug_arg' ],
+    \ [ '&Tests ...', 'let g:make_test_arg = quickui#input#open("make tests", g:make_test_arg) | exe "term make tests ".g:make_test_arg' ],
+    \ [ 'Test ...',   'let g:make_test_arg = quickui#input#open("make test[...]", g:make_test_arg) | exe "term make test".g:make_test_arg' ],
     \ ])
 endif
 
