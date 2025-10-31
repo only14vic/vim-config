@@ -683,7 +683,7 @@ function! AirlineRefreshGitBranch()
     AirlineRefresh
 endfunction
 
-if g:is_development
+if g:is_development && v:false
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'base16_shell' "base16_monokai,dark,base16_shell,base16_snazzy,base16_pop,base16_monokai,badwolf,jet,base16_summerfruit_dark
 let g:airline_section_x = '%{&filetype}'
