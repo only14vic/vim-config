@@ -454,7 +454,7 @@ Plug 'nordtheme/vim'
 Plug 'cocopon/iceberg.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'vim-scripts/vcscommand.vim'
-Plug 'tpope/vim-fugitive'
+"Plug 'tpope/vim-fugitive'
 Plug 'cespare/vim-toml', { 'branch': 'main' }
 Plug 'jamessan/vim-gnupg'
 Plug 'rafi/awesome-vim-colorschemes'
@@ -467,7 +467,7 @@ Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'yami-beta/asyncomplete-omni.vim'
 Plug 'skywind3000/vim-quickui'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'vifm/vifm.vim'
+"Plug 'vifm/vifm.vim'
 if get(g:,'is_development') == 1
     Plug 'editorconfig/editorconfig-vim'
     Plug 'prabirshrestha/asyncomplete-lsp.vim'
@@ -495,7 +495,7 @@ au BufLeave             * doau CursorMoved
 au ModeChanged          i:n silent call cursor([getpos('.')[1], getpos('.')[2]+1])
 au InsertEnter          * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
 au BufWritePre          * if &bt == '' | let g:syntastic_auto_loc_list = 1 | silent! ALEResetBuffer
-                            \| silent for w in filter(getwininfo(), 'v:val.quickfix')->filter('v:val.variables.quickfix_title =~ "syntastic\\|l:lsp_cursor_diagnostic"')
+                            \| silent for w in filter(getwininfo(), 'v:val.quickfix')->filter('v:val.variables.quickfix_title =~ "syntastic\\|l:lsp_cursor_diagnostic\\|:setloclist"')
                             \| if win_id2win(w.winid) != 0 | exe printf('keepjumps %swincmd c', win_id2win(w.winid)) | endif
                             \| endfor
                             \| endif
@@ -588,7 +588,7 @@ if get(g:,'is_development') == 1
 
     au VimEnter        * let g:lsp_get_supported_capabilities = [function('s:RustCapabilities')]
     au BufEnter        Cargo.toml imap <buffer> <C-@> <C-x><C-u>
-    au BufEnter        * if index(['rust'], &ft) < 0 | silent! call lsp#disable_diagnostics_for_buffer() | endif
+    au BufEnter        * if index(['rust'], &ft) < 0 | silent! call lsp#disable_diagnostics_for_buffer() | else | if line('.') > 1 | silent! exe "normal o" | endif
     au BufWritePost    *.toml silent! !taplo format <afile>:p 2>/dev/null
     au BufRead,BufNew       *.rs let g:rust_fold = 2
     au BufReadPost,BufEnter *.rs let g:rust_fold = 0
@@ -768,7 +768,7 @@ function! SwitchColorScheme()
         let $VIM_BG='dark'
         "colorscheme jb
         "colorscheme jellybeans
-        colorscheme hybrid
+        colorscheme hybrid_reverse
     else
         set background=light
         let g:jb_style = 'light'
@@ -1044,7 +1044,7 @@ inoremap <C-@>  <C-x><C-o>
 nmap     <C-@> i<C-@>
 "inoremap <C-a> <Esc> :ALECodeAction <CR>
 nmap <C-a> :LspCodeAction --ui=float<CR>
-nmap <A-c> :LspDocumentDiagnostics --buffers=* <CR>
+nmap <A-c> :LspDocumentDiagnostics --buffers=*<CR>
 imap <C-a> <C-o><C-a>
 nmap <C-g>n     <Plug>(GitGutterNextHunk)
 nmap <nowait> <C-g>p <Plug>(GitGutterPreviewHunk)
