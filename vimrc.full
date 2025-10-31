@@ -170,12 +170,15 @@ let g:ale_html_beautify_executable = 'js-beautify'
 let g:ale_html_beautify_options = '--type html --editorconfig'
 let g:ale_rust_cargo_target_dir = $CARGO_TARGET_DIR
 let g:ale_rust_cargo_avoid_whole_workspace = 0
-let g:ale_rust_cargo_use_clippy = 1
+let g:ale_rust_cargo_use_check = 1
+let g:ale_rust_cargo_use_clippy = 0
 let g:ale_rust_cargo_check_examples = 1
 let g:ale_rust_cargo_check_tests = 1
 let g:ale_lint_on_enter = 1
 let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_filetype_changed = 0
 let g:ale_default_navigation = 'vsplit'
 let g:ale_lsp_suggestions = 1
 let g:ale_list_window_size = 1
@@ -454,7 +457,7 @@ Plug 'nordtheme/vim'
 Plug 'cocopon/iceberg.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'vim-scripts/vcscommand.vim'
-"Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 Plug 'cespare/vim-toml', { 'branch': 'main' }
 Plug 'jamessan/vim-gnupg'
 Plug 'rafi/awesome-vim-colorschemes'
@@ -495,7 +498,7 @@ au BufLeave             * doau CursorMoved
 au ModeChanged          i:n silent call cursor([getpos('.')[1], getpos('.')[2]+1])
 au InsertEnter          * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
 au BufWritePre          * if &bt == '' | let g:syntastic_auto_loc_list = 1 | silent! ALEResetBuffer
-                            \| silent for w in filter(getwininfo(), 'v:val.quickfix')->filter('v:val.variables.quickfix_title =~ "syntastic\\|l:lsp_cursor_diagnostic\\|:setloclist"')
+                            \| silent for w in filter(getwininfo(), 'v:val.quickfix')->filter('v:val.variables.quickfix_title =~ "syntastic\\|l:lsp_cursor_diagnostic\\|:setloclist\\|cargo"')
                             \| if win_id2win(w.winid) != 0 | exe printf('keepjumps %swincmd c', win_id2win(w.winid)) | endif
                             \| endfor
                             \| endif
@@ -588,14 +591,14 @@ if get(g:,'is_development') == 1
 
     au VimEnter        * let g:lsp_get_supported_capabilities = [function('s:RustCapabilities')]
     au BufEnter        Cargo.toml imap <buffer> <C-@> <C-x><C-u>
-    au BufEnter        * if index(['rust'], &ft) < 0 | silent! call lsp#disable_diagnostics_for_buffer() | else | if line('.') > 1 | silent! exe "normal o" | endif
+    au BufEnter        * if index(['rust'], &ft) < 0 | silent! call lsp#disable_diagnostics_for_buffer() | endif
     au BufWritePost    *.toml silent! !taplo format <afile>:p 2>/dev/null
     au BufRead,BufNew       *.rs let g:rust_fold = 2
     au BufReadPost,BufEnter *.rs let g:rust_fold = 0
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
-    au CursorMovedI,InsertEnter,BufLeave    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
+    au CursorMovedI,InsertEnter,BufLeave,BufWritePre    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
@@ -1044,7 +1047,7 @@ inoremap <C-@>  <C-x><C-o>
 nmap     <C-@> i<C-@>
 "inoremap <C-a> <Esc> :ALECodeAction <CR>
 nmap <C-a> :LspCodeAction --ui=float<CR>
-nmap <A-c> :LspDocumentDiagnostics --buffers=*<CR>
+nmap <A-c> :SyntasticCheck<CR>
 imap <C-a> <C-o><C-a>
 nmap <C-g>n     <Plug>(GitGutterNextHunk)
 nmap <nowait> <C-g>p <Plug>(GitGutterPreviewHunk)
@@ -1180,8 +1183,6 @@ let b:rustfmt_autosave = 0 " g:is_development
 let g:rustfmt_autosave = 0 " g:is_development
 let g:rustfmt_emit_files = 1
 let g:rustfmt_fail_silently = 0
-let g:syntastic_rust_checkers = g:is_development ? ['cargo'] : []
-let g:syntastic_rust_cargo_post_args = '--workspace --lib --bins --tests --examples'
 let g:rustfmt_command = 'rustup run nightly rustfmt'
 let g:rustfmt_options = ''
 let g:rust_clip_command = 'xclip -selection clipboard'
@@ -1212,7 +1213,7 @@ set statusline+=%*
 endif
 
 let b:syntastic_mode = 'passive' "g:is_development ? 'active' : 'passive'
-let g:syntastic_mode_map = {'mode': 'passive'}
+"let g:syntastic_mode_map = {'mode': 'passive'}
 let g:syntastic_auto_jump = 0
 let g:syntastic_loc_list_height = 1
 let g:syntastic_aggregate_errors = 1
@@ -1220,6 +1221,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0 "g:is_development
 let g:syntastic_check_on_wq = 0
+let g:syntastic_rust_checkers = g:is_development ? ['cargo'] : []
+let g:syntastic_rust_cargo_post_args = '--workspace --lib --bins --tests --examples'
 let g:syntastic_html_checkers=[]
 "let g:syntastic_html_tidy_empty_tags = ['span','i']
 let g:syntastic_html_tidy_ignore_errors = [
