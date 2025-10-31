@@ -87,7 +87,6 @@ execute system('
 call plug#begin()
 Plug 'mileszs/ack.vim'
 Plug 'farmergreg/vim-lastplace'
-Plug 'vifm/vifm.vim'
 Plug 'jamessan/vim-gnupg'
 Plug 'rafi/awesome-vim-colorschemes'
 call plug#end()
@@ -178,7 +177,7 @@ nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
 nnoremap <S-c> :term<CR>
 nmap <C-d> :Lexplore<CR>
-nmap <A-d> :VsplitVifm .<CR>
+nmap <A-d> :call term_start('vifm --choose-files -',{'exit_cb':'OpenFileUnderCursor','norestore':1}) <CR>
 nmap <S-d> :bo vert term ++close vifm .<CR>
 nmap <A-n> :bo vert term ++close tjournal <CR>
 nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
@@ -312,7 +311,7 @@ augroup defaults
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter    * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
     au FileType netrw noremap <nowait><buffer> q :q<CR>
-    au FileType nerdtree noremap <buffer> q :q<CR> | nmap <buffer> d q | nmap <buffer> dd q
+    au FileType nerdtree noremap <buffer> q :q<CR>
     au FileType gitcommit setlocal spell
     au FileType qf nnoremap <buffer> o <C-W>gF
     au TerminalWinOpen * wincmd L | vert resize 100%
@@ -404,6 +403,18 @@ let g:gitgutter_sign_priority = 3
 let g:gitgutter_override_sign_column_highlight = 1
 let g:gitgutter_close_preview_on_escape = 1
 let g:gitgutter_use_location_list = 1
+
+function! OpenFileUnderCursor(job, status)
+    if a:status == 0
+        sleep 100m
+        let file = getline('.')
+        if file == ''
+            bdelete!
+        else
+            execute 'normal gF'
+        endif
+    endif
+endfunc
 
 function! LoadSessionDefault()
    if argc() == 0 && &diff == 0 && getenv('VIM_TERMINAL') == v:null && filereadable('Session.vim')
