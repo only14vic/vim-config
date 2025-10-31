@@ -1012,8 +1012,7 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-d>  :NERDTreeFind<bar>doau BufEnter<CR>
 nnoremap <S-d>  :NERDTreeToggle<bar>doau BufEnter<CR>
 nmap <nowait> d  <S-d>
-nmap <nowait> <A-d> :VsplitVifm .<CR>
-nnoremap <nowait> dd :call term_start('vifm --choose-files -',{'exit_cb':'OpenFileUnderCursor','norestore':1}) <CR>
+nmap <nowait> <A-d> :call term_start('vifm --choose-files -',{'exit_cb':'OpenFileUnderCursor','norestore':1}) <CR>
 nmap <A-n> :bo vert term ++norestore ++close tjournal <CR>
 nmap <A-t> :bo vert term ++norestore ++close taskwarrior-tui <CR>
 imap     <C-d> <C-o><C-d>
@@ -1045,6 +1044,7 @@ inoremap <C-@>  <C-x><C-o>
 nmap     <C-@> i<C-@>
 "inoremap <C-a> <Esc> :ALECodeAction <CR>
 nmap <C-a> :LspCodeAction --ui=float<CR>
+nmap <A-c> :LspDocumentDiagnostics --buffers=* <CR>
 imap <C-a> <C-o><C-a>
 nmap <C-g>n     <Plug>(GitGutterNextHunk)
 nmap <nowait> <C-g>p <Plug>(GitGutterPreviewHunk)
