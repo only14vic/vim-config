@@ -505,7 +505,7 @@ au BufWritePre          * if &bt == '' | let g:syntastic_auto_loc_list = 1 | sil
 au BufEnter             * if &bt == '' && getcmdtype() == '' | doau FileType | silent! checktime | endif
 au BufEnter             * if &diff == 0 && &bt == '' && getcmdtype() == '' | let g:syntastic_auto_loc_list = 2 | let g:asyncomplete_auto_popup = 1 | endif
 au BufEnter             * if &ft =~ 'vim\|gitcommit\|git\|sql\|javascript' | let g:asyncomplete_auto_popup = 0 | endif
-au BufEnter             * if &ft == 'nerdtree' && winnr('$') > 1 | setlocal winfixwidth | exe 'vert resize '.g:NERDTreeWinSize | call nerdtree#ui_glue#invokeKeyMap('R') | exe 'ReadBookmarks' | endif
+au BufEnter             * if &ft == 'nerdtree' && winnr('$') > 1 | setlocal winfixwidth | exe 'vert resize '.g:NERDTreeWinSize | call nerdtree#ui_glue#invokeKeyMap('r') | exe 'ReadBookmarks' | endif
 "au BufLeave             * if &diff == 0 && &bt == '' && getcmdtype() == '' && g:is_fullwin == 0 | set nowinfixheight | endif
 au BufWinEnter          * set noballoonevalterm | redraw! | augroup webdevicons_cursor_hold | au! | augroup END
 au BufWinEnter          * if bufname() == 'Result' && line('$') > 1 | setlocal winfixheight | exe 'resize '.min([get(g:,'dbext_default_buffer_lines'),line('$')]) | endif
@@ -522,6 +522,7 @@ au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh
 au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
                             \| nnoremap <buffer> <Enter> <Enter> | nnoremap <buffer> o <C-W>gF
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
+au FileType json        let b:asyncomplete_enable=0
 au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
 au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2
 au FileType html,htmldjango,css,scss,sass setlocal shiftwidth=4 complete=t foldmethod=indent foldnestmax=4 tags=.ctags/css.ctags
@@ -586,6 +587,7 @@ if get(g:,'is_development') == 1
     au User lsp_float_opened call setwinvar(lsp#document_hover_preview_winid(), '&wincolor', 'PopupWindow') | let g:lsp_float_opened = 1
     au User lsp_float_closed let g:lsp_float_opened = 0
     au User lsp_diagnostics_updated if mode() == 'n' | silent! call LspDiagnosticCursorToggle() | endif
+    au User lsp_progress_updated echomsg lsp#get_progress()
 
     "packadd termdebug
 
