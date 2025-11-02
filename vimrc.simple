@@ -89,6 +89,7 @@ Plug 'mileszs/ack.vim'
 Plug 'farmergreg/vim-lastplace'
 Plug 'jamessan/vim-gnupg'
 Plug 'rafi/awesome-vim-colorschemes'
+Plug 'w0ng/vim-hybrid'
 call plug#end()
 
 set laststatus=2
@@ -166,6 +167,7 @@ vmap <C-v> ""Pgvy
 imap <C-v> <C-o>""gP
 cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
+inoremap <C-c> <C-o>":P
 nnoremap <silent> <LeftRelease> :if foldclosed('.') > -1 <bar> exe "normal o" <bar> endif <CR>
 nmap <expr> <RightMouse> mode('1') == 'nt' ? "\<CR>" : "\<Esc>"
 inoremap <RightMouse> <Esc>
@@ -176,6 +178,7 @@ nnoremap \| :vsp<CR>
 nnoremap = <C-w>=
 nnoremap <A-v> <C-v>
 nnoremap <S-c> :term<CR>
+nmap d     :NERDTreeFind<CR>
 nmap <C-d> :Lexplore<CR>
 nmap <A-d> :call term_start('vifm --choose-files -',{'exit_cb':'OpenFileUnderCursor','norestore':1}) <CR>
 nmap <S-d> :bo vert term ++close vifm .<CR>
@@ -310,7 +313,7 @@ augroup defaults
     au VimResume   * if &bt == '' && getcmdtype() == '' | redraw! | silent! checktime | endif
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter    * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
-    au FileType netrw noremap <nowait><buffer> q :q<CR>
+    au FileType netrw vertical resize 40 | noremap <nowait><buffer> q :q<CR>
     au FileType nerdtree noremap <buffer> q :q<CR>
     au FileType gitcommit setlocal spell
     au FileType qf nnoremap <buffer> o <C-W>gF
