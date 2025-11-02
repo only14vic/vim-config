@@ -363,9 +363,7 @@ let NERDTreeMapPreview = 'p'
 function! NERDTreeOpenCallback(node)
     call a:node.activate({'reuse':'currenttab', 'where':'v'})
 endfunction
-if exists('g:NERDTree')
-    autocmd VimEnter * call NERDTreeAddKeyMap({'key':'<2-LeftMouse>', 'scope':'FileNode', 'callback':'NERDTreeOpenCallback', 'override':1})
-endif
+au FileType nerdtree call NERDTreeAddKeyMap({'key':'<2-LeftMouse>', 'scope':'FileNode', 'callback':'NERDTreeOpenCallback', 'override':1})
 
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_extensions = ['tag', 'buffertag', 'dir', 'undo', 'changes', 'mixed']
