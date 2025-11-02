@@ -477,7 +477,7 @@ if get(g:,'is_development') == 1
     Plug 'keremc/asyncomplete-clang.vim'
     Plug 'hrsh7th/vim-vsnip'
     Plug 'hrsh7th/vim-vsnip-integ'
-    Plug 'prabirshrestha/vim-lsp', {'commit': '04428c920002ac7cfacbecacb070a8af57b455d0'}
+    Plug 'prabirshrestha/vim-lsp'
     Plug 'vim-syntastic/syntastic'
     Plug 'dense-analysis/ale'
     Plug 'mattn/ctrlp-lsp'
@@ -587,7 +587,7 @@ if get(g:,'is_development') == 1
     au User lsp_float_opened call setwinvar(lsp#document_hover_preview_winid(), '&wincolor', 'PopupWindow') | let g:lsp_float_opened = 1
     au User lsp_float_closed let g:lsp_float_opened = 0
     au User lsp_diagnostics_updated if mode() == 'n' | silent! call LspDiagnosticCursorToggle() | endif
-    au User lsp_progress_updated echomsg lsp#get_progress()
+    au User lsp_progress_updated echo lsp#get_progress()
 
     "packadd termdebug
 
@@ -1434,6 +1434,7 @@ silent! call LoadSessionDefault()
 
 " Fix /home/vic/.archlinux/.vim/plugged/vim-lsp/autoload/lsp/ui/vim/completion.vim
 " add to line 116: let l:overflow_after = 0
+" change on line 114: let l:overflow_after = 0 "max([0, l:range['end']['character'] - l:complete_position['character']])
 "
 " git config --global core.editor "vim --noplugin"
 "
