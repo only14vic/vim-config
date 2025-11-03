@@ -169,7 +169,7 @@ cmap <C-v> <C-r>=trim(@")<CR>
 vmap <LeftMouse> <C-c>
 inoremap <C-c> <C-o>":P
 nnoremap <silent> <LeftRelease> :if foldclosed('.') > -1 <bar> exe "normal o" <bar> endif <CR>
-nmap <expr> <RightMouse> mode('1') == 'nt' ? "\<CR>" : "\<Esc>"
+nmap <expr> <RightMouse> mode('1') == 'nt' ? "\<CR>" : &bt != '' ? "\<Esc>" : ":NERDTreeFind\<CR>"
 inoremap <RightMouse> <Esc>
 tnoremap <RightMouse> <LeftMouse><C-w>N
 "tnoremap <2-LeftMouse> <CR>
@@ -291,11 +291,12 @@ nmap dr :diffget RE<CR>  " - get from REMOTE
 nmap db :diffget BA<CR>  " - get from BASE
 nmap dl :diffget LO<CR>  " - get from LOCAL
 inoremap <C-t> <C-R>=strftime('%Y-%m-%d %H:%M:%S')<C-M>
-nnoremap <C-l> :colorscheme deep-space<CR>
+nnoremap <C-l> :colorscheme lightning<CR>
 
+"set background=light
 "colorscheme deep-space
-set background=light
-colorscheme hybrid
+set background=dark
+colorscheme hybrid_reverse
 
 autocmd! ColorScheme *
     \  hi clear SpellBad

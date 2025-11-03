@@ -522,7 +522,7 @@ au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh
 au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
                             \| nnoremap <buffer> <Enter> <Enter> | nnoremap <buffer> o <C-W>gF
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
-au FileType json        let b:asyncomplete_enable=0
+au FileType json,js,html,css,scss,sass     let b:asyncomplete_enable=0
 au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
 au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2
 au FileType html,htmldjango,css,scss,sass setlocal shiftwidth=4 complete=t foldmethod=indent foldnestmax=4 tags=.ctags/css.ctags
@@ -1357,7 +1357,7 @@ call quickui#menu#install('&File', [
 \ [ "Save &All\ts", 'normal s' ],
 \ [ "Save Session\tShift+s", 'normal S' ],
 \ [ "--", '' ],
-\ [ "Settings .&vimrc", 'tabedit .vimrc' ],
+\ [ "&Edit .&vimrc", 'tabedit ~/.vimrc' ],
 \ [ "--", '' ],
 \ [ "E&xit\tShift+q", 'normal Q' ],
 \ ])
