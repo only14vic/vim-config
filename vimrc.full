@@ -147,6 +147,7 @@ let g:ale_fixers = {
     \ 'xml': ['tidy','trim_whitespace','remove_trailing_lines'],
     \ 'html': ['html-beautify','trim_whitespace','remove_trailing_lines'],
     \ 'javascript': ['eslint','trim_whitespace','remove_trailing_lines'],
+    \ 'javascriptreact': ['eslint','trim_whitespace','remove_trailing_lines'],
     \ 'json': ['jq','trim_whitespace','remove_trailing_lines'],
     \ 'css': ['stylelint','trim_whitespace','remove_trailing_lines'],
     \ 'sass': ['stylelint','trim_whitespace','remove_trailing_lines'],
@@ -162,7 +163,9 @@ let g:ale_linters = {
     \ 'xml': ['tidy'],
     \ 'sql': [],
     \ 'javascript': ['eslint'],
+    \ 'javascriptreact': ['eslint'],
     \ 'json': ['eslint'],
+    \ 'js': ['eslint'],
     \ 'css': ['stylelint'],
     \ 'sass': ['stylelint'],
     \ }
@@ -177,13 +180,13 @@ let g:ale_rust_cargo_check_tests = 1
 let g:ale_lint_on_enter = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
-let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_filetype_changed = 0
 let g:ale_default_navigation = 'vsplit'
 let g:ale_lsp_suggestions = 1
 let g:ale_list_window_size = 1
 let g:ale_open_list = 1
-let g:ale_set_loclist = 1
+let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 let g:ale_set_balloons = 1
 let g:ale_sql_pgformatter_options = '-c ~/.pg_format'
@@ -522,7 +525,7 @@ au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh
 au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
                             \| nnoremap <buffer> <Enter> <Enter> | nnoremap <buffer> o <C-W>gF
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
-au FileType json,js,html,css,scss,sass     let b:asyncomplete_enable=0
+au FileType json,js,html,htmldjango,css,scss,sass     let b:asyncomplete_enable=0
 au FileType conf,gitconfig,gitcommit,make setlocal spell noexpandtab nofoldenable
 au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=syntax foldnestmax=2
 au FileType html,htmldjango,css,scss,sass setlocal shiftwidth=4 complete=t foldmethod=indent foldnestmax=4 tags=.ctags/css.ctags
@@ -596,7 +599,7 @@ if get(g:,'is_development') == 1
     au BufEnter        * if index(['rust'], &ft) < 0 | silent! call lsp#disable_diagnostics_for_buffer() | endif
     au BufWritePost    *.toml silent! !taplo format <afile>:p 2>/dev/null
     au BufRead,BufNew       *.rs let g:rust_fold = 2
-    au BufReadPost,BufEnter *.rs let g:rust_fold = 0 | silent! exe "normal o"
+    au BufReadPost,BufEnter *.rs let g:rust_fold = 0 | if line('.') > 1 | silent! exe "normal o" | endif
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
