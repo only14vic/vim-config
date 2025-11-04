@@ -314,8 +314,8 @@ augroup defaults
     au VimResume   * if &bt == '' && getcmdtype() == '' | redraw! | silent! checktime | endif
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter    * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
-    au FileType netrw vertical resize 40 | noremap <nowait><buffer> q :q<CR>
-    au FileType nerdtree noremap <buffer> q :q<CR>
+    au FileType netrw setlocal cursorlineopt+=line | vertical resize 40 | noremap <nowait><buffer> q :q<CR>
+    au FileType nerdtree setlocal cursorlineopt+=line | noremap <buffer> q :q<CR>
     au FileType gitcommit setlocal spell
     au FileType qf nnoremap <buffer> o <C-W>gF
     au TerminalWinOpen * wincmd L | vert resize 100%
