@@ -599,7 +599,7 @@ if get(g:,'is_development') == 1
     au BufEnter        * if index(['rust'], &ft) < 0 | silent! call lsp#disable_diagnostics_for_buffer() | endif
     au BufWritePost    *.toml silent! !taplo format <afile>:p 2>/dev/null
     au BufRead,BufNew       *.rs let g:rust_fold = 2
-    au BufReadPost,BufEnter *.rs let g:rust_fold = 0 | if line('.') > 1 | silent! exe "normal o" | endif
+    au BufReadPost,BufEnter *.rs let g:rust_fold = 0 | if foldclosed('.') >= 0 && line('.') > 1 | silent! exe "normal o" | endif
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
