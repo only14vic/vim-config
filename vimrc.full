@@ -31,7 +31,7 @@ set list
 set listchars=tab:»·,trail:·
 set foldenable          "foldenable, nofoldenable
 set foldmethod=syntax   "syntax, indent
-set foldnestmax=5
+set foldnestmax=2
 set foldlevel=0
 set showfulltag
 set selection=inclusive
@@ -603,7 +603,7 @@ if get(g:,'is_development') == 1
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
-    au CursorMovedI,InsertEnter,BufLeave,BufWritePre    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
+    au CursorMovedI,InsertEnter,VimLeavePre,BufLeave,BufWritePre    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
