@@ -988,7 +988,7 @@ nnoremap <C-o> zR
 nnoremap <C-z> zM<Up>
 nnoremap q :q<CR>
 nnoremap <A-q> :q!<CR>
-nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <CR>
+nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <bar> :if bufname() == '' <bar> :quit <bar> :endif <CR>
 imap     <C-q> <C-o><C-q>
 nnoremap <S-q> :silent tabdo windo <bar> :if &bt == 'terminal' <bar> :bdelete! <bar> :endif<CR> :qa<CR>
 nnoremap <Leader>q :cquit!<CR>
@@ -1324,7 +1324,8 @@ amenu       10.11 &Menu.+\ &New\ Tab <S-t>
 amenu       10.12 &Menu.⮻\ &Split\ Tab <C-\>
 amenu       10.13 &Menu.⮺\ &Merge\ Tab <A-\>
 amenu       10.20 &Menu.--\ -Sep- :
-amenu       10.21 &Menu.↧\ &Unfold    <S-o>
+amenu       10.21 &Menu.↧\ &Unfold     <S-o>
+amenu       10.21 &Menu.⮇\ Unfold\ All <C-o>
 amenu       10.22 &Menu.↥\ F&old      z
 amenu       10.23 &Menu.⇈\ Fold\ All <S-z>
 amenu       10.30 &Menu.---\ -Sep- :
