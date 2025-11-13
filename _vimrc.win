@@ -1,0 +1,282 @@
+lang ru_RU.utf8
+syntax enable
+filetype plugin indent on
+
+set path=.
+set errorbells
+set visualbell t_vb=
+set tabstop=4
+set shiftwidth=4
+set encoding=utf-8
+set ignorecase
+set smartcase
+set smartindent
+set autoread
+set incsearch
+set hlsearch
+set cursorline
+set cursorlineopt=number,line
+set number
+set expandtab
+set smarttab
+set nowrap
+set linebreak
+set wrapscan
+set nopaste
+set showbreak=
+set list
+set listchars=tab:>•,trail:•
+set selection=inclusive
+set switchbuf=useopen,usetab,vsplit
+set termguicolors
+set wildmenu
+set wildmode=longest:full
+set wildoptions=fuzzy,pum
+set wildignore=*/.git/*
+set wildignorecase
+set fileignorecase
+set noswapfile
+set nocompatible
+set showcmd
+set showmode
+set splitright
+set ballooneval
+set noballoonevalterm
+set virtualedit=onemore
+set mouse=a
+set mousemodel=popup
+"set ttymouse=sgr
+set dictionary=spell
+set nospell spelllang=ru,en
+set spelloptions=camel
+set spellsuggest=double
+set backspace=indent,eol,nostop
+set equalalways
+set eadirection=hor
+set smoothscroll
+set scroll=5
+set noconfirm
+set copyindent
+set lazyredraw
+set iminsert=0
+set imsearch=0
+set conceallevel=0
+set concealcursor=nc
+set shortmess-=S
+set shortmess-=C
+set complete=.,d,kspell
+set completeopt=menu,menuone,popuphidden,noinsert
+set updatetime=500
+set timeout timeoutlen=700 ttimeoutlen=10
+set history=1000
+set undofile
+set undodir=$HOME/vimfiles/undo
+set laststatus=2
+set t_md=
+set t_mb=
+set t_Co=256
+
+let &t_SI = "\e[5 q\<Esc>]12;green\x7"
+let &t_SR = "\e[5 q\<Esc>]12;magenta\x7"
+let &t_EI = "\e[2 q\<Esc>]12;red\x7"
+
+if has("gui_running")
+    set guifont=Liberation\ Mono:h12:cANSI
+    set guicursor+=a:blinkon0
+    set guioptions-=L
+    set guioptions-=r
+endif
+
+set statusline=
+set statusline+=%#Icon#
+set statusline+=\ 👽
+set statusline+=%#NormalC#%{(mode()=='n')?'\ NORMAL\ ':''}
+set statusline+=%#InsertC#%{(mode()=='i')?'\ INSERT\ ':''}
+set statusline+=%#VisualC#%{(mode('1')=~'v')?'\ VISUAL\ ':''}
+set statusline+=%#Filename#
+set statusline+=\ %f
+set statusline+=%#ReadOnly#
+set statusline+=\ %r
+set statusline+=%m
+set statusline+=%=
+set statusline+=%#Fileformat#
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\ [%{&fileformat}\]
+set statusline+=%#Position#
+set statusline+=\ [%l/%L]
+
+au! ColorScheme *
+    \ hi Directory gui=NONE term=NONE cterm=NONE |
+    \ hi Normal gui=NONE cterm=NONE term=NONE |
+    \ hi clear SpellBad |
+    \ hi SpellBad cterm=underline,italic gui=undercurl,italic |
+    \ hi clear SpellCap
+    \ hi clear Todo
+    \ hi clear Conceal
+
+set background=dark
+colorscheme hybrid
+
+call plug#begin()
+call plug#end()
+
+let g:mapleader = '-'
+
+nnoremap <expr> <CR> pumvisible() == 0 ? 'i' : "\<CR>"
+nnoremap dd <Nop>
+nnoremap d  <Nop>
+nnoremap a  <Nop>
+nnoremap s  <Nop>
+nnoremap c  <Nop>
+nnoremap x  <Nop>
+nnoremap Q  <Nop>
+noremap  .  <C-O>
+noremap  ,  <C-I>
+nnoremap ; q:
+vnoremap c "*zy<Esc>:<Space><C-r>=substitute(trim(@*), '[\ \|]*\n[\ \|\\]*',' \| ','g')<CR><Home>
+nnoremap \| :vsp<CR>
+nnoremap <C-j> :m +1<CR>==
+nnoremap <C-k> :m -2<CR>==
+nnoremap + :resize +5<CR>
+nnoremap _ :resize -5<CR>
+nnoremap > :vertical resize +10<CR>
+nnoremap < :vertical resize -10<CR>
+nnoremap <C-w><Left> <C-W>H
+nnoremap <C-w><Right> <C-W>L
+nnoremap <C-w><Up> <C-W>K
+nnoremap <C-w><Down> <C-W>J
+nnoremap <C-w><C-Right> <C-W>r
+nnoremap <C-w><C-Down> <C-W>r
+nnoremap <C-w><C-Up> <C-W>R
+nnoremap <C-w><C-Left> <C-W>R
+noremap <S-t> :tabnew .<CR>
+nnoremap <A-Left>  :tabN<CR>
+nnoremap <A-Right> :tabn<CR>
+nnoremap <A-Up>    :tabmove -<CR>
+nnoremap <A-Down>  :tabmove +<CR>
+imap <A-Left>  <C-o><A-Left>
+imap <A-Right> <C-o><A-Right>
+imap <A-Up>    <C-o><A-Up>
+imap <A-Down>  <C-o><A-Down>
+tmap <A-Left> <C-w>gT
+tmap <A-Right> <C-w>gt
+tmap <C-q> <C-w><C-c>
+noremap <C-Right> e<Right>
+noremap <C-Left> b
+inoremap <C-Right> <C-o>e<Right>
+inoremap <C-Left> <C-o>b
+noremap <C-u> <C-c>u
+imap    <C-u> <C-o>u
+imap    <C-z> <C-o>u
+nnoremap r <C-c>:redo<CR>
+nnoremap <C-r> <C-o>:redo<CR>
+vmap <LeftMouse> <C-c>
+nmap <expr> <RightMouse> mode('1') == 'nt' ? "<CR>" : "\<RightMouse>"
+inoremap <RightMouse> <Esc>
+tnoremap <RightMouse> <LeftMouse><C-W>"*
+tnoremap <ScrollWheelUp> <Up>
+tnoremap <ScrollWheelDown> <Down>
+cnoremap <ScrollWheelUp> <Up>
+cnoremap <ScrollWheelDown> <Down>
+noremap <C-s> <C-c>:write<CR>
+inoremap <C-s> <Esc>:write<CR>
+noremap s :wall<CR>
+noremap q :q<CR>
+nnoremap <C-q> :if &bt=='' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <bar> :if bufname() == '' <bar> :quit <bar> :endif <CR>
+imap <C-q> <C-o><C-q>
+nnoremap Q :silent tabdo windo <bar> :if &bt=='terminal' <bar> :bdelete! <bar> :endif<CR> :qa<CR>
+nnoremap f     /<C-r>=expand('<cword>')<CR><CR>
+vnoremap f     "*zy<Esc>/<C-r>=trim(@*)<CR><CR>
+nnoremap <C-f> :vimgrep /<C-r>=expand('<cword>')<CR>/gj *<Left><Left><Left><Left><Left>
+vnoremap <C-f> "*zy<Esc>:vimgrep /<C-r>=trim(@*)<CR>/gj *
+nnoremap <C-x> :doau QuickFixCmdPost q<CR>
+nnoremap x     :doau QuickFixCmdPost l<CR>
+nnoremap <C-b> :b#<CR>
+tnoremap <S-Tab> <C-w><C-w>
+tnoremap <C-x> <C-\><C-n>
+nnoremap <Esc> :noh<bar>:redraw!<CR>
+nnoremap <S-c> :term<CR>
+nnoremap <C-d> :Lexplore<CR>
+nnoremap <Tab> :wincmd w<CR>
+nnoremap <S-Tab> :wincmd p<CR>
+nnoremap <A-s> :set spell!<CR>
+nnoremap <A-w> :set wrap!<CR>
+nnoremap <A-e> :set expandtab!<CR>
+nnoremap <A-=> :set equalalways!<CR>
+nnoremap <A-n> :setlocal cursorlineopt+=line<CR>
+nnoremap <A-m> :setlocal cursorlineopt-=line<CR>
+nnoremap <A-q> :q!<CR>
+nnoremap <C-\> <C-w>T
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+cnoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+nnoremap <C-v> "*gP
+vnoremap <C-v> "*Pgvy
+imap <expr> <C-v> pumvisible() ? "\<C-e>\<C-o>\<C-v>" : "\<C-o>\<C-v>"
+cnoremap <C-v> <C-r>=trim(@*)<CR>
+vnoremap <C-c> "*y
+vnoremap <C-x> "*x
+vnoremap <Del> "_d
+vnoremap <BS> "_d
+inoremap <C-Del> <C-\><C-o>"_dw
+inoremap <C-BS> <C-w>
+nnoremap <S-End> viw
+nnoremap <S-Home> viwo
+nnoremap <S-Right> ve
+nnoremap <S-left> vb
+nnoremap <S-Up> <C-V>
+nnoremap <S-Down> <S-V>
+inoremap <S-End> <C-o>vim
+inoremap <S-Home> <C-o>viwo
+inoremap <S-Right> <C-o>ve
+inoremap <S-Left> <Left><C-o>vb
+inoremap <S-Up> <C-o><C-V>
+inoremap <S-Down> <C-o><S-V>
+vnoremap <S-Right> e
+vnoremap <S-Left> b
+vnoremap <S-Up> k
+vnoremap <S-Down> j
+vnoremap <S-Home> g^
+vnoremap <S-End> $
+inoremap <C-h> <C-w>
+nnoremap <C-h> :execute(printf(":help %s*",expand("<cword>")))<CR>
+vnoremap <C-h> "*y<Esc>:help <C-r>=printf("%s*",@*)<CR><CR>
+noremap <expr> <C-Up> pumvisible() ? "\<PageUp>" : "5k"
+noremap <expr> <C-Down> pumvisible() ? "\<PageDown>" : "5j"
+inoremap <expr> <C-Up> pumvisible() ? "\<PageUp>" : "\<C-o>5k"
+inoremap <expr> <C-Down> pumvisible() ? "\<PageDown>" : "\<C-o>5j"
+noremap <expr> <PageUp> pumvisible() ? "\<PageUp>" : "10k"
+noremap <expr> <PageDown> pumvisible() ? "\<PageDown>" : "10j"
+inoremap <expr> <PageUp> pumvisible() ? "\<PageUp>" : "\<C-o>10k"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>" : "\<C-o>10j"
+nmap dn :normal ]c<CR>
+nmap dg :diffget<CR> dn
+nmap dp :diffput<CR> dn
+nmap dr :diffget RE<CR>
+nmap db :diffget BA<CR>
+nmap dl :diffget LO<CR>
+
+au BufWinEnter * if index(['help'],&ft) >= 0 | wincmd L | setlocal winfixwidth | vert resize 80 | endif
+au BufEnter * if &bt=='' && getcmdtype()=='' | silent! checktime | endif
+au QuickFixCmdPost [^l]* if len(getqflist()) > 0 | exe 'hor bo copen '.min([10,len(getqflist())]) | endif
+au QuickFixCmdPost   l*  if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.min([10,len(getloclist(winnr()))]) | endif
+au FileType netrw setlocal cursorlineopt+=line | nnoremap <buffer> <Esc> :q<CR> | nmap <buffer> <2-LeftMouse> <CR>
+au FileType qf setlocal nowrap | nnoremap <buffer> <Esc> :q<CR> | nnoremap <buffer> <Enter> <C-w>gF
+au TerminalWinOpen * wincmd L | vert resize 100 %
+
+let g:netrw_liststyle = 0
+let g:netrw_preview = 1
+let g:netrw_keepdir = 1
+let g:netrw_usetab = 1
+let g:netrw_browse_split = 3
+let g:netrw_silent = 1
+let g:netrw_altv = 1
+let g:netrw_alto = 0
+let g:netrw_winsize=20
+let g:netrw_fastbrowse = 1
+let g:netrw_mousemaps = 1
+let g:netrw_banner = 0
+let g:netrw_sort_options = 'i'
+let g:netrw_list_hide = '^\.+'
+
+let g:gitgutter_enabled = 0
