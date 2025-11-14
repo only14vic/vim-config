@@ -8,6 +8,8 @@ set visualbell t_vb=
 set tabstop=4
 set shiftwidth=4
 set encoding=utf-8
+set fileencoding=cp1251
+set fileencodings+=cp1251
 set ignorecase
 set smartcase
 set smartindent
@@ -51,6 +53,7 @@ set nospell spelllang=ru,en
 set spelloptions=camel
 set spellsuggest=double
 set backspace=indent,eol,nostop
+set sessionoptions=buffers,curdir,help,tabpages
 set equalalways
 set eadirection=hor
 set smoothscroll
@@ -93,6 +96,7 @@ set statusline+=\ 👽
 set statusline+=%#NormalC#%{(mode()=='n')?'\ NORMAL\ ':''}
 set statusline+=%#InsertC#%{(mode()=='i')?'\ INSERT\ ':''}
 set statusline+=%#VisualC#%{(mode('1')=~'v')?'\ VISUAL\ ':''}
+set statusline+=%{FugitiveStatusline()}
 set statusline+=%#Filename#
 set statusline+=\ %f
 set statusline+=%#ReadOnly#
@@ -111,9 +115,11 @@ au! ColorScheme *
     \ hi Normal gui=NONE cterm=NONE term=NONE |
     \ hi clear SpellBad |
     \ hi SpellBad cterm=underline,italic gui=undercurl,italic |
-    \ hi clear SpellCap
-    \ hi clear Todo
-    \ hi clear Conceal
+    \ hi clear SpellCap |
+    \ hi clear Todo |
+    \ hi clear Conceal |
+    \ hi Visual gui=reverse cterm=reverse |
+    \ hi CursorLine guibg=NONE ctermbg=NONE gui=underline term=underline cterm=underline
 
 set background=dark
 colorscheme hybrid
@@ -182,6 +188,7 @@ cnoremap <ScrollWheelDown> <Down>
 noremap <C-s> <C-c>:write<CR>
 inoremap <C-s> <Esc>:write<CR>
 noremap s :wall<CR>
+nnoremap <S-s> :mksession! $HOME/Session.vim<CR>
 noremap q :q<CR>
 nnoremap <C-q> :if &bt=='' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <bar> :if bufname() == '' <bar> :quit <bar> :endif <CR>
 imap <C-q> <C-o><C-q>
@@ -195,7 +202,6 @@ nnoremap x     :doau QuickFixCmdPost l<CR>
 nnoremap <C-b> :b#<CR>
 tnoremap <S-Tab> <C-w><C-w>
 tnoremap <C-x> <C-\><C-n>
-nnoremap <Esc> :noh<bar>:redraw!<CR>
 nnoremap <S-c> :term<CR>
 nnoremap <C-d> :Lexplore<CR>
 nnoremap <Tab> :wincmd w<CR>
@@ -208,8 +214,10 @@ nnoremap <A-n> :setlocal cursorlineopt+=line<CR>
 nnoremap <A-m> :setlocal cursorlineopt-=line<CR>
 nnoremap <A-q> :q!<CR>
 nnoremap <C-\> <C-w>T
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-cnoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<CR>"
+cnoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<CR>"
+cnoremap <expr> <Esc>  pumvisible() ? "\<C-e>" : "\<C-c>"
+nnoremap <expr> <Esc>  pumvisible() ? "\<Esc>" : get(v:,'hlsearch') ? ":noh<CR>" : index(['','help'],&bt) < 0 ? ":q<CR>" : ":redraw!<CR>"
 nnoremap <C-v> "*gP
 vnoremap <C-v> "*Pgvy
 imap <expr> <C-v> pumvisible() ? "\<C-e>\<C-o>\<C-v>" : "\<C-o>\<C-v>"
@@ -280,3 +288,4 @@ let g:netrw_sort_options = 'i'
 let g:netrw_list_hide = '^\.+'
 
 let g:gitgutter_enabled = 0
+
