@@ -140,6 +140,7 @@ nnoremap Q  <Nop>
 noremap  .  <C-O>
 noremap  ,  <C-I>
 nnoremap ; q:
+nnoremap = <C-w>=
 vnoremap c "*zy<Esc>:<Space><C-r>=substitute(trim(@*), '[\ \|]*\n[\ \|\\]*',' \| ','g')<CR><Home>
 nnoremap \| :vsp<CR>
 nnoremap <C-j> :m +1<CR>==
