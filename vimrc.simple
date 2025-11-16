@@ -309,6 +309,7 @@ doautocmd ColorScheme
 
 augroup defaults
     au!
+    au BufLeave    * stopinsert
     au BufWinEnter * doau FileType | redraw!
     au BufEnter    * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
     au InsertEnter * if &bt == '' && getcmdtype() == '' | silent! checktime | endif

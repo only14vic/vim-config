@@ -497,7 +497,7 @@ let g:lastplace_ignore_buftype = "help,nofile,quickfix"
 
 let g:is_fullwin = 0
 
-au BufLeave             * doau CursorMoved
+au BufLeave             * stopinsert
 au ModeChanged          i:n silent call cursor([getpos('.')[1], getpos('.')[2]+1])
 au InsertEnter          * if &bt == '' && getcmdtype() == '' | silent! checktime | endif
 au BufWritePre          * if &bt == '' | let g:syntastic_auto_loc_list = 1 | silent! ALEResetBuffer
