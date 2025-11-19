@@ -60,7 +60,7 @@ set spelloptions=camel
 set spellsuggest=double
 set backspace=indent,eol,nostop
 set sessionoptions=buffers,curdir,help,tabpages
-set equalalways
+set noequalalways
 set eadirection=hor
 set ttyfast
 set winminheight=0
@@ -553,7 +553,7 @@ if get(g:,'is_development') == 1
         if pumvisible() == 0 && g:lsp_float_can_show == 1
             \ && getline('.')[charcol('.') - 1] =~? '[a-z0-9(_]'
             \ && or(lsp#internal#diagnostics#under_cursor#get_diagnostic() == {}, mode() == 'i')
-            silent execute(':LspHover --ui=float')
+            silent execute(':LspHover')
             let g:lsp_float_can_show = 0
         else
             let g:lsp_float_can_show = 1
@@ -603,7 +603,8 @@ if get(g:,'is_development') == 1
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
-    au CursorMovedI,InsertEnter,VimLeavePre,BufLeave,BufWritePre    *.rs if g:lsp_float_opened == 1 | exe "normal \<Plug>(lsp-float-close)" | endif
+    au CursorMovedI    *.rs exe "normal \<Plug>(lsp-float-close)"
+    au InsertEnter,InsertLeave,VimLeavePre,BufEnter,BufLeave,BufWritePre,TabLeave,TabEnter  *.rs  doau CursorMoved | for id in popup_list() | silent! popup_close(id) | endfor
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
@@ -925,7 +926,7 @@ inoremap <RightMouse> <Esc>
 tnoremap <RightMouse> <LeftMouse><C-w>N
 "nmap     <2-LeftMouse> <CR>
 "tnoremap <2-LeftMouse> <CR>
-nnoremap <S-u> :u0<CR>
+"nnoremap <S-u> :u0<CR>
 noremap  <C-u> <C-c>u
 imap     <C-u> <C-o>u
 imap     <C-z> <C-o>u

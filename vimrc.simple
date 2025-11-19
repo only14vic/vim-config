@@ -185,7 +185,7 @@ nmap <S-d> :bo vert term ++close vifm .<CR>
 nmap <A-n> :bo vert term ++close tjournal <CR>
 nmap <A-t> :bo vert term ++close taskwarrior-tui <CR>
 nmap r     :redo<CR>
-nmap <S-u> :u0<CR>
+"nmap <S-u> :u0<CR>
 imap <C-u> <C-o>u
 imap <C-z> <C-o>u
 vnoremap <BS> "_d
