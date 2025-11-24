@@ -17,7 +17,7 @@ set autoread
 set incsearch
 set hlsearch
 set cursorline
-set cursorlineopt=number,line
+set cursorlineopt=number,screenline
 set number
 set expandtab
 set smarttab
@@ -118,8 +118,8 @@ au! ColorScheme *
     \ hi clear SpellCap |
     \ hi clear Todo |
     \ hi clear Conceal |
-    \ hi Visual gui=reverse cterm=reverse |
-    \ hi CursorLine guibg=NONE ctermbg=NONE gui=underline term=underline cterm=underline
+    \ hi Visual gui=reverse cterm=reverse
+    "\ hi CursorLine guibg=NONE ctermbg=NONE gui=underline term=underline cterm=underline
 
 set background=dark
 colorscheme hybrid
@@ -211,8 +211,6 @@ nnoremap <A-s> :set spell!<CR>
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-e> :set expandtab!<CR>
 nnoremap <A-=> :set equalalways!<CR>
-nnoremap <A-n> :setlocal cursorlineopt+=line<CR>
-nnoremap <A-m> :setlocal cursorlineopt-=line<CR>
 nnoremap <A-q> :q!<CR>
 nnoremap <C-\> <C-w>T
 inoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<CR>"
@@ -269,7 +267,7 @@ au BufWinEnter * if index(['help'],&ft) >= 0 | wincmd L | setlocal winfixwidth |
 au BufEnter * if &bt=='' && getcmdtype()=='' | silent! checktime | endif
 au QuickFixCmdPost [^l]* if len(getqflist()) > 0 | exe 'hor bo copen '.min([10,len(getqflist())]) | endif
 au QuickFixCmdPost   l*  if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.min([10,len(getloclist(winnr()))]) | endif
-au FileType netrw setlocal cursorlineopt+=line | nnoremap <buffer> <Esc> :q<CR> | nmap <buffer> <2-LeftMouse> <CR>
+au FileType netrw setlocal cursorlineopt=screenline | nnoremap <buffer> <Esc> :q<CR> | nmap <buffer> <2-LeftMouse> <CR>
 au FileType qf setlocal nowrap | nnoremap <buffer> <Esc> :q<CR> | nnoremap <buffer> <Enter> <C-w>gF
 au TerminalWinOpen * wincmd L | vert resize 100 %
 

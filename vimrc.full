@@ -17,7 +17,7 @@ set autoread
 set incsearch
 set hlsearch
 set cursorline
-set cursorlineopt=number
+set cursorlineopt=number,screenline
 set number
 set expandtab
 set smarttab
@@ -31,7 +31,7 @@ set list
 set listchars=tab:»·,trail:·
 set foldenable          "foldenable, nofoldenable
 set foldmethod=syntax   "syntax, indent
-set foldnestmax=2
+set foldnestmax=5
 set foldlevel=0
 set showfulltag
 set selection=inclusive
@@ -127,7 +127,7 @@ let g:is_development = $APP_ENV == 'dev' && $USER != 'root' && &diff == 0
             \ && getenv('MC_TMPDIR') == v:null
 
 if getenv('CARGO_TARGET_DIR') == v:null
-    let $CARGO_TARGET_DIR=getcwd().'/target/vim-local'
+    let $CARGO_TARGET_DIR=getcwd().'/target'
 endif
 
 let g:ale_enabled = g:is_development
@@ -531,8 +531,8 @@ au FileType json,sql,sqloracle,sql.sqloracle setlocal foldenable foldmethod=synt
 au FileType html,htmldjango,css,scss,sass setlocal shiftwidth=4 complete=t foldmethod=indent foldnestmax=4 tags=.ctags/css.ctags
 au FileType yaml       setlocal shiftwidth=4
 au FileType javascript setlocal foldmethod=syntax foldnestmax=4
-au FileType netrw      setlocal cursorlineopt+=line | nmap <buffer> <2-LeftMouse> <CR>
-au FileType nerdtree   setlocal cursorlineopt+=line | setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | noremap <buffer> a :Bookmark<CR>
+au FileType netrw      setlocal cursorlineopt=screenline | nmap <buffer> <2-LeftMouse> <CR>
+au FileType nerdtree   setlocal cursorlineopt=screenline | setlocal iskeyword+=- iskeyword+=. | noremap <buffer> q :q<CR> | noremap <buffer> a :Bookmark<CR>
                 \| noremap <buffer> <Del> :ClearBookmarks <C-r>=expand('<cword>')<CR><CR> | noremap <buffer> e :EditBookmarks<CR>
                 "\| nnoremap <silent><buffer> <Enter> :call nerdtree#ui_glue#invokeKeyMap('r')<CR> :call nerdtree#ui_glue#invokeKeyMap('<'.'CR>')<CR>
 au BufRead,BufNewFile *.csv  set filetype=csv_semicolon
@@ -603,8 +603,8 @@ if get(g:,'is_development') == 1
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
-    au CursorMovedI    *.rs exe "normal \<Plug>(lsp-float-close)"
-    au InsertEnter,InsertLeave,VimLeavePre,BufEnter,BufLeave,BufWritePre,TabLeave,TabEnter  *.rs  doau CursorMoved | for id in popup_list() | silent! popup_close(id) | endfor
+    au CursorMovedI    *.rs if g:lsp_diagnostics_enabled | exe "normal \<Plug>(lsp-float-close)" | for id in popup_list() | silent! popup_close(id) | endfor | endif
+    au ModeChanged,InsertEnter,InsertLeave,VimLeavePre,BufEnter,BufLeave,BufWritePre,TabLeave,TabEnter  *.rs  doau CursorMoved
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
@@ -1211,11 +1211,30 @@ let g:gitgutter_override_sign_column_highlight = 1
 let g:gitgutter_close_preview_on_escape = 1
 let g:gitgutter_use_location_list = 1
 
+set laststatus=2
+set statusline=
+set statusline+=%#Icon#
+set statusline+=\ 
+set statusline+=%#NormalC#%{(mode()=='n')?'\ NORMAL\ ':''}
+set statusline+=%#InsertC#%{(mode()=='i')?'\ INSERT\ ':''}
+set statusline+=%#VisualC#%{(mode('1')=~'v')?'\ VISUAL\ ':''}
+set statusline+=%#Filename#
+set statusline+=\ %f
+set statusline+=%#ReadOnly#
+set statusline+=\ %r
+set statusline+=%m
 if g:is_development && get(g:,'loaded_syntastic_plugin')
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 endif
+set statusline+=%=
+set statusline+=%#Fileformat#
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\ [%{&fileformat}\]
+set statusline+=%#Position#
+set statusline+=\ [%l/%L]
 
 let b:syntastic_mode = g:is_development ? 'active' : 'passive'
 "let g:syntastic_mode_map = {'mode': 'passive'}
