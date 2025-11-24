@@ -1142,6 +1142,7 @@ nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-e> :set expandtab!<CR>
 nnoremap <A-=> :set equalalways!<CR>
 nnoremap <A-l> :set cursorlineopt+=screenline<CR>
+nnoremap <A-S-l> :set cursorlineopt-=screenline<CR>
 nnoremap <A-g> :GitGutterToggle<CR>
 nmap dn :normal ]c<CR>
 nmap dg :diffget<CR> dn
