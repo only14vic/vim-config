@@ -285,6 +285,7 @@ nnoremap <A-s> :set spell!<CR>
 nnoremap <A-r> :set readonly!<CR>
 nnoremap <A-e> :set expandtab!<CR>
 nnoremap <A-u> :set undofile!<CR>
+nnoremap <A-l> :set cursorlineopt-=screenline<CR>
 nmap dn :normal ]c<CR>
 nmap dg :diffget<CR> dn
 nmap dp :diffput<CR> dn
