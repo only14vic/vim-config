@@ -17,7 +17,7 @@ set autoread
 set incsearch
 set hlsearch
 set cursorline
-set cursorlineopt=number,screenline
+set cursorlineopt=number
 set number
 set expandtab
 set smarttab
@@ -635,7 +635,7 @@ autocmd! ColorScheme *
     \ hi Conceal ctermfg=yellow guifg=yellow |
     \ hi Visual gui=reverse cterm=reverse |
     \ hi ColorColumn ctermbg=gray guibg=gray |
-    \ hi CursorLine guibg=NONE ctermbg=NONE term=underline cterm=underline |
+    "\ hi CursorLine guibg=NONE ctermbg=NONE term=underline cterm=underline |
     \ hi Search gui=underline,bold guifg=yellow guibg=gray30 |
     \ hi IncSearch gui=underline,bold guifg=white guibg=gray30 |
     \ hi Error term=reverse cterm=bold ctermfg=white ctermbg=darkred guifg=white guibg=darkred |
@@ -1141,7 +1141,7 @@ nnoremap <A-s> :set spell!<CR>
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-e> :set expandtab!<CR>
 nnoremap <A-=> :set equalalways!<CR>
-nnoremap <A-l> :set cursorlineopt-=screenline<CR>
+nnoremap <A-l> :set cursorlineopt+=screenline<CR>
 nnoremap <A-g> :GitGutterToggle<CR>
 nmap dn :normal ]c<CR>
 nmap dg :diffget<CR> dn
