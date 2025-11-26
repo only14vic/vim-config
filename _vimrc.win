@@ -258,6 +258,14 @@ noremap <expr> <PageUp> pumvisible() ? "\<PageUp>" : "10k"
 noremap <expr> <PageDown> pumvisible() ? "\<PageDown>" : "10j"
 inoremap <expr> <PageUp> pumvisible() ? "\<PageUp>" : "\<C-o>10k"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>" : "\<C-o>10j"
+nnoremap o zv
+nnoremap z za
+nnoremap <A-o> zc <bar> zO
+nnoremap <A-z> zA
+nnoremap <S-o> zx <bar> zc <bar> zO
+nnoremap <S-z> zc
+nnoremap <C-o> zR
+nnoremap <C-z> zM
 nmap dn :normal ]c<CR>
 nmap dg :diffget<CR> dn
 nmap dp :diffput<CR> dn
