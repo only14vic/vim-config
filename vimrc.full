@@ -522,7 +522,7 @@ au VimEnter             * if &diff == 1 | exe "windo doau FileType | setlocal fo
 au QuickFixCmdPost [^l]* if len(getqflist())  > 0 | exe 'hor bo copen '.min([10,len(getqflist())])  | endif
 au QuickFixCmdPost l*    if len(getloclist(winnr())) > 0 | exe 'hor bo lopen '.min([10,len(getloclist(winnr()))]) | endif
 au FileType rust,c,cpp,vim imap <buffer> <C-@> <Plug>(asyncomplete_force_refresh)
-au FileType qf          setlocal wrap | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
+au FileType qf          setlocal wrap cursorlineopt=screenline | if g:is_fullwin == 1 | setlocal nowinfixheight nowinfixwidth | else | setlocal winfixheight winfixwidth | endif
                             \| nnoremap <buffer> <Enter> <Enter> | nnoremap <buffer> o <C-W>gF
                             \| if !empty(getwininfo(win_getid())->filter('v:val.loclist')) | wincmd J | endif
 au FileType json,js,html,htmldjango,css,scss,sass     let b:asyncomplete_enable=0
@@ -980,13 +980,13 @@ inoremap <C-s> <Esc>:write<CR>
 noremap  s     :wall<CR>
 nnoremap <S-s> :mksession!<CR>
 nnoremap o zv
-nnoremap z za<Up>
+nnoremap z za
 nnoremap <A-o> zc <bar> zO
-nnoremap <A-z> zA<Up>
+nnoremap <A-z> zA
 nnoremap <S-o> zx <bar> zc <bar> zO
-nnoremap <S-z> zx <bar> zC<Up>
+nnoremap <S-z> zc
 nnoremap <C-o> zR
-nnoremap <C-z> zM<Up>
+nnoremap <C-z> zM
 nmap <BS> <S-o>
 nnoremap q :q<CR>
 nnoremap <A-q> :q!<CR>
@@ -1350,7 +1350,7 @@ amenu       10.20 &Menu.--\ -Sep- :
 amenu       10.21 &Menu.↧\ &Unfold     <S-o>
 amenu       10.21 &Menu.⮇\ Unfold\ All <C-o>
 amenu       10.22 &Menu.↥\ F&old      z
-amenu       10.23 &Menu.⇈\ Fold\ All <S-z>
+amenu       10.23 &Menu.⇈\ Fold\ All <C-z>
 amenu       10.30 &Menu.---\ -Sep- :
 amenu       10.31 &Menu.⮽\ &Close <C-q>
 amenu       10.32 &Menu.⮾\ &Quit  q
