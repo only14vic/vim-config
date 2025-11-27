@@ -984,7 +984,7 @@ nnoremap z za
 nnoremap <A-o> zc <bar> zO
 nnoremap <A-z> zA
 nnoremap <S-o> zx <bar> zc <bar> zO
-nnoremap <S-z> zc
+nnoremap <S-z> zx <bar> zc
 nnoremap <C-o> zR
 nnoremap <C-z> zM
 nmap <BS> <S-o>
