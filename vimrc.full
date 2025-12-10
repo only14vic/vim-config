@@ -169,7 +169,7 @@ let g:ale_linters = {
     \ 'css': ['stylelint'],
     \ 'sass': ['stylelint'],
     \ }
-let g:ale_html_beautify_executable = 'js-beautify'
+let g:ale_html_beautify_executable = 'node_modules/.bin/js-beautify'
 let g:ale_html_beautify_options = '--type html --editorconfig'
 let g:ale_rust_cargo_target_dir = $CARGO_TARGET_DIR
 let g:ale_rust_cargo_avoid_whole_workspace = 0
@@ -1449,13 +1449,17 @@ endif
 "       End of file
 " ======================
 
-function! LoadSessionDefault()
-   if argc() == 0 && &diff == 0 && getenv('VIM_TERMINAL') == v:null && filereadable('Session.vim')
+au StdinReadPre * let g:stdin = 1
+au VimEnter     * nested call LoadSession()
+
+let g:session_loaded = 0
+function! LoadSession()
+   if g:session_loaded == 0 && exists('g:stdin') == 0 && argc() == 0 && &diff == 0 && getenv('VIM_TERMINAL') == v:null && filereadable('Session.vim')
        source Session.vim
    endif
+   let g:session_loaded = 1
 endfunction
 
-silent! call LoadSessionDefault()
 
 " Fix /home/vic/.archlinux/.vim/plugged/vim-lsp/autoload/lsp/ui/vim/completion.vim
 " add to line 116: let l:overflow_after = 0
