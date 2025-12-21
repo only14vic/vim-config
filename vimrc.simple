@@ -136,7 +136,7 @@ nmap x  <Nop>
 nmap .  <C-O>
 nmap ,  <C-I>
 nmap <Enter> i
-nmap <S-q> :qa<CR>
+nmap <S-q> :silent tabdo windo if or(&bt=='terminal',&ft=='') <bar> :bdelete! <bar> :endif<CR> :qa<CR>
 nmap <C-q> :if &bt=='' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <bar> :if bufname() == '' <bar> :quit <bar> :endif <CR>
 tmap <C-q> <C-w><C-c>
 nmap q     :q<CR>
