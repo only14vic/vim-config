@@ -136,7 +136,7 @@ nmap x  <Nop>
 nmap .  <C-O>
 nmap ,  <C-I>
 nmap <Enter> i
-nmap <S-q> :silent tabdo windo if or(&bt=='terminal',&ft=='') <bar> :bdelete! <bar> :endif<CR> :qa<CR>
+nmap <S-q> :silent tabdo windo if or(&bt=='terminal',&ft=='') <bar> :q! <bar> :endif<CR> :qa<CR>
 nmap <C-q> :if &bt=='' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <bar> :if bufname() == '' <bar> :quit <bar> :endif <CR>
 tmap <C-q> <C-w><C-c>
 nmap q     :q<CR>
@@ -318,6 +318,7 @@ augroup defaults
     au VimResume   * if &bt == '' && getcmdtype() == '' | redraw! | silent! checktime | endif
     au BufWinEnter * if &ft == 'help' | wincmd L | setlocal winfixwidth | vert resize 80 | endif
     au VimEnter    * if &diff == 1 | setlocal readonly nomodifiable | exe "silent! normal! gg ]c zo" | endif
+    au BufRead,BufNewFile CHANGELOG,CHANGES,README,FAQ,TODO,INSTALL,NOTES set filetype=markdown
     au FileType netrw setlocal cursorlineopt=screenline | vertical resize 40 | noremap <nowait><buffer> q :q<CR>
     au FileType nerdtree setlocal cursorlineopt=screenline | noremap <buffer> q :q<CR>
     au FileType gitcommit setlocal spell

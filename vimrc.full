@@ -541,6 +541,7 @@ au BufRead,BufNewFile,BufEnter *.html set filetype=htmldjango.html
 au BufRead,BufNewFile,BufEnter *.sql  set filetype=sql.sqloracle
 au BufRead,BufNewFile Makefile set filetype=make
 au BufRead,BufNewFile .gitmodules set filetype=gitconfig noexpandtab
+au BufRead,BufNewFile CHANGELOG,CHANGES,README,FAQ,TODO,INSTALL,NOTES set filetype=markdown
 "au BufEnter,BufRead * if &ft =~ '^\(gitconfig\|make\)$' | setlocal noexpandtab | endif
 "au BufEnter,BufRead * if &ft =~ '^\(gitcommit\)$' | setlocal nofoldenable | endif
 au TerminalWinOpen      * wincmd L | vert resize 100%
@@ -992,7 +993,7 @@ nnoremap q :q<CR>
 nnoremap <A-q> :q!<CR>
 nnoremap <C-q> :if &bt=='' && bufname() != 'Result' <bar> :silent! lclose <bar> :bdelete <bar> :else <bar> :bdelete! <bar> :endif <bar> :if bufname() == '' <bar> :quit <bar> :endif <CR>
 imap     <C-q> <C-o><C-q>
-nnoremap <S-q> :silent tabdo windo if or(&bt=='terminal',&ft=='') <bar> :bdelete! <bar> :endif<CR> :qa<CR>
+nnoremap <S-q> :silent tabdo windo if or(&bt=='terminal',&ft=='') <bar> :q! <bar> :endif<CR> :qa<CR>
 nnoremap <Leader>q :cquit!<CR>
 inoremap [A <Up>
 inoremap [B <Down>
