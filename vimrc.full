@@ -1337,6 +1337,7 @@ command GitShow          let cmd = printf('cd "'.g:git_log_last_dir.'" && git sh
             \| vnew | put = system(cmd) | setlocal readonly nomodifiable nomodified nofoldenable filetype=git | wincmd L
 command RustCheck        lexpr system('cargo check --workspace --lib --bins --examples --tests --benches') | lopen
 command RustFixFolding   lexpr system('cd ~/.vim/plugged/rust.vim && git apply ~/.vim/rust.vim.fold.patch') | lopen
+command MarkdownView     execute('bo vert term ++norestore ++close glow -t '.expand('%p'))
 
 " menu: Menu
 amenu       10.01 &Menu.≡\ &Buffers \
