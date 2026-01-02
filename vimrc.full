@@ -7,6 +7,7 @@ set path=.:**
 set errorbells
 set visualbell t_vb=
 "set colorcolumn=+1
+set textwidth=80
 set tabstop=4
 set shiftwidth=4
 set encoding=utf-8
@@ -1141,7 +1142,7 @@ nnoremap <A-s> :set spell!<CR>
 nnoremap <A-w> :set wrap!<CR>
 nnoremap <A-e> :set expandtab!<CR>
 nnoremap <A-=> :set equalalways!<CR>
-nnoremap <A-l> :set cursorlineopt+=screenline<CR>
+nnoremap <A-l>   :set cursorlineopt+=screenline<CR>
 nnoremap <A-S-l> :set cursorlineopt-=screenline<CR>
 nnoremap <A-c>   :set colorcolumn=+1<CR>
 nnoremap <A-S-c> :set colorcolumn=<CR>
