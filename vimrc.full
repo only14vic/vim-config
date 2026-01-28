@@ -154,6 +154,7 @@ let g:ale_fixers = {
     \ 'sass': ['stylelint','trim_whitespace','remove_trailing_lines'],
     \ 'c': ['clang-format','trim_whitespace','remove_trailing_lines'],
     \ 'cpp': ['clang-format','trim_whitespace','remove_trailing_lines'],
+    \ 'markdown': ['remove_trailing_lines'],
     \ '*': ['trim_whitespace','remove_trailing_lines']
     \ }
 let g:ale_linters_explicit = 1
