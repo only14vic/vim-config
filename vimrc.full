@@ -609,7 +609,8 @@ if get(g:,'is_development') == 1
     au CursorMovedI    *.rs if g:lsp_diagnostics_enabled | exe "normal \<Plug>(lsp-float-close)" | for id in popup_list() | silent! popup_close(id) | endfor | endif
     au ModeChanged,InsertEnter,InsertLeave,VimLeavePre,BufEnter,BufLeave,BufWritePre,TabLeave,TabEnter,WinScrolled,WinResized *.rs doau CursorMoved
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
-    au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb' | iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
+    au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb'
+                        \| iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
     au FileType sql,sqloracle setlocal omnifunc=sqlcomplete#Complete iskeyword+=.
         \| silent! iunmap <buffer> <Left>
         \| silent! iunmap <buffer> <Right>
@@ -684,11 +685,11 @@ au ColorScheme blue,darkblue,desert,elflord,evening,industry,koehler,murphy,pabl
 
 let g:jellybeans_use_lowcolor_black = 1
 let g:jb_style = 'dark'
-"colorscheme jb
+@colorscheme jb
 "colorscheme jellybeans
 "colorscheme hybrid
 "colorscheme onehalfdark
-"colorscheme habamax
+colorscheme habamax
 "colorscheme deep-space
 
 function! AirlineRefreshGitBranch()
@@ -1008,8 +1009,8 @@ cnoremap <expr> <CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
 inoremap <expr> <Esc> pumvisible() ? "\<Esc>" : "\<Esc>"
 " \| exec('silent! normal m` z ``')
-nnoremap <expr> <Esc> pumvisible() ? "\<Esc>" : get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt) < 0, index(['Result'],bufname()) >= 0)
-        \? ":q<CR>" : ":noh <bar> :pclose <bar> :cclose <bar> :lclose <bar> :exe 'silent! SyntasticReset' <bar> :exe 'silent! DBResultsClose' <bar> :NERDTreeClose <bar> :GitGutterAll <bar> :doau VimResized <bar> :redraw! <CR>"
+nnoremap <expr><silent> <Esc> pumvisible() ? "\<Esc>" : get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt) < 0, index(['Result'],bufname()) >= 0)
+        \? ":q<CR>" : ":noh <bar> :pclose <bar> :cclose <bar> :lclose <bar> :exe 'silent! SyntasticReset' <bar> :exe 'silent! DBResultsClose' <bar> :NERDTreeClose <bar> :GitGutterAll <bar> :doau VimResized <bar> :silent! call popup_close(popup_list()[0]) <bar> :redraw! <CR>"
 nnoremap <S-c> :term<CR>
 noremap  <silent> <F8>    :TagbarToggle<CR>
 map      <silent> <F9>     <C-c>:call quickui#menu#open()<CR>
@@ -1042,7 +1043,7 @@ nnoremap <S-F6> :LspRename<CR>
 imap     <S-F6> <C-o><S-F6>
 "nnoremap <C-g> :ALEGoToDefinition<CR>
 "nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
-nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':rightbelow vertical LspDefinition<CR>'
+nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':tab split<CR> :LspDefinition<CR>'
 nmap     <C-LeftMouse> <LeftMouse><C-g>
 imap     <C-g> <C-c><C-g>
 vnoremap <C-_>  I// <Esc>
