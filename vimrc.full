@@ -1010,7 +1010,7 @@ cnoremap <expr> <Esc> pumvisible() ? "\<C-e>"  : "\<C-c>"
 inoremap <expr> <Esc> pumvisible() ? "\<Esc>" : "\<Esc>"
 " \| exec('silent! normal m` z ``')
 nnoremap <expr><silent> <Esc> pumvisible() ? "\<Esc>" : get(v:,'hlsearch') ? ":noh<CR>" : or(index(['','help'],&bt) < 0, index(['Result'],bufname()) >= 0)
-        \? ":q<CR>" : ":noh <bar> :pclose <bar> :cclose <bar> :lclose <bar> :exe 'silent! SyntasticReset' <bar> :exe 'silent! DBResultsClose' <bar> :NERDTreeClose <bar> :GitGutterAll <bar> :doau VimResized <bar> :silent! call popup_close(popup_list()[0]) <bar> :redraw! <CR>"
+        \? ":q<CR>" : ":noh <bar> :pclose <bar> :cclose <bar> :lclose <bar> :exe 'silent! SyntasticReset' <bar> :exe 'silent! DBResultsClose' <bar> :NERDTreeClose <bar> :GitGutterAll <bar> :doau VimResized <bar> :silent! call popup_close(popup_list()[0]) <CR> :redraw!<CR>"
 nnoremap <S-c> :term<CR>
 noremap  <silent> <F8>    :TagbarToggle<CR>
 map      <silent> <F9>     <C-c>:call quickui#menu#open()<CR>
