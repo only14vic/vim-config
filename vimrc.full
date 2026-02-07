@@ -1043,7 +1043,7 @@ nnoremap <S-F6> :LspRename<CR>
 imap     <S-F6> <C-o><S-F6>
 "nnoremap <C-g> :ALEGoToDefinition<CR>
 "nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
-nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':tab split<CR> :LspDefinition<CR>'
+nnoremap <expr> <C-g> or(&bt=='quickfix', &ft=~'^\(gitcommit\)$') ? '<C-W>gF<CR>:VCSDiff<CR>' : ':tab LspDefinition<CR>'
 nmap     <C-LeftMouse> <LeftMouse><C-g>
 imap     <C-g> <C-c><C-g>
 vnoremap <C-_>  I// <Esc>
