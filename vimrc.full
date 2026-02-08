@@ -606,8 +606,8 @@ if get(g:,'is_development') == 1
     au CursorHoldI     *.html,*.css,*.sass if getline('.')[col('.')-2] =~ '[<\.]' | silent! call feedkeys("\<C-@>") | endif
     au CursorHoldI     *.rs if pumvisible() == 0 | if index(['.',':'], strpart(getline('.'), col('.')-2, 1)) >= 0 | silent! call feedkeys("\<C-@>") | else | silent! call LspHoverShow() | endif | endif
     au CursorHold      *.rs if g:lsp_diagnostics_enabled | silent call LspHoverShow() | silent! call LspDiagnosticCursorToggle() | endif
-    au CursorMovedI    *.rs if g:lsp_diagnostics_enabled | exe "normal \<Plug>(lsp-float-close)" | for id in popup_list() | silent! popup_close(id) | endfor | endif
-    au ModeChanged,InsertEnter,InsertLeave,VimLeavePre,BufEnter,BufLeave,BufWritePre,TabLeave,TabEnter,WinScrolled,WinResized *.rs doau CursorMoved
+    au CursorMovedI    *.rs if g:lsp_diagnostics_enabled | exe "normal \<Plug>(lsp-float-close)" | endif
+    au InsertEnter     *.rs if g:lsp_diagnostics_enabled | for p in popup_list() | call popup_close(p) | endfor | endif
     au BufWritePre     *.rs if g:lsp_diagnostics_enabled | :LspDocumentFormatSync | endif
     au FileType rust   au! rust.vim.PreWrite BufWrite | let g:termdebugger = 'rust-gdb'
                         \| iabbrev <buffer> async@ async fn () {}<Left><CR><CR><Up><Up><C-o>2e<Right>
