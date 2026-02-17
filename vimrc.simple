@@ -21,7 +21,7 @@ set display=truncate
 set backspace=indent,eol,nostop
 set sessionoptions=buffers,curdir,help,tabpages
 set complete=.,d,kspell
-set completeopt=menu,menuone,popuphidden,noinsert
+set completeopt=menu,menuone,popuphidden,noinsert,fuzzy,nearest,nosort
 set wildmenu
 set wildignorecase
 set wildoptions=fuzzy,pum
@@ -55,6 +55,7 @@ set undofile
 set undodir=~/.vim/undo
 set shortmess-=S
 set shortmess-=C
+set diffopt+=linematch:60
 set updatetime=500
 set timeout timeoutlen=500 ttimeoutlen=10
 set termguicolors
